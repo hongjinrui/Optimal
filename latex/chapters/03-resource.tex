@@ -1,0 +1,167 @@
+\chapter{功率、带宽与公平性：把资源分配化成凸问题}
+\label{chap:resource}
+\chaptertakeaway{从速率公式推导注水；用线性不等式处理固定 SINR；把最小用户性能最大化转化为一串可行性问题。}
+
+\section{平行信道：边际收益决定功率分配}
+考虑 $K$ 条互不干扰的标量高斯子信道。第 $i$ 条子信道的功率增益为 $g_i>0$，接收噪声功率为 $n_i>0$，发射功率 $p_i\geq0$ 以 W 计。令 $a_i=g_i/n_i$，单位为 $\mathrm{W}^{-1}$；$a_i p_i$ 才是无量纲信噪比。各子信道按相同带宽归一化后，考虑
+\begin{equation}
+ \max_{p\geq0}\quad \sum_{i=1}^K w_i\log_2(1+a_i p_i)
+ \quad\text{s.t.}\quad \sum_i p_i\leq P,
+ \label{eq:weighted-water}
+\end{equation}
+其中 $w_i>0$ 是业务优先级，$P>0$ 是总功率预算。目标严格凹，因此最优功率唯一。提高某条信道的功率会增加速率，故最优解用完总预算。这个模型来自平行高斯信道容量；开放案例中的注水问题可作为实现起点\cite{tse2005,cvxexamples,cvxpyexamples}。
+
+\begin{proposition}[加权注水]
+存在唯一的 $\lambda>0$ 使得
+\begin{equation}
+ p_i^\star=\pos{\frac{w_i}{\lambda\ln2}-\frac1{a_i}},
+ \qquad \sum_i p_i^\star=P.
+ \label{eq:water-formula}
+\end{equation}
+这里 $\lambda$ 是每增加一单位功率预算所能带来的最优加权速率增益。
+\end{proposition}
+\begin{proof}
+将问题写成负速率最小化。对总功率约束引入乘子 $\lambda\geq0$，对 $-p_i\leq0$ 引入 $\mu_i\geq0$。驻点条件是
+\begin{equation}
+ -\frac{w_i a_i}{(1+a_i p_i)\ln2}+\lambda-\mu_i=0.
+\end{equation}
+若 $p_i>0$，互补条件给出 $\mu_i=0$，由此得到括号内的表达式；若该表达式非正，$p_i=0$ 满足对应条件。凸问题满足严格可行性，KKT 条件充分必要。功率和是关于 $\lambda$ 的连续非增函数，在正功率区域严格下降，故可用一维二分找到所需乘子。
+\end{proof}
+
+对已启用的信道，$w_i a_i/[(1+a_i p_i)\ln2]$ 都等于 $\lambda$。否则，把少量功率从边际收益小的信道移到收益大的信道就能提高目标。等权时，$1/a_i$ 可画成不同的“噪声底”，而 $p_i+1/a_i$ 达到同一水位。加权时水位随 $w_i$ 改变，不能再画成一条公共水平线。
+
+若目标改成 $\sum_i w_i\ln(1+a_i p_i)$，公式中不再出现 $\ln2$。在本例的单个总功率约束下，这只是目标整体乘上常数：最优功率不变，乘子的数值改变。若速率还和功耗罚项相加，换对数底时必须同步调整权重。
+
+\begin{example}[两条信道的精确解]
+取 $a=(2,1)\,\mathrm{W}^{-1}$，$P=1\,\mathrm W$，$w_1=w_2=1$。两条信道均启用，公共水位为
+$\nu=(P+1/a_1+1/a_2)/2=5/4\,\mathrm W$，故
+$p^\star=(3/4,1/4)\,\mathrm W$，总归一化速率为
+$\log_2(5/2)+\log_2(5/4)=\log_2(25/8)$。
+若 $P\leq1/2\,\mathrm W$，只给第一条信道供电；超过这个阈值后第二条信道才启用。
+\end{example}
+
+加入峰值约束 $p_i\leq\bar p_i$ 后，只需把式\eqref{eq:water-formula}截断到 $[0,\bar p_i]$，再搜索总功率乘子。若总预算大于峰值之和，所有信道都达到峰值，预算无需用完。
+
+\section{单用户 MIMO：矩阵容量也能回到注水}
+多天线单用户容量设计把功率变量扩展为协方差矩阵。设复基带信道为 $y=Hx+n$，其中 $H\in\C^{r\times M}$ 已知，$n\sim\mathcal{CN}(0,\sigma^2\I_r)$ 是空间白噪声，$Q=\E[xx^\HH]\succeq0$ 是发射协方差，单位为 W。在高斯信号与平均总功率约束下，归一化容量设计为\cite{tse2005}
+\begin{equation}
+ \max_{Q\succeq0,\,\tr Q\leq P}\quad
+ \log_2\det\left(\I_r+\frac1{\sigma^2}HQH^\HH\right).
+ \label{eq:mimo-logdet}
+\end{equation}
+目标是仿射正定矩阵的 log-det，关于 $Q$ 凹，约束也凸。这里采用复数信道每次使用的容量；实数高斯信道的对应表达式含额外的 $1/2$ 因子。
+
+设 $H$ 的秩为 $d>0$，非零奇异值为 $s_1,\ldots,s_d$，对应右奇异向量组成 $V_d\in\C^{M\times d}$。SVD 使发射与接收坐标分别旋转到信道的特征模：这些酉变换保留总功率和白噪声协方差。变换后，Hadamard 行列式不等式表明，在各特征模功率给定时，去掉协方差的非对角项不会降低目标。因此存在最优解
+\begin{equation}
+ Q^\star=V_d\diag(q_1^\star,\ldots,q_d^\star)V_d^\HH,
+ \qquad q_j^\star=\pos{\nu-\frac{\sigma^2}{s_j^2}},
+ \quad\sum_jq_j^\star=P.
+ \label{eq:mimo-water}
+\end{equation}
+于是矩阵问题化成了增益 $a_j=s_j^2/\sigma^2$ 的平行信道注水。零奇异值方向不传输信息，可选零功率；若 $H=0$，容量为零并可取 $Q=0$。
+
+该化简说明，协方差不是单纯的求解技巧，它同时选择空间方向和各方向上的功率。每根天线的功率约束在酉变换后一般不再保持逐特征模可分，仍可保留凸 log-det 模型求解，但不能直接使用式\eqref{eq:mimo-water}。多用户 MIMO 的干扰耦合也不满足这里的单用户平行化条件。
+
+\section{带宽也可优化：透视变换保留凹性}
+联合优化功率与带宽时，不能把噪声功率当成与带宽无关的常数。设系统总带宽为 $B$ Hz，第 $i$ 条链路分得比例 $s_i\geq0$，噪声功率谱密度为 $N_0$ W/Hz，增益仍为 $g_i$。在频带平坦且用户正交的模型下，其速率为
+\begin{equation}
+ R_i(p_i,s_i)=B s_i\log_2\left(1+\frac{g_i p_i}{N_0 B s_i}\right),\qquad s_i>0.
+ \label{eq:bandwidth-rate}
+\end{equation}
+单位是 bit/s。记 $a_i=g_i/(N_0B)$，则 $s_i\log_2(1+a_i p_i/s_i)$ 是凹函数的\emph{透视}：在变量缩放后乘回带宽比例。它对 $(p_i,s_i)$ 联合凹\cite{boyd2004}。因此
+\begin{equation}
+ \max_{p,s\geq0}\sum_i w_iR_i(p_i,s_i)
+ \quad\text{s.t.}\quad \sum_i p_i\leq P,\quad\sum_i s_i\leq1
+ \label{eq:power-bandwidth}
+\end{equation}
+是凸优化问题；还可加入 $R_i\geq r_i^{\min}$，因为凹函数的上水平集是凸集。
+
+这一结论可直接由曲率核查。对 $s>0$，沿任意微分方向 $(\mathrm dp,\mathrm ds)$，有
+\begin{equation}
+ \mathrm d^2 R=-\frac{B a^2}{\ln2\,s(1+ap/s)^2}
+ \left(\mathrm dp-\frac p s\,\mathrm ds\right)^2\leq0.
+\end{equation}
+带宽增加一方面扩大可用自由度，另一方面增加总噪声功率；透视结构同时保留了这两项变化。
+
+在 $s=0$ 处，采用上半连续的凹闭包 $R(p,0)=0$，$p\geq0$。这与 $s\downarrow0$、固定有限 $p$ 时的极限一致。零带宽上放置正功率不会产生速率，且浪费预算，故总能选择一个满足 $s_i=0\Rightarrow p_i=0$ 的最优解；无需为此添加非凸的逻辑约束。建模软件宜使用相对熵或指数锥原语表达透视，直接写成变量乘除可能无法通过 DCP 规则。
+
+\section{有干扰时：固定 SINR 目标是线性约束}
+令 $g_{ij}\geq0$ 表示发射机 $j$ 到接收机 $i$ 的功率增益，$g_{ii}>0$，噪声功率为 $n_i>0$。各发射机使用同一频段、接收端把干扰当噪声，则
+\begin{equation}
+ \SINR_i(p)=\frac{g_{ii}p_i}{\sum_{j\ne i}g_{ij}p_j+n_i}.
+ \label{eq:power-sinr}
+\end{equation}
+给定目标 $\gamma_i>0$ 时，分母严格为正，所以 $\SINR_i\geq\gamma_i$ 等价于
+\begin{equation}
+ g_{ii}p_i-\gamma_i\sum_{j\ne i}g_{ij}p_j\geq\gamma_i n_i.
+ \label{eq:sinr-linear}
+\end{equation}
+因此最小总功率问题
+\begin{equation}
+ \min_{0\leq p\leq\bar p}\one^\T p
+ \quad\text{s.t.}\quad\eqref{eq:sinr-linear}\quad(i=1,\ldots,K)
+ \label{eq:sinr-lp}
+\end{equation}
+是线性规划。分式表达本身并不决定问题难度；能否在保持等价的前提下消去分母才是关键。
+
+这个特例还有显式的可行性判据。定义非负干扰矩阵 $F$ 和严格正向量 $u$：
+\begin{equation}
+ F_{ij}=\begin{cases}\gamma_i g_{ij}/g_{ii},&j\ne i,\\0,&j=i,\end{cases}
+ \qquad u_i=\gamma_i n_i/g_{ii}.
+\end{equation}
+约束就是 $p\geq Fp+u$。设 $\rho(F)$ 为 $F$ 的谱半径，即特征值模的最大值。
+
+\begin{proposition}[最小可行功率]
+不加峰值约束时，存在有限可行功率当且仅当 $\rho(F)<1$。此时
+\begin{equation}
+ p^{\min}=(\I-F)^{-1}u=\sum_{k=0}^{\infty}F^k u
+ \label{eq:min-power}
+\end{equation}
+是分量意义下最小的可行向量。加入峰值后，可行性等价于
+$\rho(F)<1$ 且 $p^{\min}\leq\bar p$。
+\end{proposition}
+\begin{proof}
+若 $\rho(F)<1$，矩阵级数收敛且各项非负，式\eqref{eq:min-power}满足等式。对任一可行 $p$，递推代入得
+$p\geq\sum_{k=0}^{m}F^k u+F^{m+1}p$；取极限即得 $p\geq p^{\min}$。
+反过来，若有可行 $p$，由 $u>0$ 知 $p>0$ 且 $Fp<p$。令 $D=\diag(p)$，矩阵 $D^{-1}FD$ 的每行和均小于 $1$，故其谱半径小于 $1$。相似矩阵具有相同特征值，于是 $\rho(F)<1$。峰值判据由分量最小性立即得到。
+\end{proof}
+
+\begin{example}[干扰反馈的代价]
+取 $g_{11}=g_{22}=1$，$g_{12}=g_{21}=1/4$，$n_1=n_2=1\,\mathrm W$，两用户目标均为 $\gamma$。则 $\rho(F)=\gamma/4$，在 $\gamma<4$ 时
+$p_1^{\min}=p_2^{\min}=\gamma/(1-\gamma/4)\,\mathrm W$。
+目标为 $\gamma=1$ 时各需 $4/3\,\mathrm W$；若每个发射机峰值为 $2\,\mathrm W$，可实现的公共目标不超过 $4/3$。接近谱半径边界时，小幅提高目标会引起很大的功率增加。
+\end{example}
+
+数值上应求解线性方程 $(\I-F)p=u$，而非显式构造逆矩阵。接近 $\rho(F)=1$ 时还应检查条件数和原始 SINR；仅凭浮点特征值小于 $1$ 不能替代残差检验。
+
+\section{公平性：对公共性能做二分}
+最大化最弱用户的 SINR，写为
+\begin{equation}
+ \max_{0\leq p\leq\bar p}\min_i\SINR_i(p)
+ \quad\Longleftrightarrow\quad
+ \max_{p,t\geq0}\ t\quad\text{s.t.}\quad\SINR_i(p)\geq t.
+ \label{eq:maxmin-sinr}
+\end{equation}
+$t$ 和 $p_j$ 同时作为变量时，约束中有乘积 $tp_j$，不能直接当作 LP。固定 $t$ 后则恢复为式\eqref{eq:sinr-lp}的线性可行性问题。所有可行目标构成区间 $[0,t^\star]$，因为能满足较大目标的功率也满足较小目标。这称为准凹最大化问题的可行性二分\cite{boyd2004,cvxpyexamples}。
+
+初始化下界 $L=0$，对应可行向量 $p=0$；假定峰值均有限，取
+\begin{equation}
+ U=1+\min_i\frac{g_{ii}\bar p_i}{n_i}.
+\end{equation}
+忽略干扰都达不到 $U$，故它是严格不可行上界。每轮测试 $t=(L+U)/2$：若可行，令 $L=t$ 并保存可行功率；否则令 $U=t$。到 $U-L\leq\varepsilon$ 时返回保存的功率及区间 $[L,U]$，至多需要
+$\lceil\log_2((U_0-L_0)/\varepsilon)\rceil$ 轮。可行性容差应明显小于所需性能精度，并以原始 SINR 复核更新下界；不准确求解器返回的状态不能当作严格数学证书。
+
+在当前简单功控模型中，每次可行性测试可用谱半径和式\eqref{eq:min-power}；加入分组功率、线性耦合预算后，用 LP 更方便。若峰值预算不存在，应先构造有限上界或识别最优值可能无界，不能直接套用上述初始化。
+
+\section{几何规划：同一模型的另一种表示}
+几何规划（GP）以严格正变量为定义域，要求目标与不等式左端为\emph{正项式}，等式两端之比为\emph{单项式}。单项式形如 $c\prod_jp_j^{a_j}$，其中 $c>0$、指数 $a_j\in\R$；若干单项式之和即为正项式。它在原变量中通常不凸，但令 $x_j=\ln p_j$ 后，正项式取对数成为 log-sum-exp 函数，从而转化为凸问题\cite{boyd2004}。
+
+固定 SINR 的约束可写成
+\begin{equation}
+ \sum_{j\ne i}\frac{\gamma_i g_{ij}}{g_{ii}}p_jp_i^{-1}
+ +\frac{\gamma_i n_i}{g_{ii}}p_i^{-1}\leq1.
+ \label{eq:power-gp}
+\end{equation}
+零干扰项直接删去，剩余系数为正。这里假设各峰值 $\bar p_i>0$；若某峰值为零且要求正 SINR，应先判为不可行。目标 $\sum_i p_i$ 是正项式，峰值条件为 $p_i/\bar p_i\leq1$；因 $\gamma_i,n_i>0$ 强制 $p_i>0$，GP 的正变量域不会丢失原可行解。GP 适合进一步加入单项式比例约束、正项式功耗等模型。
+
+本例已经有精确 LP 表示，实际应优先采用 LP；GP 展示的是一种可扩展的建模结构。反之，含相减的多项式通常不是正项式，任意速率和、任意 SINR 和也不会因为取对数就自动成为 GP。选择表示的标准是等价性与数值代价，而不是公式看起来是否复杂。

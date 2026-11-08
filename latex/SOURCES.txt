@@ -1,0 +1,41 @@
+开源检索和复用说明（核查日期：2026-11-08）
+
+结论
+已有适合复用的开放案例库；本次未核实到同时符合中文、紧凑完整、
+问题整理在前、覆盖主要凸/非凸方法、开放许可及完整LaTeX源码的单一成品。
+因此以开放案例为起点扩充成教材，而不复制受版权保护参考书的正文和图。
+这一结论仅限本次实际检索，不声称世界上不存在其他教材。
+
+直接基础
+CVX: https://github.com/cvxr/CVX
+  固定版本 a0a775908bc1eec1625d56498d0224132b0d8b7f
+  LICENSE.txt 的 Example library 小节明确 examples/ 为 public domain。
+  复用：GP功率控制、阵列最小旁瓣问题；后者改写为角度约定清楚的ULA。
+  上游MATLAB代码仅保留原样来源，没有运行CVX/MATLAB。
+
+CVXPY examples: https://github.com/cvxpy/examples
+  固定版本 73a6892ef5bea4ded68f8f9fab17e48119dc62f5
+  Apache-2.0，完整许可和原作者归属随包提供。
+  实质改编：注水、max-min SINR两个notebook的建模结构。
+  新代码位于code/run_experiments.py，原文件快照位于third_party/。
+  改进：物理log2速率与单位解释、直接总功率约束、解析对照、残差核验。
+
+参考阅读（不作开源正文复制）
+Boyd / Vandenberghe: https://web.stanford.edu/~boyd/cvxbook/
+  作者免费提供PDF，但版权由Cambridge持有。
+Tse / Viswanath: https://web.stanford.edu/~dntse/wireless_book.html
+  免费可读电子章节，仍适用传统图书版权。
+Palomar: https://bookdown.org/palomar/portfoliooptimizationbook/
+  提供在线数学优化参考，但应用领域不同，不作为本教材的逐章改编底本。
+MIT OCW 6.079:
+  https://ocw.mit.edu/courses/6-079-introduction-to-convex-optimization-fall-2009/pages/lecture-notes/
+  CC BY-NC-SA 4.0（留意单项例外）；本包仅引用与推荐，未改编讲义正文。
+
+写作规则
+https://github.com/hongjinrui/writing_skills/blob/main/SKILL.md
+  按用户指定读取并遵循；完整MIT许可快照位于third_party/writing_rules/。
+
+新增内容
+中文教学组织、问题地图、关键证明、统一记号、算法选择说明、14道自拟习题
+及解答，以及WMMSE/ISTA新实现与四组实际运行的实验图。
+理论来源以正文紧随引用和references.tex标明；共19条参考文献。

@@ -1,0 +1,105 @@
+\chapter{解法的共同语言：凸性、对偶与最优性}\label{ch:foundations}
+\chaptertakeaway{认识哪些数学结构带来全局可解性，理解 KKT 条件为何有用，并区分解析证书、求解器数值精度和局部停点。}
+
+\section{凸性让局部信息支持全局判断}
+集合 $\mathcal C$ 若包含任意两点间的线段，即 $x,y\in\mathcal C$ 和 $0\le\theta\le1$ 蕴含 $\theta x+(1-\theta)y\in\mathcal C$，就称为凸集。函数 $f$ 在凸定义域上满足
+\begin{equation}\label{eq:convex-def}
+ f(\theta x+(1-\theta)y)\le\theta f(x)+(1-\theta)f(y)
+\end{equation}
+时称为凸函数，$-f$ 凸时称 $f$ 凹。通信中“收益随资源增加而边际递减”常体现为凹性，例如 $\log(1+ap)$，$a>0$、$p\ge0$。
+
+最小化凸目标、约束为凸函数的非正下水平集和仿射等式时，得到凸优化。最大化凹目标与之等价。等式约束通常要求仿射：即便 $x^2$ 凸，$x^2=1$ 的可行集 $\{-1,1\}$ 也不凸。复数变量可拆成实、虚部后使用同样定义。
+
+\begin{proposition}
+凸优化的任意局部最优解都是全局最优解。若目标严格凸，则在凸可行集上至多有一个最优解。
+\end{proposition}
+\begin{proof}
+若局部最优点 $x$ 之外有更好可行点 $y$，则由凸性，$x+\theta(y-x)$ 对任意足够小的 $\theta>0$ 仍可行，且目标严格小于 $f(x)$，与局部最优矛盾。严格凸性又排除了两个不同的最优点，因为它们的中点会更优。
+\end{proof}
+此结论说明为何值得花时间做等价变换。但凸性本身不保证存在最优解：$\min_{x>0}x$ 的下确界为零却不取到。连续函数在非空紧可行集上能取到最小值，这是通信中有限功率与闭约束的重要用途。
+
+\subsection{实用的曲率检查}
+对可微 $f$，凸性等价于所有切平面都是全局下界：
+\begin{equation}\label{eq:tangent-lower}
+ f(y)\ge f(x)+\nabla f(x)^{\T}(y-x).
+\end{equation}
+对二阶可微函数，在开凸域内 $\nabla^2f(x)\succeq0$ 等价于凸。符号 $A\succeq0$ 表示 $A$ 为半正定对称矩阵；复数情况要求 Hermitian 矩阵。检查一个 Hessian 的一个数值点只能反驳全域凸性，不能证明全域凸性。
+
+非负加权和、仿射复合、逐点最大值保持凸性。凹函数的逐点最小值仍凹。透视 $t f(x/t)$ 在 $t>0$ 保持 $f$ 的凸性；凹函数也同理。复合规则要同时看外层函数的单调性，不能见到两个凸函数就断言复合仍凸。
+
+\begin{example}[干扰和速率为何可能非凹]
+两个用户直接增益和交叉增益都为1，噪声功率为1，取 $p_1,p_2\in[0,2]$。用自然对数衡量和速率，在点 $(2,0)$、$(0,2)$ 的目标均为 $\ln3$，而中点 $(1,1)$ 的目标为 $2\ln(3/2)<\ln3$。这违反凹函数的中点不等式。相同的对数表达式在正交模型下则为凹函数。
+\end{example}
+
+\section{问题表示：从一般函数到标准锥}
+标准形式的价值是把识别出的结构交给可靠的数值算法\cite{boyd2004}。常见形式如下。
+\begin{itemize}
+\item 线性规划（LP）：目标与约束都仿射。例如固定 SINR 功率控制。
+\item 凸二次规划（QP）：$\min \tfrac12x^{\T}Qx+c^{\T}x$，$Q\succeq0$，配仿射约束。例如受限最小二乘。
+\item 二阶锥规划（SOCP）：包含 $\norm{Ax+b}_2\le c^{\T}x+d$。右侧必须非负；可表示范数界、单流波束的服务质量约束。
+\item 半正定规划（SDP）：矩阵变量 $X\succeq0$ 配线性目标与仿射约束。例如协方差设计和二次型的提升松弛。
+\item 指数锥/几何规划：对数、指数和正变量的乘积结构可用适当变量变换处理，见第3章。
+\end{itemize}
+$\log$ 目标不一定直接属于 SOCP。建模工具可能调用指数锥求解器，或者使用其他有理论依据的转换；应记录实际求解器和状态。
+
+\subsection{上图、松弛变量与 Schur 补}
+把 $\min f(x)$ 写成 $\min_{x,t}t$、$f(x)\le t$ 称上图表示。它保留最优值，将复杂目标转移到约束，常有助于识别标准形式。范数平方约束 $\norm{z}_2^2\le t$ 可写为旋转锥或等价二阶锥
+\begin{equation}
+ \left\|\begin{bmatrix}2z\\t-1\end{bmatrix}\right\|_2\le t+1.
+\end{equation}
+此式自动要求 $t\ge0$。若矩阵 $C\succ0$，Schur 补给出
+\begin{equation}\label{eq:schur}
+ \begin{bmatrix}A&B\\B^{\HH}&C\end{bmatrix}\succeq0
+ \quad\Longleftrightarrow\quad A-BC^{-1}B^{\HH}\succeq0.
+\end{equation}
+证明可用可逆分块三角矩阵的合同变换把左侧变成 $\diag(A-BC^{-1}B^{\HH},C)$。当 $C$ 只是半正定时，需要值域条件和广义逆，不能直接照搬逆矩阵公式。
+
+\section{对偶变量把约束变成价格}
+考虑实变量最小化问题
+\begin{equation}\label{eq:primal}
+ p^\star=\inf_x f_0(x),\quad f_i(x)\le0,\quad Ax=b.
+\end{equation}
+拉格朗日函数为
+\begin{equation}
+ L(x,\lambda,\nu)=f_0(x)+\sum_i\lambda_i f_i(x)+\nu^{\T}(Ax-b),\quad\lambda\ge0.
+\end{equation}
+其中 $\lambda_i$ 是不等式的乘子。对偶函数 $g(\lambda,\nu)=\inf_xL(x,\lambda,\nu)$ 总是凹的，因为它是仿射函数族的逐点下确界。对偶问题是 $\max_{\lambda\ge0,\nu}g(\lambda,\nu)$。
+
+任意原问题可行点 $x$ 与对偶可行点都满足 $g(\lambda,\nu)\le f_0(x)$。原因是 $L(x,\lambda,\nu)\le f_0(x)$，再取下确界。这一\emph{弱对偶性}不要求原问题凸，因此对非凸问题也能提供界。若对偶最优值 $d^\star=p^\star$，称为强对偶。
+
+\begin{theorem}[Slater 条件的一个常用版本]\label{thm:slater}
+设问题\eqref{eq:primal} 是凸优化，最优值有限，存在位于目标及各约束共同定义域相对内部的点 $\bar x$，使 $A\bar x=b$ 且所有不等式严格成立。则强对偶成立，且存在最优拉格朗日乘子。
+\end{theorem}
+相对内部指在集合自身仿射包内的内部。仿射不等式可采用更弱的条件；本书使用上面的方便充分条件。对于锥问题，应在相应锥内部表述严格可行性。Slater 条件不成立不等于强对偶必失败，它只是一个足够条件。
+
+\subsection{敏感性解释}
+将约束改为 $f_i(x)\le\delta_i$，若最优值关于 $\delta$ 在零点可微且存在适用的强对偶条件，则其导数为 $-\lambda_i^\star$。因此最优乘子刻画“多给一点资源，目标能改善多少”。当最优值不可微时，乘子仍给出相应的支撑界，而未必是唯一导数。
+
+\section{KKT 条件：检查答案的核心工具}
+对于可微问题，一个候选解及其乘子满足 Karush--Kuhn--Tucker（KKT）条件，是指
+\begin{align}
+ &f_i(x^\star)\le0,\quad Ax^\star=b, &&\text{原可行性},\label{eq:kkt1}\\
+ &\lambda_i^\star\ge0, &&\text{对偶可行性},\\
+ &\lambda_i^\star f_i(x^\star)=0, &&\text{互补松弛},\\
+ &\nabla f_0(x^\star)+\sum_i\lambda_i^\star\nabla f_i(x^\star)+A^{\T}\nu^\star=0,
+ &&\text{驻点条件}.\label{eq:kkt4}
+\end{align}
+凸问题中，这些条件充分保证全局最优：驻点使凸的 $L$ 在 $x^\star$ 取全局下确界，原可行与互补使 $L=f_0$，于是对偶下界与原目标相等。结合定理\ref{thm:slater}，KKT 也成为常用的必要条件。非光滑函数以次梯度包含关系替代梯度等式；显式集合约束以法锥表示。
+
+非凸问题中，适当约束资格下局部最优满足 KKT，但 KKT 一般只是一阶必要条件。无约束 $\min_x(x^2-1)^2$ 在 $x=0$ 梯度也为零，而它是局部极大点。把任意驻点称为“最优解”会把必要条件误当充分条件。
+
+\begin{example}[功率价格的解析值]
+单用户最小功率问题 $\min_{p\ge0}p$，要求 $\log_2(1+ap)\ge r$，其中 $a>0$、$r>0$。约束严格递增，所以
+\begin{equation}
+ p^\star=\frac{2^r-1}{a},\qquad
+ \lambda^\star=\frac{(1+ap^\star)\ln2}{a}=\frac{2^r\ln2}{a}.
+\end{equation}
+该乘子同时等于最小功率对所需频谱效率 $r$ 的导数。越高的服务门限需要越昂贵的边际功率。
+\end{example}
+
+\section{可行性、精度与复杂度}
+数值解不是实数意义的精确解。若约束 $f_i(x)\le0$，原始残差可取 $\max_i\pos{f_i(x)}$；等式另检验 $\norm{Ax-b}_\infty$。不同约束单位不同时，先按物理尺度归一化再比较。可行候选与可行对偶解间的目标差称原对偶间隙，适合凸问题认证精度；不能用两次迭代目标差代替它。
+
+典型的三种输出是：凸问题的近似全局解及残差/间隙；非凸算法的可行停点及多初值比较；整数或全局算法的可行目标与认证界。凸问题也会因尺度差、内存或建模错误而失败，因此“凸”与“求解器返回准确结果”是两个要分别检查的事实。
+
+算法代价应结合变量维度、矩阵结构和精度讨论。稠密线性方程的直接分解常有立方阶算术量级，但稀疏结构会改变实际代价。大规模一阶法每步便宜，却常需更多迭代；内点法每步昂贵，却适合中等规模高精度锥模型。第5章将把这些区别转化成可执行的更新式。

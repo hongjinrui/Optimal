@@ -1,0 +1,188 @@
+\chapter{波束成形与信道估计：锥约束、矩阵与稀疏性}
+\label{chap:beam-estimation}
+\chaptertakeaway{识别复数波束问题中的相位自由度；区分精确锥表示与半正定松弛；由误差模型选择最小二乘、LMMSE 或稀疏估计。}
+
+\section{固定 SINR 的下行波束成形可精确化为 SOCP}
+一个具有 $M$ 根天线的基站向 $K$ 个单天线用户发送独立、单位平均能量的数据符号 $s_j$。每个用户只接收一条数据流。用户 $i$ 的信道和波束分别为 $h_i,w_i\in\C^M$，接收信号为
+\begin{equation}
+ y_i=h_i^\HH\sum_{j=1}^K w_js_j+n_i,
+ \qquad \E|n_i|^2=\sigma_i^2>0.
+\end{equation}
+波束平方范数 $\norm{w_i}_2^2$ 表示发射功率。已知瞬时信道、干扰当噪声时，给定目标 $\gamma_i>0$ 的最小总功率设计是
+\begin{equation}
+ \begin{aligned}
+ \min_{w_1,\ldots,w_K}\quad&\sum_j\norm{w_j}_2^2\\
+ \text{s.t.}\quad&
+ \frac{|h_i^\HH w_i|^2}{\sum_{j\ne i}|h_i^\HH w_j|^2+\sigma_i^2}\geq\gamma_i,
+ \quad i=1,\ldots,K.
+ \end{aligned}
+ \label{eq:unicast-original}
+\end{equation}
+直接观察会看到二次分式；利用每条波束的独立相位自由度后，问题具有精确的二阶锥表示。
+
+把 $w_i$ 乘以 $\exp[-\mathrm j\arg(h_i^\HH w_i)]$，既不改变任何用户的干扰功率，也不改变目标用户的接收功率，因此可令
+$\Ima(h_i^\HH w_i)=0$ 且 $\Rea(h_i^\HH w_i)\geq0$。在这个相位约定下，SINR 约束等价于
+\begin{equation}
+ \left\|\begin{bmatrix}(h_i^\HH w_j)_{j\ne i}\\\sigma_i\end{bmatrix}\right\|_2
+ \leq\frac{\Rea(h_i^\HH w_i)}{\sqrt{\gamma_i}},
+ \qquad \Ima(h_i^\HH w_i)=0.
+ \label{eq:beam-soc}
+\end{equation}
+左端有 $K-1$ 个复干扰分量和一个实噪声分量；拆开实部和虚部后，是 $2(K-1)+1$ 维实向量的范数。右端是实仿射函数，故这是二阶锥约束。目标是凸二次函数，也可引入 $t\geq0$，以 $\norm{[w_1^\T,\ldots,w_K^\T]^\T}_2\leq t$、最小化 $t$ 得到标准 SOCP；其最小功率为 $t^{\star2}$。
+
+相位旋转的成立依赖于“每个用户对应一条可独立旋转的数据流”，且约束只通过接收功率和波束范数使用这些变量。若同一流要同时服务多个用户，不能同时令所有 $h_i^\HH w$ 为正实数；若问题包含给定绝对相位或相干合成要求，也要重新检查该变换。开放的天线阵列设计案例展示了如何把波束图指标表示为范数与锥约束\cite{cvxexamples}。
+
+\begin{example}[单用户的匹配波束]
+取 $K=1$、$h\ne0$。最小功率为
+\begin{equation}
+ P^\star=\frac{\gamma\sigma^2}{\norm h_2^2},
+ \qquad w^\star=\frac{\sqrt\gamma\,\sigma}{\norm h_2^2}h.
+ \label{eq:matched-beam}
+\end{equation}
+柯西--施瓦茨不等式给出 $|h^\HH w|\leq\norm h_2\norm w_2$，故任何可行波束都需要上述功率；沿 $h$ 的方向取波束达到等号。多用户时，沿每个用户自己的信道发射还会制造干扰，SOCP 正是在这些方向之间作联合权衡。
+\end{example}
+
+\section{开放阵列案例：控制 ULA 的旁瓣}
+CVX 的开放案例 \path{antenna_array_design/ant_array_min_sidelobe.m} 对任意二维阵列，在目标方向保持单位响应，并最小化主瓣范围外的最大幅度\cite{cvxexamples}。本节复用该建模思路，将几何和角度约定改为均匀线阵（ULA）；上游源码保留在 \path{third_party/CVX/examples/}，本书未运行该 MATLAB 程序。
+
+设载波波长为 $\lambda_0$，$M$ 个各向同性阵元的间距为 $d=\lambda_0/2$。角度 $\theta\in[-\pi/2,\pi/2]$ 相对于阵列法线测量，单位为弧度。忽略互耦并采用窄带远场模型，导向向量为
+\begin{equation}
+ a(\theta)_m=\exp(\mathrm j\pi m\sin\theta),
+ \qquad m=0,\ldots,M-1.
+\end{equation}
+复权重 $w\in\C^M$ 对应的阵列响应记作 $b(\theta)=w^\HH a(\theta)$。选定主指向 $\theta_0$，在主瓣外的停止角域选取有限网格 $\{\theta_q\}_{q=1}^{N_s}$。最小旁瓣设计为
+\begin{equation}
+ \begin{aligned}
+ \min_{w,\,t\geq0}\quad&t\\
+ \text{s.t.}\quad&a(\theta_0)^\HH w=1,\\
+ &\left\|\begin{bmatrix}\Rea(a(\theta_q)^\HH w)\\
+                   \Ima(a(\theta_q)^\HH w)\end{bmatrix}\right\|_2\leq t,
+ \quad q=1,\ldots,N_s.
+ \end{aligned}
+ \label{eq:ula-sidelobe}
+\end{equation}
+因为 $a^\HH w=b(\theta)^*$，主指向等式恰好要求 $b(\theta_0)=1$；每条范数约束限制一个停止方向的幅度。目标线性、主指向为两个实仿射等式、其余为二维二阶锥，所以采样后的问题是 SOCP。若要在干扰方向形成零陷，可直接加入 $a(\theta_{\rm null})^\HH w=0$。以主指向为 $0\,\mathrm{dB}$ 参考时，网格上的最大旁瓣电平为 $20\log_{10}t^\star$，使用 $20$ 是因为 $t$ 表示幅度比。
+
+有限网格只约束采样角度。更稠密的角度复核可能找到网格间漏掉的峰值；发现峰值后可把相应角度加入设计网格并重解。稠密复核仍是数值检查，不能单凭有限采样声称得到了整个连续角域的严格上界。网格加密还会增加锥约束数量，故应同时考虑旁瓣容差与求解规模。
+
+\section{半正定提升：何时精确，何时只是松弛}
+另一种表示是把向量二次项提升为矩阵。令 $H_i=h_ih_i^\HH\in\C^{M\times M}$，$W_i=w_iw_i^\HH\succeq0$。其中 $X\succeq0$ 表示厄米半正定矩阵，即 $z^\HH Xz\geq0$ 对所有 $z$ 成立。接收功率变成线性形式 $|h_i^\HH w_j|^2=\tr(H_iW_j)$。于是式\eqref{eq:unicast-original}等价于
+\begin{equation}
+ \begin{aligned}
+ \min_{W_i\succeq0}\quad&\sum_i\tr(W_i)\\
+ \text{s.t.}\quad&\tr(H_iW_i)-\gamma_i\sum_{j\ne i}\tr(H_iW_j)
+ \geq\gamma_i\sigma_i^2,\\
+ &\rank(W_i)=1\quad(i=1,\ldots,K).
+ \end{aligned}
+ \label{eq:beam-rank}
+\end{equation}
+删去秩约束后得到半正定规划（SDP）。这种做法称为半正定松弛（SDR）：扩大可行集合，在最小化问题中给出原问题最优值的下界\cite{luo2010}。
+
+对当前固定信道、单流单播、仅最小化总功率的模型，松弛是精确的。这个结论可直接构造证明，而无需把一般 SDR 当成精确方法。给定一个可行 SDP 解 $W_i$，因为 $\gamma_i\sigma_i^2>0$，有 $h_i^\HH W_ih_i>0$。构造
+\begin{equation}
+ \widetilde w_i=\frac{W_ih_i}{\sqrt{h_i^\HH W_ih_i}},
+ \qquad \widetilde W_i=\widetilde w_i\widetilde w_i^\HH.
+ \label{eq:sdp-recovery}
+\end{equation}
+则 $\widetilde W_i\preceq W_i$，且 $h_i^\HH\widetilde W_ih_i=h_i^\HH W_ih_i$。前一结论来自
+$\widetilde W_i=W_i^{1/2}vv^\HH W_i^{1/2}$，其中
+$v=W_i^{1/2}h_i/\sqrt{h_i^\HH W_ih_i}$ 满足 $\norm v_2=1$，故 $vv^\HH\preceq\I$。因此恢复后期望信号保持、对其他用户的干扰不增、总功率不增。这说明存在秩一最优解。
+
+一般组播设计则要求一个波束同时满足多个用户：
+\begin{equation}
+ \min_w\ \norm w_2^2
+ \quad\text{s.t.}\quad |h_i^\HH w|^2\geq\gamma_i\sigma_i^2\quad(\forall i).
+\end{equation}
+同一个 $W$ 要保留多个方向上的接收功率，式\eqref{eq:sdp-recovery}通常无法同时做到。这时高秩 SDP 解可能无法无损恢复。常见方法是从 $z\sim\mathcal{CN}(0,W)$ 抽取方向，再缩放到满足全部约束，并保留功率最小的可行候选。抽样只能产生候选解；应同时报告 SDP 下界和候选功率上界。若没有可行候选，就没有可交付的原问题解。
+
+升维的代价也必须计算：$M$ 维复波束变成 $M\times M$ 厄米矩阵，实自由度约由 $2M$ 增至 $M^2$。本章单播模型已有较小的 SOCP 表示，通常优先使用它；SDP 适合分析二次约束、设计协方差或处理确实需要矩阵变量的问题。
+
+\section{信道不确定性：最坏情况范数有明确含义}
+若估计信道为 $\widehat h$，真实信道满足
+$h=\widehat h+e$、$\norm e_2\leq\epsilon$，则固定波束 $w$ 的最坏接收幅度具有精确公式：
+\begin{equation}
+ \min_{\norm e_2\leq\epsilon}|(\widehat h+e)^\HH w|
+ =\pos{|\widehat h^\HH w|-\epsilon\norm w_2}.
+ \label{eq:worst-desired}
+\end{equation}
+误差在波束方向上的投影至多为 $\epsilon\norm w_2$；选择反向投影可以达到这个下界，若误差足够大则可完全抵消名义信号。相应的最大幅度是
+$|\widehat h^\HH w|+\epsilon\norm w_2$。半径 $\epsilon$ 与信道范数使用同一尺度，它需要来自估计误差界或明确的设计容限，而非任意的调参常数\cite{ben2009}。
+
+单用户稳健 SNR 约束要求每个允许误差都满足
+$|h^\HH w|^2\geq\gamma\sigma^2$。由式\eqref{eq:worst-desired}及相位旋转，它等价于
+\begin{equation}
+ \epsilon\norm w_2+\sqrt\gamma\,\sigma\leq\Rea(\widehat h^\HH w),
+ \qquad\Ima(\widehat h^\HH w)=0.
+ \label{eq:robust-soc}
+\end{equation}
+这仍是 SOCP。若 $\norm{\widehat h}_2>\epsilon$，最优方向沿 $\widehat h$，最小功率为
+\begin{equation}
+ P^\star_{\rm robust}
+ =\frac{\gamma\sigma^2}{(\norm{\widehat h}_2-\epsilon)^2}.
+ \label{eq:robust-power}
+\end{equation}
+若 $\norm{\widehat h}_2\leq\epsilon$，不确定集合包含零信道，任何正 SNR 目标都不可行。稳健设计额外付出的功率随误差半径逼近信道范数而急剧增大。
+
+多用户时，同一个误差信道同时影响期望项和所有干扰项。分别把期望信号压到最小、把每项干扰抬到最大，通常只能构造充分条件；这些极值未必由同一误差同时实现。需要精确稳健化时，应从整个二次不等式出发检查 S 引理的条件，不能把单用户公式逐项拼接后声称等价。
+
+类似结构也出现在稳健线性拟合中。若矩阵误差满足谱范数界 $\norm\Delta_2\leq\epsilon$，则
+\begin{equation}
+ \max_{\norm\Delta_2\leq\epsilon}\norm{(A+\Delta)x-y}_2
+ =\norm{Ax-y}_2+\epsilon\norm x_2.
+ \label{eq:robust-ls}
+\end{equation}
+三角不等式给出上界；当 $x\ne0$ 时，取秩一矩阵使 $\Delta x$ 与残差同向即可达到。该式把一个含无限多个扰动约束的问题化成了两个范数之和。
+
+\section{信道估计：误差准则决定优化问题}
+导频观测可统一写成 $y=Ax+n$，其中 $y\in\C^m$ 是接收样本，$A\in\C^{m\times d}$ 是由导频和传播模型确定的已知矩阵，$x\in\C^d$ 是待估信道。先确定噪声和先验假设，再选择目标函数。
+
+若只按平方残差拟合，得到最小二乘（LS）估计
+\begin{equation}
+ \widehat x_{\rm LS}\in\argmin_x\ \norm{Ax-y}_2^2.
+\end{equation}
+$A$ 满列秩时，正规方程 $A^\HH A\widehat x=A^\HH y$ 给出唯一解；秩不足时可用伪逆选择最小范数解。实际求解宜用 QR 或 SVD：形成 $A^\HH A$ 会把二范数条件数平方，从而放大病态问题中的数值误差。已知噪声协方差为 $C_n\succ0$ 时，使用 $\norm{C_n^{-1/2}(Ax-y)}_2^2$ 相当于先白化，再作 LS。
+
+若 $x,n$ 零均值且不相关，协方差分别为 $C_x\succeq0$ 和 $C_n\succ0$，在线性估计器 $\widehat x=Ly$ 中，使 $\E\norm{x-Ly}_2^2$ 最小的 LMMSE 解为
+\begin{equation}
+ \widehat x_{\rm LMMSE}
+ =C_xA^\HH(AC_xA^\HH+C_n)^{-1}y.
+ \label{eq:lmmse}
+\end{equation}
+均方误差最小要求估计误差与观测正交，即
+$\E[(x-Ly)y^\HH]=0$，从而得到
+$L(AC_xA^\HH+C_n)=C_xA^\HH$。这个推导只用二阶统计量；若 $x,n$ 还相互独立并服从圆对称复高斯分布，它也是所有估计器中的 MMSE 解。非零均值时先中心化观测，最后加回 $x$ 的均值。
+
+当 $C_x=\tau^2\I$、$C_n=\sigma^2\I$，且 $A$ 的尺度已固定时，式\eqref{eq:lmmse}等价于岭回归
+\begin{equation}
+ \min_x\ \norm{Ax-y}_2^2+\frac{\sigma^2}{\tau^2}\norm x_2^2.
+\end{equation}
+惩罚压缩了小奇异值方向上不稳定的估计，代价是引入偏差。没有信道先验、噪声统计也不可靠时，不能把任意惩罚参数都解释成真实方差比。
+
+\section{稀疏信道：用近端步骤代替不可导梯度}
+若 $x$ 表示少量有效路径所在的时延或角度网格系数，可采用复数 LASSO：
+\begin{equation}
+ \min_{x\in\C^d}\ \frac12\norm{Ax-y}_2^2+\lambda\sum_{j=1}^d|x_j|,
+ \qquad\lambda>0.
+ \label{eq:complex-lasso}
+\end{equation}
+这里 $|x_j|$ 是复幅度，惩罚作用于整对实部和虚部。它鼓励系数为零，同时保留非零系数的相位。选择 $\lambda$ 应结合噪声尺度和模型验证；更密的角度网格可能增加列相关性，并不保证更容易恢复。
+
+光滑部分的梯度为 $A^\HH(Ax-y)$，其 Lipschitz 常数为 $L=\norm A_2^2$；复空间使用实内积 $\Rea(u^\HH v)$。取 $0<\alpha\leq1/L$，一次近端梯度更新为
+\begin{equation}
+ z=x^k-\alpha A^\HH(Ax^k-y),\qquad
+ x_j^{k+1}=\begin{cases}
+ \left(1-\dfrac{\alpha\lambda}{|z_j|}\right)z_j,&|z_j|>\alpha\lambda,\\
+ 0,&|z_j|\leq\alpha\lambda.
+ \end{cases}
+ \label{eq:complex-soft}
+\end{equation}
+第二步称为复软阈值。其来源是独立地求解
+$\min_x\frac12|x-z_j|^2+\alpha\lambda|x|$：最优非零解与 $z_j$ 同相位，剩下的幅度问题在 $[0,\infty)$ 上作一维截断。
+
+\begin{example}[正交导频下的阈值解]
+若 $A^\HH A=\I$，则式\eqref{eq:complex-lasso}的解是直接对 $A^\HH y$ 作阈值 $\lambda$ 的软阈值。对一个观测分量 $z=3+4\mathrm j$、$\lambda=2$，估计为 $(1-2/5)z=1.8+2.4\mathrm j$：幅度由 $5$ 降为 $3$，相位保持。若 $|z|\leq2$，估计为零。
+\end{example}
+
+确定瞬时信道与固定单流 SINR 时，优先检查相位自由度，通常可以使用 SOCP。面对多个二次约束时，矩阵提升有助于识别 SDP 结构，但必须继续检查秩约束或恢复误差。信道具有明确误差界时，再决定是否需要稳健设计；误差界与概率模型解决的是不同的可靠性要求。
+
+估计问题则先检查 $A$ 的秩和条件数。只有平方误差时采用可靠的线性代数求解；有可信二阶先验时采用 LMMSE；有具体稀疏表示时再引入 $\ell_1$ 惩罚。稀疏估计通常包含偏差，恢复效果还取决于导频矩阵与表示误差，不能只凭目标函数凸就保证识别真实路径。

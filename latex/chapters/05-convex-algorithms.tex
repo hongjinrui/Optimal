@@ -1,0 +1,156 @@
+\chapter{怎样把凸模型变成可运行的算法}
+\label{chap:convex-algorithms}
+\chaptertakeaway{知道一次迭代具体计算什么，并用可行性、目标误差和残差判断计算是否结束。算法的选择既取决于凸性，也取决于梯度、投影和线性方程组的计算成本。}
+
+\section{投影梯度：沿改善方向走，再恢复可行性}
+设 $C\subseteq\R^n$ 是非空闭凸集，$f:C\to\R$ 可微且凸。考虑
+\begin{equation}
+ \min_{x\in C} f(x).
+ \label{eq:pg-problem}
+\end{equation}
+这里 $x$ 可以是各信道功率，$C$ 可以同时包含非负和总功率约束。若梯度满足 $\norm{\nabla f(x)-\nabla f(y)}_2\le L\norm{x-y}_2$，称梯度为 $L$-Lipschitz 连续；$L$ 控制局部二次近似可能低估目标的程度。投影梯度更新为
+\begin{equation}
+ x^{t+1}=\Pi_C\!\left(x^t-\eta\nabla f(x^t)\right),\qquad
+ \Pi_C(y)=\argmin_{x\in C}\frac12\norm{x-y}_2^2.
+ \label{eq:pg-update}
+\end{equation}
+其中 $t$ 是迭代编号，$\eta>0$ 是步长。闭凸性保证欧氏投影存在且唯一。
+
+步长 $\eta=1/L$ 时，每次更新最小化一个在当前点与目标相切的二次上界：
+\begin{equation}
+ f(x)\le f(x^t)+\nabla f(x^t)^\T(x-x^t)
+          +\frac L2\norm{x-x^t}_2^2.
+ \label{eq:descent-lemma}
+\end{equation}
+因此投影并非事后补救：它直接求解这个上界在 $C$ 上的最小值。由上界在 $x^t$ 处取等号，立即得到 $f(x^{t+1})\le f(x^t)$。若最优解 $x^\star$ 存在，则进一步有\cite{boyd2004}
+\begin{equation}
+ f(x^t)-f(x^\star)\le\frac{L\norm{x^0-x^\star}_2^2}{2t},\qquad t\ge1.
+ \label{eq:pg-rate}
+\end{equation}
+这个界说明把目标误差缩小一个数量级，最坏情形下需要相应增加迭代次数。式中并未保证迭代点距离以同样速度下降；若要控制距离，需要强凸性等额外结构。
+
+\paragraph{总功率集合的投影。}
+对 $C=\{p\in\R^K:p\ge0,\ \one^\T p\le P\}$，其中 $P>0$ 是功率预算，投影具有截断形式
+\begin{equation}
+ [\Pi_C(y)]_k=\pos{y_k-\tau}.
+ \label{eq:simplex-projection}
+\end{equation}
+若 $\sum_k\pos{y_k}\le P$，取 $\tau=0$；否则 $\tau>0$ 使 $\sum_k\pos{y_k-\tau}=P$。这是投影问题的 KKT 条件：所有正分量从 $y_k$ 中减去同一个拉格朗日乘子。可以排序 $y_k$ 后寻找活动分量，也可以在 $[0,\max_k y_k]$ 上二分 $\tau$。例如 $y=(2,-1,1)$、$P=2$ 时，$\tau=1/2$，投影为 $(1.5,0,0.5)$。其外观类似注水，但这里求的是最近可行向量。
+
+\paragraph{未知 $L$ 时怎样选步长。}
+从候选步长开始，检查式~\eqref{eq:descent-lemma} 中把 $L$ 换为 $1/\eta$ 后是否成立；不成立就缩小步长。这样用实际目标值检验局部曲率。对于光滑凸问题，停止时可报告梯度映射
+\begin{equation}
+ G_\eta(x)=\frac{x-\Pi_C(x-\eta\nabla f(x))}{\eta}.
+\end{equation}
+其零点满足约束问题的一阶最优性条件。相比只检查相邻目标值，梯度映射更能区分“步长很小”与“接近最优”。数值上还应检查约束违反量。
+
+\section{近端梯度：把不可微项保留为一个小问题}
+稀疏估计中的 $\ell_1$ 正则项不可微，但它的近端算子有闭式解。对
+\begin{equation}
+ \min_x F(x)=f(x)+g(x),
+ \label{eq:composite}
+\end{equation}
+假设 $f$ 凸且梯度为 $L$-Lipschitz 连续，$g$ 是适当、下半连续的凸函数。所谓“适当”是指 $g$ 从不取 $-\infty$，且至少一点有限。定义
+\begin{equation}
+ \prox_{\eta g}(z)=\argmin_x\left\{g(x)+\frac1{2\eta}\norm{x-z}_2^2\right\}.
+\end{equation}
+近端梯度取
+\begin{equation}
+ x^{t+1}=\prox_{\eta g}\left(x^t-\eta\nabla f(x^t)\right).
+ \label{eq:prox-update}
+\end{equation}
+当 $g$ 是集合 $C$ 的示性函数，即集合内为零、集合外为 $+\infty$ 时，它退化为投影梯度。这解释了两个算法的共同结构：线性化光滑部分，精确保留容易处理的约束或正则项。
+
+在复数稀疏信道估计中，令观测 $b\in\C^m$，训练矩阵 $A\in\C^{m\times n}$，待估信道 $x\in\C^n$，取
+\begin{equation}
+ f(x)=\frac12\norm{Ax-b}_2^2,\qquad
+ g(x)=\lambda\sum_{k=1}^n\abs{x_k},\qquad \lambda>0.
+\end{equation}
+把复向量看成实部和虚部组成的实向量，使用实内积 $\Rea(a^\HH b)$，梯度为 $A^\HH(Ax-b)$，可取 $L=\norm{A}_2^2$。每个分量的近端操作为
+\begin{equation}
+ [\prox_{\eta g}(z)]_k=
+ \begin{cases}
+ (1-\eta\lambda/\abs{z_k})z_k,&\abs{z_k}>\eta\lambda,\\
+ 0,&\abs{z_k}\le\eta\lambda.
+ \end{cases}
+ \label{eq:complex-shrink}
+\end{equation}
+它缩小复系数的幅度并保留相位。若分别对实部、虚部做实软阈值，实际惩罚变成了 $\abs{\Rea x_k}+\abs{\Ima x_k}$，与这里的复幅度正则项不同。
+
+以 $\eta=1/L$ 迭代式~\eqref{eq:prox-update}，通常称为 ISTA。若最优解存在，其目标误差为 $O(1/t)$。FISTA 在近端步骤之间加入外推，把最坏目标误差改进到 $O(1/t^2)$\cite{beck2009}。一种标准写法取 $a_0=1$、$y^0=x^0$，并执行
+\begin{align}
+ x^{t+1}&=\prox_{g/L}\!\left(y^t-\nabla f(y^t)/L\right),\\
+ a_{t+1}&=\frac{1+\sqrt{1+4a_t^2}}2,\\
+ y^{t+1}&=x^{t+1}+\frac{a_t-1}{a_{t+1}}(x^{t+1}-x^t).
+\end{align}
+在上述凸性和光滑性条件下，$F(x^t)-F(x^\star)\le 2L\norm{x^0-x^\star}_2^2/(t+1)^2$。标准 FISTA 的目标序列可以暂时上升；这个现象与其误差界并不矛盾。若实验要求逐步下降，可以使用带接受检查的单调变体。
+
+\section{内点法与建模语言：一次迭代可以更贵}
+当问题规模适中、要求较高精度时，通用锥规划求解器往往比手写一阶算法更省开发成本。它们把目标和约束转成线性锥、二阶锥、半正定锥或指数锥，再求解相应的数值系统。
+
+先看带等式约束 $Bx=b$ 的光滑最小化，$B$ 为约束矩阵。若当前点可行，牛顿方向 $d$ 和本步的等式乘子 $\nu$ 满足
+\begin{equation}
+ \begin{bmatrix}H&B^\T\\B&0\end{bmatrix}
+ \begin{bmatrix}d\\\nu\end{bmatrix}
+ =-\begin{bmatrix}\nabla f(x)\\0\end{bmatrix},
+ \qquad H=\nabla^2 f(x).
+ \label{eq:newton-kkt}
+\end{equation}
+它把目标的二阶信息和可行方向 $Bd=0$ 同时纳入计算。若 $B$ 满行秩，且 $H$ 在 $B$ 的零空间上正定，这个系统有唯一解。对于稠密系统，分解矩阵的时间和存储成本随维数迅速增加；稀疏性和问题结构决定了能否扩展到大规模。
+
+对凸不等式 $g_i(x)\le0$，严格可行域内可用障碍目标
+\begin{equation}
+ f(x)-\mu\sum_{i=1}^m\ln[-g_i(x)],\qquad \mu>0.
+\end{equation}
+在满足相应正则条件、精确求得中心点时，取 $\lambda_i=\mu/[-g_i(x)]$ 可得到对偶证书，原始与对偶目标的差为 $m\mu$。减小 $\mu$ 提高精度，同时会使问题更接近边界并增加线性系统的求解难度。实际锥求解器常使用原始--对偶方法；障碍表达式主要帮助理解精度和边界的关系\cite{boyd2004}。
+
+二阶锥约束的基本计算对象是向量范数；半正定约束的对象则是矩阵特征值或相关分解。例如一个实对称 $d\times d$ 矩阵已有 $d(d+1)/2$ 个独立元素。把波束向量提升为协方差矩阵后，维数可能显著增大。复杂度不能只按“用了多少个用户”判断，还应报告锥块尺寸、矩阵稀疏性和精度要求。
+
+\paragraph{数学凸性与 DCP 检查。}
+CVX、CVXPY 的规则凸规划（DCP）通过已知原子和组合规则验证凸性。它提供可检查的建模途径，并不识别所有等价凸表达式。标量函数 $\sqrt{1+x^2}$ 是凸的，但直接把凸函数 $1+x^2$ 放入凹且递增的平方根，不能通过常见 DCP 组合规则。写成 $\norm{(1,x)}_2$ 就能被识别。遇到拒绝时，应先核查模型结构，再找等价锥表达；改变求解器不会修复数学上的非凸性。
+
+\section{对偶分解：把耦合约束变成价格}
+若不同链路只通过总功率耦合，对偶分解可以用一个广播价格协调各链路。设 $U_k(p_k)$ 是链路 $k$ 的凹效用，$C_k$ 是其凸局部功率集合，考虑
+\begin{equation}
+ \max_{p_k\in C_k}\ \sum_k U_k(p_k)
+ \quad\text{s.t.}\quad \sum_k p_k\le P.
+ \label{eq:dual-resource}
+\end{equation}
+对总功率引入价格 $\lambda\ge0$，得到
+\begin{equation}
+ D(\lambda)=\lambda P+
+ \sum_k\max_{p_k\in C_k}\{U_k(p_k)-\lambda p_k\}.
+\end{equation}
+因为原问题是最大化，$D(\lambda)$ 给出最优效用的上界，对偶问题是 $\min_{\lambda\ge0}D(\lambda)$。固定价格后，每个链路独立选择功率。若本轮局部解为 $p_k^t$，则 $P-\sum_k p_k^t$ 是 $D$ 的一个次梯度，投影次梯度更新为
+\begin{equation}
+ \lambda^{t+1}=\pos{\lambda^t+\eta_t(\sum_k p_k^t-P)}.
+ \label{eq:price-update}
+\end{equation}
+用电超过预算就涨价，预算有余就降价，符号由对偶最小化方向确定。
+
+强对偶成立时，正确求解对偶可恢复最优效用。典型收敛条件还包括有界次梯度与 $\sum_t\eta_t=\infty$、$\sum_t\eta_t^2<\infty$。若局部最优解不唯一，原始功率可能振荡；需要用原始迭代的适当平均或进一步恢复可行解，不能把每轮功率都当作满足总预算的分配。这个方法的收益是分布式执行，代价是价格通信、迭代时延及原始可行性恢复。
+
+\section{ADMM：通过一致性拆开不同计算}
+当两个凸部分各自容易处理，但合在一起难处理时，可以引入两份变量并要求一致。标准二块 ADMM 处理
+\begin{equation}
+ \min_{x,z} f(x)+g(z)\quad\text{s.t.}\quad Ax+Bz=c,
+ \label{eq:admm-problem}
+\end{equation}
+其中 $f,g$ 是闭的适当凸函数，$A,B,c$ 为已知线性约束数据。缩放形式的更新为\cite{boyd2011}
+\begin{align}
+ x^{t+1}&=\argmin_x\left\{f(x)+\frac\rho2\norm{Ax+Bz^t-c+u^t}_2^2\right\},\\
+ z^{t+1}&=\argmin_z\left\{g(z)+\frac\rho2\norm{Ax^{t+1}+Bz-c+u^t}_2^2\right\},\\
+ u^{t+1}&=u^t+Ax^{t+1}+Bz^{t+1}-c.
+\end{align}
+这里 $u$ 是对偶乘子除以罚参数 $\rho>0$ 后的变量。与简单二次罚函数相比，对偶更新持续校正一致性误差，通常无需把 $\rho$ 推到无穷大。
+
+原始残差和常用的对偶残差分别是
+\begin{equation}
+ r^{t+1}=Ax^{t+1}+Bz^{t+1}-c,\qquad
+ s^{t+1}=\rho A^\T B(z^{t+1}-z^t).
+\end{equation}
+前者检查约束，后者反映相邻块变化对最优性条件的影响。停止阈值应包含绝对项和相对尺度项；只看目标变化可能遗漏一致性误差。$\rho$ 影响两个残差的平衡和实际速度，本身不是最终允许的误差。
+
+例如 LASSO 可拆成 $f(x)=\norm{Ax-b}_2^2/2$、$g(z)=\lambda\norm{z}_1$、$x=z$。第一步解线性方程 $(A^\HH A+\rho\I)x=A^\HH b+\rho(z-u)$，第二步做软阈值。固定 $\rho$ 时可复用矩阵分解。标准二块凸 ADMM 在存在鞍点、子问题可精确求解等条件下具有残差趋零和目标收敛结论；变量自身收敛可能还需额外条件。把它直接改成多块顺序更新或非凸子问题后，应重新核查相应定理。
+
+选择算法时，先估计最贵的操作：若梯度和投影便宜，先试一阶法；若精度要求高且锥块适中，先用通用求解器建立可靠基准；若局部计算自然分离而通信受限，再考虑分解算法。无论采用哪一种，都应把原始约束残差与实际目标值一并交给读者。

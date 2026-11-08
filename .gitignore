@@ -1,0 +1,15 @@
+# LaTeX build products (keep the supplied figure PDFs)
+*.aux
+*.log
+*.out
+*.toc
+*.xdv
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+latex/main.pdf
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.pyc

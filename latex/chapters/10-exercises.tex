@@ -1,0 +1,69 @@
+\chapter{习题：从识别结构到检查解答}
+\label{ch:exercises}
+\chaptertakeaway{用十四道自拟习题检查建模、等价变换和算法保证。先独立完成，再对照附录中的推导；计算结果应同时满足原问题的约束。}
+
+题目中的功率除特别说明外均已归一化。自然对数记作 $\ln$，以 $2$ 为底的对数记作 $\log_2$。建议先做题~\ref{ex:units}--\ref{ex:soc}，再做其余题目。
+
+\begin{enumerate}[label=\textbf{\arabic*.},ref=\arabic*,itemsep=10pt]
+\item \label{ex:units}\textbf{速率中的单位与带宽。}
+一条复基带 AWGN 链路的接收功率增益为 $g=10^{-8}$，发射功率为 $p=0.1\,\mathrm W$，带宽为 $B=10^6\,\mathrm{Hz}$。本题把噪声功率谱密度定义为 $N_0=10^{-17}\,\mathrm{W/Hz}$，故带内噪声为 $N_0B$。
+写出信噪比和速率（$\mathrm{bit/s}$），并计算数值。若把 $B$ 加倍而保持 $p,g,N_0$ 不变，信噪比和速率各怎样变化？把 $\log_2$ 换成 $\ln$ 后，如何恢复原速率？
+
+\item \label{ex:nonconcave}\textbf{干扰破坏联合凹性。}
+两个用户的噪声功率均为 $1$，直接增益均为 $1$，交叉增益均为 $2$，且 $p_1,p_2\geq0$、$p_1+p_2\leq1$。总速率为
+\[
+ R(p_1,p_2)=\ln\!\left(1+\frac{p_1}{1+2p_2}\right)
+ +\ln\!\left(1+\frac{p_2}{1+2p_1}\right).
+\]
+比较 $(1,0)$、$(0,1)$ 与其中点，证明 $R$ 不是联合凹函数。为什么“每个用户的速率对自身功率是凹的”不足以证明总问题是凸优化？
+
+\item \label{ex:water}\textbf{用 KKT 条件算一次注水。}
+求解 $\max_{p\geq0}\sum_{i=1}^4\ln(1+p_i/\alpha_i)$，约束为 $\sum_i p_i\leq10$，其中 $\alpha=(1,2,4,8)$。推导水位表达式，确定激活信道，给出最优功率与总功率约束的乘子，并检查未激活信道的 KKT 不等式。
+
+\item \label{ex:power}\textbf{固定 SINR 的线性规划与谱半径。}
+两用户的增益矩阵为 $G=\left[\begin{smallmatrix}1&0.2\\0.2&1\end{smallmatrix}\right]$，噪声为 $(0.1,0.1)$，目标 SINR 都是 $2$。写出最小总功率的线性规划，构造 $p\geq Fp+u$，计算 $\rho(F)$ 与分量最小可行功率。如果每个用户的峰值功率为 $0.3$，问题是否可行？
+
+\item \label{ex:soc}\textbf{波束成形为什么能转成二阶锥？}
+单播下行的第 $k$ 个用户满足
+\[
+ \frac{|h_k^{\HH}w_k|^2}{\sum_{j\ne k}|h_k^{\HH}w_j|^2+\sigma_k^2}\geq\gamma_k>0.
+\]
+在目标为总发射功率、其他约束只与各波束的二次幅度有关时，证明可以令 $h_k^{\HH}w_k$ 为非负实数，并写出等价的二阶锥约束。若同一波束同时服务多个用户，为什么这一论证通常不能直接套用？
+
+\item \label{ex:robust}\textbf{范数球的不确定性。}
+实向量 $a=\hat a+\delta$ 满足 $\|\delta\|_2\leq\varepsilon$。证明要求 $a^{\T}x\leq b$ 对所有允许的 $\delta$ 成立，等价于
+$\hat a^{\T}x+\varepsilon\|x\|_2\leq b$。给出最坏误差方向，并说明 $x=0$ 的情形。
+
+\item \label{ex:prox}\textbf{实数与复数软阈值。}
+对 $v\in\C$ 和 $\lambda\geq0$，求
+$\argmin_{z\in\C}\{\frac12|z-v|^2+\lambda|z|\}$。
+解释为什么最优解与非零的 $v$ 同相，并给出 $v=3+4\mathrm i$、$\lambda=2$ 的答案。它怎样退化为实数软阈值？
+
+\item \label{ex:dual}\textbf{对偶更新的符号。}
+考虑 $\min_{x\in\mathcal X} f(x)$，约束 $g(x)\leq0$，拉格朗日函数为 $L(x,\lambda)=f(x)+\lambda g(x)$。令 $x^t$ 精确最小化 $L(x,\lambda^t)$。写出对偶变量的投影更新，并解释在约束违反时乘子怎样变化。若约束改为 $a^{\T}x\geq b$，如何保持符号一致？
+
+\item \label{ex:sca}\textbf{切线的方向决定近似是否可行。}
+设 $g,h$ 均为可微凸函数。对最小化 $g(x)-h(x)$，说明应线性化哪一项，以及所得近似是原目标的上界还是下界。对约束 $g(x)-h(x)\leq0$，用同样构造得到的是内近似还是外近似？说明目标单调改进、停点和全局最优这三者的区别。
+
+\item \label{ex:wmmse}\textbf{标量 WMMSE 恒等式。}
+设 $y=as+\eta$，其中 $s,\eta$ 均为零均值，$\E|s|^2=1$，$\E[\eta s^*]=0$，$\E|\eta|^2=I>0$。用 $\hat s=u^*y$ 估计 $s$，定义 $e(u)=\E|\hat s-s|^2$。求 $u$、$e$ 的最优值，并证明
+\[
+ \max_{u\in\C,\,v>0}\{\ln v-ve(u)+1\}=\ln(1+|a|^2/I).
+\]
+这里的最优 $v$ 是什么？此恒等式本身是否证明多用户加权和速率能求得全局最优？
+
+\item \label{ex:ee}\textbf{单链路能效与 Dinkelbach。}
+对 $p_c>0$ 和 $0\leq p\leq P$，最大化归一化能效
+$\eta(p)=\ln(1+p)/(p_c+p)$。推导内部最优点的方程，证明无功率上界时根唯一，并求 $p_c=1,P=4$ 的最优解。写出 Dinkelbach 子问题及 $q>0$ 时的闭式解。
+
+\item \label{ex:assignment}\textbf{什么时候可以直接松弛指派变量？}
+两个用户、两个资源块的收益矩阵为
+$C=\left[\begin{smallmatrix}4&3\\3&0\end{smallmatrix}\right]$。每个用户和资源块恰好匹配一次，求最大收益匹配。解释为什么标准指派问题把 $x_{kn}\in\{0,1\}$ 松弛为 $x_{kn}\geq0$ 仍存在整数最优解。再给出增加一个线性耦合约束后出现严格松弛间隙的例子。
+
+\item \label{ex:chance}\textbf{单个高斯约束与联合机会约束。}
+令实随机向量 $a\sim\mathcal N(\mu,\Sigma)$，且 $x$ 为确定的设计变量。对 $0<\epsilon<1/2$，把
+$\Prob(a^{\T}x\leq b)\geq1-\epsilon$ 写成确定性二阶锥约束。若有 $m$ 个事件、要求同时满足的概率至少为 $1-\epsilon$，怎样分配各事件的失败概率才能得到充分条件？每个事件分别满足概率 $0.95$，是否足以保证联合概率 $0.95$？
+
+\item \label{ex:admm}\textbf{ADMM 应检查什么？}
+对共识问题 $\min f(x)+g(z)$、约束 $x=z$，写出原始残差和对偶残差。当 $x^t=z^t$ 但 $z^t$ 仍明显变化时，能否停止？说明标准凸 ADMM 收敛论证通常需要什么条件；将一个模块换成非凸神经网络后，哪些保证需要重新证明？
+\end{enumerate}

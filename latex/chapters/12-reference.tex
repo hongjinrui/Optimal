@@ -1,0 +1,53 @@
+\chapter{速查：表示、求解与阅读路线}\label{ch:reference}
+
+\section{复数模型如何交给实数求解器}
+通信模型常用复数简化记号，优化的凸性仍是在实数坐标下判断。若 $z=x+\mathrm i y$，其等价实向量是 $\widetilde z=[x^{\T},y^{\T}]^{\T}$；复矩阵 $A$ 的实表示为
+\begin{equation}
+ \widetilde A=\begin{bmatrix}\Rea A&-\Ima A\\\Ima A&\Rea A\end{bmatrix},\qquad
+ \norm{Az-b}_2=\norm{\widetilde A\widetilde z-\widetilde b}_2.
+\end{equation}
+若 $Q=Q^{\HH}$，则 $z^{\HH}Qz=\widetilde z^{\T}\widetilde Q\widetilde z$。这不是把复变量简单“取实部”；虚部仍是完整决策变量。
+
+对实值函数 $f(z)$，实微分为 $\mathrm df=\nabla_x f^{\T}\mathrm dx+\nabla_y f^{\T}\mathrm dy$。若采用 Wirtinger 记号，则
+\begin{equation}
+ \frac{\partial f}{\partial z^*}=\frac12(\nabla_x f+\mathrm i\nabla_y f).
+\end{equation}
+例如 $f(z)=\norm{Az-b}_2^2$ 的 $\partial f/\partial z^*=A^{\HH}(Az-b)$，而实坐标梯度对应 $2A^{\HH}(Az-b)$。实现中的步长要与梯度约定一致。第4、5章使用 $\tfrac12\norm{Az-b}_2^2$ 的近端梯度时，实坐标更新对应 $A^{\HH}(Az-b)$。
+
+\section{稳健二次约束与 S 引理}
+范数不确定性不仅出现在线性支持函数中，也出现在二次服务质量约束。一个重要工具是 S 引理。令实向量 $e\in\R^n$ 满足 $\norm e_2\le\epsilon$，$\epsilon>0$。对实对称 $Q$、向量 $b$ 与标量 $c$，下式的稳健约束
+\begin{equation}\label{eq:slemma-quad}
+ e^{\T}Qe+2b^{\T}e+c\ge0\quad\text{对所有 }\norm e_2\le\epsilon
+\end{equation}
+等价于存在 $\lambda\ge0$ 使
+\begin{equation}\label{eq:slemma-lmi}
+ \begin{bmatrix}Q+\lambda I&b\\b^{\T}&c-\lambda\epsilon^2\end{bmatrix}\succeq0.
+\end{equation}
+这将无限多条约束变成有限维 SDP 约束。充分性可直接核验：式\eqref{eq:slemma-lmi} 表示对任意 $e$，二次式\eqref{eq:slemma-quad}的左侧加 $\lambda(\norm e_2^2-\epsilon^2)$ 非负；在球内第二项非正，所以原二次式非负。必要性来自单个严格可行二次约束下的 S 引理；这里 $e=0$ 严格位于球内，满足其条件\cite{ben2009}。多个二次不确定约束同时出现时，同样加多个乘子的做法通常仅是充分条件。
+
+在通信中可以先把最坏信道下的 SINR 门限写成关于信道误差的二次式，再应用此式。若 $Q,b,c$ 对协方差设计变量仿射，所得矩阵不等式保持凸性；若它们还含有变量乘积，则引入 S 引理并不会自动消除剩余非凸性。矩阵是 Hermitian 的复数版本也可用相应复 S 引理，或先转为实数表示并核对不确定集合。
+
+\section{一页算法选择表}
+\begingroup\small
+\begin{longtable}{p{.24\textwidth}p{.30\textwidth}p{.35\textwidth}}
+\toprule 识别出的结构 & 优先选择 & 应报告的保证或证据\\\midrule\endhead
+少数可消元的资源变量 & KKT、单调根搜索、注水 & 方程残差、边界分支与全局条件\\
+固定 SINR 功控 & LP、谱半径检验 & 原可行残差、最小功率、不可行原因\\
+单流单播功率最小化 & 相位固定后的 SOCP & 等价性、原 SINR 核验\\
+凸光滑大规模模型 & 投影梯度、加速梯度 & 步长依据、梯度映射或函数界\\
+凸光滑加可近端正则 & ISTA/FISTA、ADMM & 目标与残差、凸问题的精度指标\\
+中等规模凸锥模型 & 内点法/锥求解器 & 原对偶间隙和锥约束残差\\
+干扰和速率 & SCA、WMMSE & 可行性、真实目标、多初值和驻点误差\\
+单个能效比值 & Dinkelbach & 子问题全局条件和参数残差\\
+单位模、秩一限制 & 流形/相位法、SDR & 可实施性，恢复目标与松弛界\\
+固定收益匹配 & 指派算法、LP 极点 & 整数最优解和等价性\\
+一般离散耦合 & 分支定界、有效松弛 & 可行目标、全局界、gap、时限\\
+随机信道长期设计 & SAA、随机梯度 & 抽样分布、验证样本、统计误差\\
+在线队列决策 & 漂移加惩罚、受约束 MDP & 稳定性条件、成本/积压权衡\\\bottomrule
+\end{longtable}
+\endgroup
+
+\section{继续学习时怎样选资料}
+希望补强凸分析与对偶，可读 Boyd--Vandenberghe\cite{boyd2004}；希望把算法与无线链路模型连起来，可读 Tse--Viswanath\cite{tse2005}。理解 SDP 松弛的条件与随机恢复，读 Luo 等的教程\cite{luo2010}；理解非凸块更新的驻点结论，读 Razaviyayn 等\cite{razaviyayn2013}；理解长期性能与队列权衡，读 Neely\cite{neely2010}。
+
+遇到新场景，先用第1章的地图检查新增变量、耦合和信息时序，再核验所选方法的条件。

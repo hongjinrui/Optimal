@@ -1,0 +1,76 @@
+Third-party source provenance
+Recorded 2026-11-08
+
+This directory contains unchanged reference snapshots used to build and extend
+the teaching examples in this textbook. It does not contain a CVX distribution
+or any bundled optimization solver. Upstream notices in the files are retained.
+No new license is assigned here to the user-facing textbook or its newly written
+content. The original licenses apply to the corresponding upstream files only.
+
+1. CVX example library
+Repository: https://github.com/cvxr/CVX
+Commit: a0a775908bc1eec1625d56498d0224132b0d8b7f
+
+Local paths are the same as their upstream paths under the CVX/ prefix:
+  CVX/LICENSE.txt
+  CVX/examples/antenna_array_design/ant_array_min_sidelobe.m
+  CVX/examples/gp_tutorial/power_control.m
+
+The upstream LICENSE.txt explicitly places the examples/ library in the public
+domain and requests appropriate credit. This statement is separate from the
+license of CVX itself and of any solvers. The full upstream license document is
+included as evidence; only the named example files are redistributed here.
+
+The two examples were written for CVX by Almir Mutapcic on 2006-02-02 and
+2006-02-08, respectively. Their headers credit Stephen Boyd and the cited
+antenna-array and geometric-programming publications. These snapshots have not
+been edited or run as part of textbook validation.
+
+2. CVXPY example notebooks
+Repository: https://github.com/cvxpy/examples
+Commit: 73a6892ef5bea4ded68f8f9fab17e48119dc62f5
+License: Apache License 2.0, full text in cvxpy-examples/LICENSE
+
+Local paths are the same as their upstream paths under the cvxpy-examples/ prefix:
+  cvxpy-examples/LICENSE
+  cvxpy-examples/notebooks/WWW/water_filling_BVex5.2.ipynb
+  cvxpy-examples/notebooks/WWW/maximise_minimum_SINR_BV4.20.ipynb
+
+The notebooks credit Robert Gowers, Roger Hill, Sami Al-Izzi, Timothy Pollington,
+and Keith Briggs. They identify their mathematical examples as Boyd and
+Vandenberghe, Convex Optimization, Example 5.2 and Exercise 4.20. The snapshots
+here are unchanged. The Apache license and original notebook attribution have
+been retained. No upstream NOTICE file was present in the repository root at
+the recorded version; this file records the source attribution for this package.
+
+Changes in the new textbook examples, relative to those source examples:
+  - New problem data and independent residual checks are used.
+  - Water filling is written as log2(1+p/alpha) so that the sum rate in bit/s for four 1-Hz subchannels (and the
+    conversion to aggregate spectral efficiency) is explicit, rather than
+    using a natural logarithm with an additive constant.
+  - Power and SINR constraints are expressed directly in the stated physical
+    units; any group constraint is a total-power constraint as written, rather
+    than an implicitly normalized average.
+  - The array example uses an explicitly specified uniform linear array and
+    explains why a finer angle grid is needed to detect sampling error.
+    No new array-design numerical experiment or upstream MATLAB run is claimed.
+  - New derivations explain mathematical structure, solver choice, assumptions,
+    stopping rules, and what numerical evidence can establish.
+These adaptations appear in the textbook chapters and new experiment programs,
+not in the unchanged upstream snapshots under this directory.
+
+3. User-specified mathematical research-writing rules
+Source: https://github.com/hongjinrui/writing_skills/blob/main/SKILL.md
+Read date: 2026-11-08
+Local snapshot: writing_rules/SKILL.md
+License: MIT, full license and attribution retained inside that file.
+The snapshot credits hongjinrui, JiahaoLi-creator, and Kiterlin. It is included
+to identify the exact writing guidance followed; the textbook does not claim
+that those authors reviewed or endorsed its mathematical content.
+
+4. Additional references
+The textbook cites standard books and research papers for mathematical results.
+Those books and papers are not redistributed in this package. New Chinese
+exposition, the problem-family organization, derivations, exercises, and plots
+are prepared for the present textbook. A publicly readable PDF is not treated
+as an open license to reproduce its text, diagrams, or source files.

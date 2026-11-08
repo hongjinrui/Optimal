@@ -1,0 +1,213 @@
+\chapter{干扰、能效与非凸优化}
+\label{ch:nonconvex}
+\chaptertakeaway{把非凸性定位到具体的耦合项；掌握逐次凸近似、WMMSE 和分式规划，并能准确说明它们的输出保证。}
+
+\section{加权和速率为何困难}
+
+把干扰当噪声时，增加某个用户的功率既提高自己的信号，也降低其他用户的速率。这个相反作用使和速率通常失去凹性。设有 $K$ 条单天线链路，$p_j\geq0$ 是发射功率，$g_{kj}\geq0$ 是发射端 $j$ 到接收端 $k$ 的功率增益，$\sigma_k^2>0$ 是噪声功率。加权和速率问题为
+\begin{equation}
+ \max_{\bm p\in\mathcal P}\quad
+ R(\bm p)=\sum_{k=1}^K a_k\log_2\left(1+
+ \frac{g_{kk}p_k}{\sigma_k^2+\sum_{j\ne k}g_{kj}p_j}\right),
+ \qquad a_k>0,
+ \label{eq:wsr-power}
+\end{equation}
+其中 $\mathcal P$ 可取总功率单纯形，也可取逐发射端功率盒。权重 $a_k$ 表示业务优先级；它不能直接保证每位用户获得最低速率，最低速率需要另加约束。
+
+非凹性可以直接由一个两链路例子看出。令 $g_{11}=g_{22}=1$、$g_{12}=g_{21}=10$、$\sigma_k^2=1$、$a_k=1$，总功率不超过 $1$。在 $(1,0)$ 和 $(0,1)$ 处，和速率均为 $1$ bit/s/Hz；在它们的中点 $(1/2,1/2)$ 处，和速率为 $2\log_2(13/12)<1$，违反凹函数的中点不等式。因而不能沿用正交信道的注水结论。
+
+不过，固定目标 SINR 的可行性问题仍可能是线性规划。这里困难的是同时选择各链路性能并最大化它们的非线性组合，而不是出现了 SINR 这个符号就一定困难。先检查是否能固定某个标量、消去变量或改变表示，再选择局部算法。
+
+\section{逐次凸近似：用可解的下界提高速率}
+\label{sec:sca}
+
+\subsection{下界必须朝正确的方向}
+
+对于最大化 $R(x)$，若在当前可行点 $x^{(t)}$ 构造一个易于最大化的凹函数 $\widetilde R(x;x^{(t)})$，并满足
+\begin{align}
+ \widetilde R(x;x^{(t)})&\leq R(x),\qquad x\in\mathcal X,
+ \label{eq:mm-lower}\\
+ \widetilde R(x^{(t)};x^{(t)})&=R(x^{(t)}),
+ \label{eq:mm-touch}
+\end{align}
+当 $\mathcal X$ 为凸集时，精确最大化此凹下界是凸优化，并可使原目标不下降。原因是
+\begin{equation}
+ R(x^{(t+1)})\geq \widetilde R(x^{(t+1)};x^{(t)})
+ \geq \widetilde R(x^{(t)};x^{(t)})=R(x^{(t)}).
+ \label{eq:mm-monotonic}
+\end{equation}
+这称为最大化的 minorization--maximization；对于最小化，使用紧贴原目标的上界。两者常统称 MM。方向选反后，代理问题的改进就不能推出原问题的改进。
+
+若约束写成 $c_i(x)\leq0$，可以用凸上界 $\widetilde c_i(x;x^{(t)})\geq c_i(x)$，要求 $\widetilde c_i\leq0$。这样得到原可行域的内近似，代理问题的每个可行解仍满足原约束。为使当前点保留下来，上界还需在当前点相等。由此也能看出可行初始化的作用：一个不可行初点无法直接提供这条可行性链。
+
+\subsection{和速率的差分凹表示}
+
+把第 $k$ 项写为两个凹函数之差：
+\begin{equation}
+ r_k(\bm p)=\frac{1}{\ln2}\left[
+ \ln\left(\sigma_k^2+\sum_jg_{kj}p_j\right)
+ -\ln\left(\sigma_k^2+\sum_{j\ne k}g_{kj}p_j\right)\right].
+ \label{eq:rate-dc}
+\end{equation}
+记 $I_k^{(t)}=\sigma_k^2+\sum_{j\ne k}g_{kj}p_j^{(t)}>0$。凹函数位于其一阶切平面的下方，因此
+\begin{equation}
+ \ln\left(\sigma_k^2+\sum_{j\ne k}g_{kj}p_j\right)
+ \leq\ln I_k^{(t)}+
+ \frac{\sum_{j\ne k}g_{kj}(p_j-p_j^{(t)})}{I_k^{(t)}}.
+\end{equation}
+把这个上界代入被减去的一项，得到速率的凹下界
+\begin{equation}
+ \widetilde r_k(\bm p;\bm p^{(t)})=
+ \frac{1}{\ln2}\left[
+ \ln\left(\sigma_k^2+\sum_jg_{kj}p_j\right)-\ln I_k^{(t)}
+ -\frac{\sum_{j\ne k}g_{kj}(p_j-p_j^{(t)})}{I_k^{(t)}}\right].
+ \label{eq:sca-rate}
+\end{equation}
+于是最大化 $\sum_k a_k\widetilde r_k$、附上原凸功率约束，就是一个凸优化问题。若还有 $r_k\geq\bar r_k$，用 $\widetilde r_k\geq\bar r_k$ 得到可行内近似。若初始点不满足最低速率，可先最大化共同速率裕量；只有裕量非负时，才获得所需可行起点。
+
+\subsection{单调性与驻点保证是两件事}
+
+式~\eqref{eq:mm-monotonic} 加上目标有上界，只能直接证明目标值序列收敛。要把聚点称为原问题的驻点，还需要代理与原函数的一阶导数一致、连续性、子问题解的适当性及约束正则性。常用做法是加入 $-\tfrac{\tau}{2}\norm{x-x^{(t)}}^2$（$\tau>0$），使最大化代理具有唯一解，并在满足相应正则条件时应用逐次近似的收敛定理\cite{razaviyayn2013}。驻点表示不存在满足一阶条件的局部改进方向；不同初值仍可能到达不同驻点。
+
+实际停止时至少同时记录相对目标变化和一阶残差。对于只有简单凸约束 $\mathcal X$ 的光滑最大化，可用投影梯度映射
+\begin{equation}
+ G_\eta(x)=\frac{\Pi_{\mathcal X}(x+\eta\nabla R(x))-x}{\eta}
+\end{equation}
+的范数衡量驻点误差；$\Pi_{\mathcal X}$ 表示欧氏投影。目标变化小也可能只是步长太小。
+
+\section{WMMSE：通过接收误差处理速率耦合}
+\label{sec:wmmse}
+
+WMMSE 把速率目标改写为带接收器和误差权重的优化；逐块更新后，每一步都有闭式解或凸二次子问题。它尤其适合干扰网络的和速率设计\cite{shi2011}。
+
+\subsection{速率与最小均方误差的恒等式}
+
+令 $h_{kj}\in\C$ 为复信道，$v_j\in\C$ 为发射幅度，故 $p_j=\abs{v_j}^2$；独立数据符号满足 $\E\abs{s_j}^2=1$。接收信号和估计分别为
+\begin{equation}
+ y_k=\sum_jh_{kj}v_js_j+n_k,\qquad
+ \widehat s_k=u_k^*y_k,\qquad \E\abs{n_k}^2=\sigma_k^2.
+\end{equation}
+这里明确使用 $u_k^*$ 作接收系数，以免更新公式中的共轭混淆。总接收功率为 $T_k=\sum_j\abs{h_{kj}v_j}^2+\sigma_k^2$，均方误差为
+\begin{equation}
+ e_k=\E\abs{\widehat s_k-s_k}^2
+ =\abs{u_k}^2T_k-2\Rea(u_k^*h_{kk}v_k)+1.
+ \label{eq:wmmse-mse}
+\end{equation}
+固定发射端后，完成平方可得
+\begin{equation}
+ u_k^{\rm mmse}=\frac{h_{kk}v_k}{T_k},\qquad
+ e_k^{\rm mmse}=1-\frac{\abs{h_{kk}v_k}^2}{T_k}
+ =\frac{1}{1+\SINR_k}.
+ \label{eq:wmmse-receiver}
+\end{equation}
+该关系把高 SINR 对应为低估计误差，但直接最小化误差之和仍不等价于最大化速率之和。还需要一个正误差权重 $q_k$。
+
+对任意 $e>0$，函数 $\ln q-qe+1$ 在 $q=1/e$ 处取得最大值 $-\ln e$。结合式~\eqref{eq:wmmse-receiver}，得到精确恒等式
+\begin{equation}
+ \ln(1+\SINR_k)=
+ \max_{u_k\in\C,\ q_k>0}\{\ln q_k-q_ke_k+1\}.
+ \label{eq:wmmse-identity}
+\end{equation}
+本节用自然对数速率 $\sum_k a_k\ln(1+\SINR_k)$；若用 bit/s/Hz，整体再除以 $\ln2$，最优发射设计不变。由式~\eqref{eq:wmmse-identity}，最大化加权和速率等价于
+\begin{equation}
+ \min_{\bm v\in\mathcal V,\ \bm u,\ \bm q>0}
+ \sum_k a_k(q_ke_k-\ln q_k),
+ \label{eq:wmmse-problem}
+\end{equation}
+目标仅相差常数 $\sum_k a_k$ 和一个负号。辅助变量保留了原目标的信息，而不是对 $\ln(1+\SINR)$ 作高 SINR 近似。
+
+\subsection{三组变量的更新}
+
+固定 $\bm v$ 时，依次令
+\begin{equation}
+ u_k\leftarrow\frac{h_{kk}v_k}{T_k},\qquad
+ q_k\leftarrow\frac{1}{e_k^{\rm mmse}}.
+ \label{eq:wmmse-uq}
+\end{equation}
+再固定 $\bm u,\bm q$，以总功率限制 $\sum_j\abs{v_j}^2\leq P$ 为例，发射子问题可写成
+\begin{equation}
+ \min_{\sum_j\abs{v_j}^2\leq P}\quad
+ \sum_j\left(A_j\abs{v_j}^2-2\Rea(b_j^*v_j)\right),
+ \quad
+ \begin{cases}
+ A_j=\sum_k a_kq_k\abs{u_k}^2\abs{h_{kj}}^2,\\
+ b_j=a_jq_ju_jh_{jj}^*.
+ \end{cases}
+ \label{eq:wmmse-vsub}
+\end{equation}
+注意 $A_j$ 汇总了发射端 $j$ 对所有接收端的影响。拉格朗日条件给出
+\begin{equation}
+ v_j=\frac{b_j}{A_j+\lambda},\qquad
+ \lambda\geq0,\qquad
+ \lambda\left(\sum_j\abs{v_j}^2-P\right)=0.
+ \label{eq:wmmse-vupdate}
+\end{equation}
+若 $\lambda=0$ 已满足功率限制，就不必搜索；否则利用功率关于 $\lambda$ 单调下降作一维二分。遇到 $A_j=b_j=0$ 时可取 $v_j=0$。若采用逐用户峰值功率限制，则对各自无约束解作幅度截断即可。
+
+一次循环的输入是可行发射向量，输出是更新后的可行发射向量。计算 $T_k$ 与 $A_j$ 的直接代价均为 $O(K^2)$；给定 $A_j,b_j$ 后，一次功率二分检验只需 $O(K)$。对多天线发射，$A_j$ 替换为半正定矩阵，式~\eqref{eq:wmmse-vupdate} 替换为线性方程求解，矩阵分解成为主要成本。
+
+\begin{example}[没有干扰时的恒等式核对]
+令单链路 $h=1$、$\sigma^2=1$、$v=1$，则 $T=2$、$u=1/2$、$e=1/2$、$q=2$。代入 $\ln q-qe+1$ 得 $\ln2$，恰好等于 $\ln(1+\SINR)$。这个算例可以检查实现中接收器共轭、误差常数项和对数底数是否一致。
+\end{example}
+
+在每轮更新 $u,q$ 后，辅助目标精确对应当前真实和速率；随后的发射最小化和再更新使真实和速率不下降。在正噪声、紧功率集及适当的块更新正则条件下，可得到驻点结论\cite{shi2011,razaviyayn2013}。算法仍然依赖初始化：某用户若以零发射幅度开始，会使对应 $u_k=b_k=0$，可能一直保持关闭。可用非零等功率初始化和多组随机初始化，并报告各次可行目标，而不把最大一次的结果称为全局最优。
+
+\section{能效与 Dinkelbach 分式规划}
+\label{sec:dinkelbach}
+
+能效衡量每消耗一焦耳能量传输多少比特。设总吞吐量为 $R(x)$（bit/s），总耗电功率为 $D(x)>0$（W），则能效 $R(x)/D(x)$ 的单位是 bit/J。典型模型是 $D(x)=P_{\rm c}+P_{\rm tx}(x)/\eta$，其中 $P_{\rm c}>0$ 是电路功耗，$0<\eta\leq1$ 是功放效率。
+
+\begin{proposition}[比值最优的零残差判据]
+设 $\mathcal X$ 紧，$R,D$ 连续且 $D>0$。定义
+\begin{equation}
+ F(q)=\max_{x\in\mathcal X}\{R(x)-qD(x)\}.
+ \label{eq:dink-F}
+\end{equation}
+则 $q^*=\max_{x\in\mathcal X}R(x)/D(x)$ 当且仅当 $F(q^*)=0$。
+\end{proposition}
+\begin{proof}
+若 $q^*$ 是最大比值，则对所有可行 $x$ 有 $R(x)-q^*D(x)\leq0$，且在最优点取等号。反过来，$F(q)=0$ 表示所有比值不超过 $q$，并存在点的比值等于 $q$。
+\end{proof}
+
+对于非负吞吐量，可从 $q^{(0)}=0$ 开始执行 Dinkelbach 算法，反复计算
+\begin{align}
+ x^{(t)}&\in\argmax_{x\in\mathcal X}
+       \{R(x)-q^{(t)}D(x)\},\\
+ q^{(t+1)}&=\frac{R(x^{(t)})}{D(x^{(t)})}.
+ \label{eq:dink-update}
+\end{align}
+停止指标使用 $\abs{R(x^{(t)})-q^{(t)}D(x^{(t)})}$，并说明其吞吐量单位及容差。若 $D(x)\geq d_{\min}>0$，精确子问题的非负残差 $F(q)$ 还给出 $q^*-q\leq F(q)/d_{\min}$。
+
+当 $R$ 为凹函数、$D$ 为正仿射函数、$\mathcal X$ 为凸集时，每个参数子问题是凸优化；精确求解这些子问题可得到全局最优能效\cite{dinkelbach1967}。若 $R$ 是干扰网络的非凹和速率，再套一层 WMMSE 或 SCA 得到的只是局部子问题解，零局部残差不能证明 $F(q)=0$，也就不能据此声称全局最优。分式规划还可通过其他辅助变量变换处理多比值问题，但单比值的结论不能直接移用于多个比值之和\cite{shen2018}。
+
+\begin{example}[单链路的能效功率]
+取归一化带宽 $1$、$R(p)=\log_2(1+p)$、$D(p)=1+p$、$0\leq p\leq4$。其导数的符号由 $1-\ln(1+p)$ 决定，所以 $p^*=\mathrm e-1$，能效为 $1/(\mathrm e\ln2)$。最高吞吐量在 $p=4$ 取得，能效最优则在更低功率处取得：电路功耗使小功率浪费固定开销，而对数速率的边际收益递减又限制了大功率的价值。
+\end{example}
+
+\section{交替优化与可重构智能表面}
+\label{sec:ris}
+
+交替优化把变量分块，每轮固定其余块，只更新一块。它的吸引力在于原问题可能很难，而各块较容易。例如固定 RIS 相位时优化发射波束，固定波束时优化相位。但两块各自解到全局最优，通常也只能导向一个坐标方向上无法改进的点。函数 $f(x,y)=xy$ 在 $[-1,1]^2$ 上最大化时，$(0,0)$ 的任一单块更新都可选为零，尽管全局最优值为 $1$。这个例子说明还必须考察更新的唯一性、打破平局的规则和联合一阶条件。
+
+RIS 的第 $m$ 个理想无源反射系数可写为 $\theta_m=\exp(\mathrm i\phi_m)$，其中 $\phi_m$ 为相位，满足 $\abs{\theta_m}=1$。固定其他变量后，一个简单单流目标为
+\begin{equation}
+ \max_{\abs{\theta_m}=1}\quad
+ f(\bm\theta)=\abs{c+\bm a^{\HH}\bm\theta}^2,
+ \label{eq:ris-simple}
+\end{equation}
+其中 $c\in\C$ 是直达通道贡献，$\bm a\in\C^M$ 汇总反射通道和固定发射波束。单位模集合不是凸集；把它替换为 $\abs{\theta_m}\leq1$ 是放松，所得解未必能由相位器实现。
+
+可以直接用相位变量优化。记 $z=c+\bm a^{\HH}\bm\theta$，则实变量梯度为
+\begin{equation}
+ \frac{\partial f}{\partial\phi_m}
+ =2\Rea\left(z^*\,\mathrm i\,a_m^*\theta_m\right).
+\end{equation}
+执行 $\bm\phi^{(t+1)}=\bm\phi^{(t)}+\alpha_t\nabla_{\bm\phi}f$，再用 $\theta_m=\exp(\mathrm i\phi_m)$ 恢复系数，就始终满足单位模约束。用回溯线搜索选取能提高目标的 $\alpha_t$，即可保证本块单调改进；这种方法仍是在非凸相位空间寻找驻点。
+
+式~\eqref{eq:ris-simple} 实际有更强的结构：若 $c\ne0$，可以让每个 $a_m^*\theta_m$ 与 $c$ 同相，从而取得 $(\abs c+\sum_m\abs{a_m})^2$。若多个用户共享相位，同一组系数通常不能同时对齐所有信号，这时才需要联合近似、流形方法或半正定松弛。先识别这一类特殊闭式解，能避免把一个可直接解决的设计写成复杂迭代。
+
+\section{如何选择非凸方法}
+
+差分凹速率和易于表达的凸约束适合 SCA；接收器、流和发射波束耦合的和速率常适合 WMMSE；单个正分母的能效比值适合先检查 Dinkelbach 的全局子问题条件。交替优化是组织变量的方式，可以在某一块中再用这些方法，但每嵌套一层都要检查内层精度是否支持外层目标改进。
+
+计算结果应同时附上初值、可行性残差、真实目标曲线和停止标准。需要全局证书时，应额外构造松弛上界，或对小规模实例使用分支定界；多个初值都得到相近目标，是数值稳定性的证据，不能代替全局上界。

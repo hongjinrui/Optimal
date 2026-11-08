@@ -1,0 +1,28 @@
+验证记录（2026-11-08）
+
+LaTeX
+- 对完整源码的干净副本执行 latexmk -xelatex，成功生成61页。
+- 主文件main.tex；正文10章，附录2章，参考文献19条，自拟习题14道。
+- 最终日志无未定义引用/引文、无Overfull、无LaTeX Warning或错误。
+- 检查整书页面缩略图，并查看封面、公式页、全部实验图和图文分页。
+- 此环境的中文支持使用官方CTeX v2.5.10；标准完整TeX Live/Overleaf
+  直接提供所需的ctex、xeCJK、Fandol与常用宏包。
+- 标准编译仅用随包图形PDF，无Python、网络、MATLAB或shell-escape依赖。
+
+数学与实验
+- 交叉核查KKT/Slater、SINR谱半径判据、SOCP相位变换、SDR恢复、
+  复LASSO近端、WMMSE共轭、Dinkelbach残差及概率/队列保证的条件。
+- code/run_experiments.py 已实际运行通过全部断言。
+- 注水解析结构与CVXPY分量最大差约7.13e-6。
+- 固定SINR功控闭式与LP最大分量差约2.44e-12。
+- WMMSE三种初值均单调；不同初值得到不同最终目标。
+- ISTA以近端梯度映射停止，与CVXPY目标差约1.52e-11。
+- 详细版本、参数和残差以data/results.json为准。
+- 未运行third_party中的MATLAB代码与原始notebook；保留它们用于来源核对。
+
+打包
+- 仅打包源码、图形、数值数据、说明与上游原始许可。
+- 不包含生成的整书PDF、LaTeX缓存、虚拟环境或__pycache__。
+
+最终归档复核：已将实际latex.zip解压到新的空目录，并重新编译为61页；
+日志无未定义引用、LaTeX警告或Overfull，ZIP完整性检查通过。
