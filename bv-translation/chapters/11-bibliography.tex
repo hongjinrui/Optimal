@@ -1,0 +1,24 @@
+% Source PDF page 635 (printed p. 621)
+\section*{文献说明}
+\addcontentsline{toc}{section}{文献说明}
+Fiacco 和 McCormick [FM90, 第1.2节] 详细介绍了障碍法的早期历史。20世纪60年代，它与一些密切相关的技术一起成为流行的凸优化算法，包括中心法（Li\^e\~u 和 Huard [LH66]；亦见习题11.11），以及罚函数法或外点法 [FM90, 第4节]。20世纪70年代，人们担忧在 $t$ 很大时中心化问题 (11.6) 的牛顿方程病态，研究兴趣因而下降。
+
+20世纪80年代，Gill、Murray、Saunders、Tomlin 和 Wright [GMS$^+$86] 指出了障碍法与 Karmarkar 线性规划多项式时间投影算法 [Kar84] 的密切联系，障碍法重新受到重视。整个80年代的研究重点仍是线性规划，以及较少程度上的二次规划，产生了基本内点法的不同变体，并改善了最坏情况复杂度结果，见 Gonzaga [Gon92]。原始—对偶方法逐渐成为实际实现的首选算法，见 Mehrotra [Meh92]，Lustig、Marsten 和 Shanno [LMS94]，以及 Wright [Wri97]。
+
+Nesterov 和 Nemirovski 在1994年的专著中，利用自协调函数的牛顿法收敛理论，将线性规划内点法的复杂度理论扩展到非线性凸优化。他们还发展了含广义不等式问题的内点法，并讨论了使问题满足自协调性假设的重新表述方法。例如，第587页的几何规划重新表述来自 [NN94, 第6.3.1节]。
+
+正如第585页所述，复杂度分析表明，与人们可能预期的相反，至少在精确算术下，障碍法的中心化问题不会随 $t$ 增大而变难。实际经验以及理论结果（Forsgren、Gill 和 Wright [FGW02, 第4.3.2节]，Nocedal 和 Wright [NW99, 第525页]）还表明，病态对牛顿系统计算解的影响，比早先认为的温和。
+
+近期内点法研究主要致力于将线性规划的原始—对偶方法推广到非线性凸问题；它们比原始障碍法收敛更快，达到的精度也更高。一种常见方法与第11.7节的简单原始—对偶方法思路一致，对标准形式凸优化问题，即 (11.1)，修改后的 KKT 方程作线性化。更精细的这类算法与算法11.2的区别，在于选择 $t$ 的策略以及线搜索，其中 $t$ 的选择对实现渐近超线性收敛至关重要。详细讨论与参考文献可见 Wright [Wri97, 第8章]，Ralph 和 Wright [RW97]，den Hertog [dH93]，Terlaky [Ter96]，以及 Forsgren、Gill 和 Wright 的综述 [FGW02, 第5节]。
+
+其他作者从锥规划框架出发，将线性规划的原始—对偶内点法推广到凸优化，例如 Nesterov 和 Todd [NT98]。这种方法产生了高效而准确的半定规划与二阶锥规划原始—对偶方法，见 Todd [Tod01] 和 Alizadeh、Goldfarb [AG03] 的综述。
+
+与线性规划一样，半定规划的原始—对偶方法通常描述为对修改后 KKT 方程应用牛顿法的变体。但不同于线性规划，线性化可以有许多不同方式，产生不同搜索方向和算法；见 Helmberg、Rendl、Vanderbei 和 Wolkowicz [HRVW96]，Kojima、Shindo 和 Harah [KSH97]，Monteiro [Mon97]，Nesterov 和 Todd [NT98]，Zhang [Zha98]，Alizadeh、Haeberly 和 Overton [AHO98]，以及 Todd、Toh 和 T\"ut\"unc\"u [TTT98]。
+
+初始化与不可行性检测方面也取得了重大进展。齐次自对偶表述为第11.4节的经典两阶段方法提供了优雅而高效的替代；详见 Ye、Todd 和 Mizuno [YTM94]，Xu、Hung
+% Source PDF page 636 (printed p. 622)
+和 Ye [XHY96]，Andersen 和 Ye [AY98]，以及 Luo、Sturm 和 Zhang [LSZ00]。
+
+半定规划与二阶锥规划的原始—对偶内点法已经在许多软件包中实现，包括 SeDuMi [Stu99]、SDPT3 [TTT02]、SDPA [FKN98]、CSDP [Bor02] 和 DSDP [BY02]。YALMIP [L\"of04] 为其中几个软件提供了易用接口。
+
+以下专著更详细地记录了这一快速发展领域的近期进展：Vanderbei [Van96]，Wright [Wri97]，Roos、Terlaky 和 Vial [RTV97]，Ye [Ye97]，Wolkowicz、Saigal 和 Vandenberghe [WSV00]，Ben-Tal 和 Nemirovski [BTN01]，Renegar [Ren01]，以及 Peng、Roos 和 Terlaky [PRT02]。

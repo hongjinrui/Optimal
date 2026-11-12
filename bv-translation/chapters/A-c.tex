@@ -1,0 +1,272 @@
+% Source PDF page 659 (printed p. 645)
+\subsection{二阶导数的链式法则}
+一般的二阶导数链式法则在多数情况下比较繁琐，因此这里只给出后面需要的几种特殊情形。
+
+\subsubsection*{与标量函数复合}
+设 $f:\R^n\to\R$、$g:\R\to\R$，且 $h(x)=g(f(x))$。直接计算偏导数，可得
+\begin{equation}
+ \nabla^2h(x)=g'(f(x))\nabla^2f(x)+g''(f(x))\nabla f(x)\nabla f(x)^T.\tag{A.8}
+\end{equation}
+
+\subsubsection*{与仿射函数复合}
+设 $f:\R^n\to\R$、$A\in\R^{n\times m}$、$b\in\R^n$，定义 $g:\R^m\to\R$ 为 $g(x)=f(Ax+b)$，则
+\[
+ \nabla^2g(x)=A^T\nabla^2f(Ax+b)A.
+\]
+例如，将实值函数 $f$ 限制在一条直线上，即考虑函数 $\widetilde f(t)=f(x+tv)$，其中 $x,v$ 固定。则
+\[
+ \nabla^2\widetilde f(t)=\widetilde f''(t)=v^T\nabla^2f(x+tv)v.
+\]
+
+\begin{origexample}{A.4}
+考虑例A.2中的函数 $f:\R^n\to\R$，
+\[
+ f(x)=\log\sum_{i=1}^m\exp(a_i^Tx+b_i),
+\]
+其中 $a_1,\ldots,a_m\in\R^n$、$b_1,\ldots,b_m\in\R$。注意 $f(x)=g(Ax+b)$，其中 $g(y)=\log(\sum_{i=1}^m\exp y_i)$，就能求出 $f$ 的 Hessian 的简单公式。直接计算偏导数，或者注意到 $g$ 是 $\log$ 与 $\sum_{i=1}^m\exp y_i$ 的复合，再利用公式(A.8)，可得
+\[
+ \nabla^2g(y)=\diag(\nabla g(y))-\nabla g(y)\nabla g(y)^T,
+\]
+其中 $\nabla g(y)$ 由(A.7)给出。利用复合公式，
+\[
+ \nabla^2f(x)=A^T\left(\frac1{\one^Tz}\diag(z)-\frac1{(\one^Tz)^2}zz^T\right)A,
+\]
+其中 $z_i=\exp(a_i^Tx+b_i)$，$i=1,\ldots,m$。
+\end{origexample}
+
+\section{线性代数}
+\subsection{值域与零空间}
+设 $A\in\R^{m\times n}$，即 $A$ 是一个 $m$ 行 $n$ 列的实矩阵。$A$ 的\emph{值域}记为 $\mathcal R(A)$，由 $\R^m$ 中所有能写成 $A$ 的各列的线性组合的向量组成，即
+% Source PDF page 660 (printed p. 646)
+\[
+ \mathcal R(A)=\{Ax\mid x\in\R^n\}.
+\]
+值域 $\mathcal R(A)$ 是 $\R^m$ 的一个子空间，即它本身也是向量空间。它的维数是 $A$ 的\emph{秩}，记为 $\rank A$。$A$ 的秩不会超过 $m,n$ 中的较小值。若 $\rank A=\min\{m,n\}$，则称 $A$ \emph{满秩}。
+
+$A$ 的\emph{零空间}，又称\emph{核}，记为 $\mathcal N(A)$，由所有被 $A$ 映射为零的向量 $x$ 组成：
+\[
+ \mathcal N(A)=\{x\mid Ax=0\}.
+\]
+零空间是 $\R^n$ 的子空间。
+
+\subsubsection*{$A$ 诱导的正交分解}
+若 $V$ 是 $\R^n$ 的子空间，则其\emph{正交补}记为 $V^\perp$，定义为
+\[
+ V^\perp=\{x\mid\text{对所有 }z\in V,\ z^Tx=0\}.
+\]
+正如补空间应有的性质，$V^{\perp\perp}=V$。
+
+线性代数的一个基本结论是，对于任意 $A\in\R^{m\times n}$，
+\[
+ \mathcal N(A)=\mathcal R(A^T)^\perp.
+\]
+对 $A^T$ 应用这一结论，还可得 $\mathcal R(A)=\mathcal N(A^T)^\perp$。上述结论常写成
+\begin{equation}
+ \mathcal N(A)\mathbin{\overset{\perp}{\oplus}}\mathcal R(A^T)=\R^n.\tag{A.9}
+\end{equation}
+这里的符号 $\mathbin{\overset{\perp}{\oplus}}$ 表示\emph{正交直和}，即两个相互正交的子空间的和。$\R^n$ 的分解(A.9)称为 $A$ 诱导的\emph{正交分解}。
+
+\subsection{对称矩阵的特征值分解}
+设 $A\in\mathbf S^n$，即 $A$ 是实对称 $n\times n$ 矩阵。则 $A$ 可以分解为
+\begin{equation}
+ A=Q\Lambda Q^T,\tag{A.10}
+\end{equation}
+其中 $Q\in\R^{n\times n}$ 正交，即 $Q^TQ=I$，$\Lambda=\diag(\lambda_1,\ldots,\lambda_n)$。实数 $\lambda_i$ 是 $A$ 的\emph{特征值}，即特征多项式 $\det(sI-A)$ 的根。$Q$ 的各列构成 $A$ 的一组标准正交特征向量。分解(A.10)称为 $A$ 的\emph{谱分解}或（对称）\emph{特征值分解}。
+
+我们按 $\lambda_1\geq\lambda_2\geq\cdots\geq\lambda_n$ 的次序排列特征值，用 $\lambda_i(A)$ 表示 $A\in\mathbf S$ 的第 $i$ 大特征值。最大的特征值通常记为 $\lambda_1(A)=\lambda_{\max}(A)$，最小的特征值通常记为 $\lambda_n(A)=\lambda_{\min}(A)$。
+
+% Source PDF page 661 (printed p. 647)
+行列式和迹可以用特征值表示：
+\[
+ \det A=\prod_{i=1}^n\lambda_i,\qquad\tr A=\sum_{i=1}^n\lambda_i.
+\]
+谱范数和 Frobenius 范数也可以写成
+\[
+ \norm{A}_2=\max_{i=1,\ldots,n}\abs{\lambda_i}=\max\{\lambda_1,-\lambda_n\},\qquad
+ \norm{A}_F=\left(\sum_{i=1}^n\lambda_i^2\right)^{1/2}.
+\]
+
+\subsubsection*{正定性与矩阵不等式}
+最大和最小特征值满足
+\[
+ \lambda_{\max}(A)=\sup_{x\neq0}\frac{x^TAx}{x^Tx},\qquad
+ \lambda_{\min}(A)=\inf_{x\neq0}\frac{x^TAx}{x^Tx}.
+\]
+特别地，对于任意 $x$，有
+\[
+ \lambda_{\min}(A)x^Tx\leq x^TAx\leq\lambda_{\max}(A)x^Tx,
+\]
+并且这两个不等式都能由不同的 $x$ 取到等号。
+
+若对于所有 $x\neq0$ 都有 $x^TAx>0$，则称矩阵 $A\in\mathbf S^n$ \emph{正定}，记为 $A\succ0$。由上面的不等式可知，$A\succ0$ 当且仅当它的全部特征值均为正，即 $\lambda_{\min}(A)>0$。若 $-A$ 正定，则称 $A$ \emph{负定}，记为 $A\prec0$。$\mathbf S^n$ 中所有正定矩阵的集合记为 $\mathbf S_{++}^n$。
+
+若对所有 $x$ 都有 $x^TAx\geq0$，则称 $A$ \emph{半正定}，或\emph{非负定}。若 $-A$ 非负定，即对所有 $x$ 都有 $x^TAx\leq0$，则称 $A$ \emph{半负定}，或\emph{非正定}。$\mathbf S^n$ 中所有非负定矩阵的集合记为 $\mathbf S_+^n$。
+
+对于 $A,B\in\mathbf S^n$，用 $A\prec B$ 表示 $B-A\succ0$，其他情形类似。这些不等式称为\emph{矩阵不等式}，或与半正定锥对应的\emph{广义不等式}。
+
+\subsubsection*{对称平方根}
+设 $A\in\mathbf S_+^n$，其特征值分解为 $A=Q\diag(\lambda_1,\ldots,\lambda_n)Q^T$。定义 $A$ 的（对称）\emph{平方根}为
+\[
+ A^{1/2}=Q\diag(\lambda_1^{1/2},\ldots,\lambda_n^{1/2})Q^T.
+\]
+平方根 $A^{1/2}$ 是方程 $X^2=A$ 的唯一对称半正定解。
+
+\subsection{广义特征值分解}
+一对对称矩阵 $(A,B)\in\mathbf S^n\times\mathbf S^n$ 的\emph{广义特征值}，定义为多项式 $\det(sB-A)$ 的根。
+% Source PDF page 662 (printed p. 648)
+我们通常关心 $B\in\mathbf S_{++}^n$ 的矩阵对。此时，广义特征值也是矩阵 $B^{-1/2}AB^{-1/2}$ 的特征值，因而都是实数。与通常的特征值分解一样，我们将广义特征值按非增次序排列，即 $\lambda_1\geq\lambda_2\geq\cdots\geq\lambda_n$，并用 $\lambda_{\max}(A,B)$ 表示最大广义特征值。
+
+当 $B\in\mathbf S_{++}^n$ 时，这对矩阵可以分解为
+\begin{equation}
+ A=V\Lambda V^T,\qquad B=VV^T,\tag{A.11}
+\end{equation}
+其中 $V\in\R^{n\times n}$ 非奇异，$\Lambda=\diag(\lambda_1,\ldots,\lambda_n)$，$\lambda_i$ 为矩阵对 $(A,B)$ 的广义特征值。分解(A.11)称为\emph{广义特征值分解}。
+
+广义特征值分解与矩阵 $B^{-1/2}AB^{-1/2}$ 的通常特征值分解有关。若 $Q\Lambda Q^T$ 是 $B^{-1/2}AB^{-1/2}$ 的特征值分解，则取 $V=B^{1/2}Q$，就得到(A.11)。
+
+\subsection{奇异值分解}
+设 $A\in\R^{m\times n}$，$\rank A=r$，则 $A$ 可以分解为
+\begin{equation}
+ A=U\Sigma V^T,\tag{A.12}
+\end{equation}
+其中 $U\in\R^{m\times r}$ 满足 $U^TU=I$，$V\in\R^{n\times r}$ 满足 $V^TV=I$，$\Sigma=\diag(\sigma_1,\ldots,\sigma_r)$，且
+\[
+ \sigma_1\geq\sigma_2\geq\cdots\geq\sigma_r>0.
+\]
+分解(A.12)称为 $A$ 的\emph{奇异值分解}（SVD）。$U$ 的各列称为 $A$ 的\emph{左奇异向量}，$V$ 的各列称为\emph{右奇异向量}，数 $\sigma_i$ 为\emph{奇异值}。奇异值分解也可以写成
+\[
+ A=\sum_{i=1}^r\sigma_i u_iv_i^T,
+\]
+其中 $u_i\in\R^m$ 是左奇异向量，$v_i\in\R^n$ 是右奇异向量。
+
+矩阵 $A$ 的奇异值分解，与对称非负定矩阵 $A^TA$ 的特征值分解密切相关。利用(A.12)，可写成
+\[
+ A^TA=V\Sigma^2V^T
+ =\begin{bmatrix}V&\widetilde V\end{bmatrix}
+ \begin{bmatrix}\Sigma^2&0\\0&0\end{bmatrix}
+ \begin{bmatrix}V&\widetilde V\end{bmatrix}^{\!T},
+\]
+其中 $\widetilde V$ 为任意使 $[V\ \widetilde V]$ 正交的矩阵。最右端的表达式是 $A^TA$ 的特征值分解，因此可知，它的非零特征值是 $A$ 的奇异值的平方，所对应的特征向量是 $A$ 的右奇异向量。对 $AA^T$ 作类似分析，可知它的非零
+% Source PDF page 663 (printed p. 649)
+特征值同样是 $A$ 的奇异值的平方，对应的特征向量则是 $A$ 的左奇异向量。
+
+第一个，即最大的奇异值，也记作 $\sigma_{\max}(A)$，可以表示为
+\[
+ \sigma_{\max}(A)=\sup_{x,y\neq0}\frac{x^TAy}{\norm{x}_2\norm{y}_2}
+ =\sup_{y\neq0}\frac{\norm{Ay}_2}{\norm{y}_2}.
+\]
+最右端的表达式说明，最大奇异值就是 $A$ 的 $\ell_2$ 算子范数。$A\in\R^{m\times n}$ 的最小奇异值为
+\[
+ \sigma_{\min}(A)=\begin{cases}\sigma_r(A),&r=\min\{m,n\},\\0,&r<\min\{m,n\},\end{cases}
+\]
+它为正，当且仅当 $A$ 满秩。
+
+对称矩阵的奇异值，是将它的非零特征值取绝对值后按降序排列得到的。对称半正定矩阵的奇异值，与它的非零特征值相同。
+
+非奇异矩阵 $A\in\R^{n\times n}$ 的\emph{条件数}，记作 $\operatorname{cond}(A)$ 或 $\kappa(A)$，定义为
+\[
+ \operatorname{cond}(A)=\norm{A}_2\norm{A^{-1}}_2=\sigma_{\max}(A)/\sigma_{\min}(A).
+\]
+
+\subsubsection*{伪逆}
+设 $A=U\Sigma V^T$ 为矩阵 $A\in\R^{m\times n}$ 的奇异值分解，$\rank A=r$。定义 $A$ 的\emph{伪逆}，又称 \emph{Moore--Penrose 逆}，为
+\[
+ A^\dagger=V\Sigma^{-1}U^T\in\R^{n\times m}.
+\]
+它也可以表示为
+\[
+ A^\dagger=\lim_{\epsilon\to0}(A^TA+\epsilon I)^{-1}A^T
+ =\lim_{\epsilon\to0}A^T(AA^T+\epsilon I)^{-1},
+\]
+其中极限沿 $\epsilon>0$ 取值，以保证表达式中的逆矩阵存在。若 $\rank A=n$，则 $A^\dagger=(A^TA)^{-1}A^T$；若 $\rank A=m$，则 $A^\dagger=A^T(AA^T)^{-1}$。若 $A$ 是非奇异方阵，则 $A^\dagger=A^{-1}$。
+
+伪逆出现在最小二乘、最小范数、二次最小化和欧几里得投影等问题中。例如，一般情况下，$A^\dagger b$ 是最小二乘问题
+\[
+ \text{最小化}\quad\norm{Ax-b}_2^2
+\]
+的一个解。当解不唯一时，$A^\dagger b$ 给出其中欧几里得范数最小的解。再如，矩阵 $AA^\dagger=UU^T$ 给出到 $\mathcal R(A)$ 的欧几里得投影，矩阵 $A^\dagger A=VV^T$ 给出到 $\mathcal R(A^T)$ 的欧几里得投影。
+
+一般的非凸二次优化问题
+\[
+ \text{最小化}\quad\tfrac12x^TPx+q^Tx+r,
+\]
+其中 $P\in\mathbf S^n$，其最优值 $p^\star$ 可以表示为
+\[
+ p^\star=\begin{cases}-\tfrac12q^TP^\dagger q+r,&P\succeq0,\ q\in\mathcal R(P),\\-\infty,&\text{其他情况}.\end{cases}
+\]
+这推广了在 $P\succ0$ 时成立的表达式 $p^\star=-\tfrac12q^TP^{-1}q+r$。
+
+% Source PDF page 664 (printed p. 650)
+\subsection{Schur补}
+考虑按以下方式分块的矩阵 $X\in\mathbf S^n$：
+\[
+ X=\begin{bmatrix}A&B\\B^T&C\end{bmatrix},
+\]
+其中 $A\in\mathbf S^k$。若 $\det A\neq0$，则矩阵
+\[
+ S=C-B^TA^{-1}B
+\]
+称为 $X$ 中 $A$ 的 \emph{Schur 补}。Schur 补出现在多种情境中，也出现在许多重要的公式和定理中。例如，
+\[
+ \det X=\det A\det S.
+\]
+
+\subsubsection*{分块矩阵的逆}
+通过消去一组变量求解线性方程时，会用到 Schur 补。从方程
+\[
+ \begin{bmatrix}A&B\\B^T&C\end{bmatrix}\begin{bmatrix}x\\y\end{bmatrix}=\begin{bmatrix}u\\v\end{bmatrix}
+\]
+出发，并假设 $\det A\neq0$。从上面的分块方程消去 $x$，再代入下面的分块方程，得到 $v=B^TA^{-1}u+Sy$，因此
+\[
+ y=S^{-1}(v-B^TA^{-1}u).
+\]
+将它代入第一个方程，得到
+\[
+ x=(A^{-1}+A^{-1}BS^{-1}B^TA^{-1})u-A^{-1}BS^{-1}v.
+\]
+这两个方程可以写成分块矩阵求逆公式：
+\[
+ \begin{bmatrix}A&B\\B^T&C\end{bmatrix}^{\!-1}
+ =\begin{bmatrix}
+ A^{-1}+A^{-1}BS^{-1}B^TA^{-1}&-A^{-1}BS^{-1}\\
+ -S^{-1}B^TA^{-1}&S^{-1}
+ \end{bmatrix}.
+\]
+特别地，Schur 补等于 $X$ 的逆矩阵中第 $(2,2)$ 个分块的逆。
+
+\subsubsection*{最小化与正定性}
+对一个二次型的部分变量求最小值时，也会出现 Schur 补。假设 $A\succ0$，考虑以 $u$ 为变量的最小化问题
+\begin{equation}
+ \text{最小化}\quad u^TAu+2v^TB^Tu+v^TCv.\tag{A.13}
+\end{equation}
+解为 $u=-A^{-1}Bv$，最优值为
+\begin{equation}
+ \inf_u\begin{bmatrix}u\\v\end{bmatrix}^{\!T}
+ \begin{bmatrix}A&B\\B^T&C\end{bmatrix}\begin{bmatrix}u\\v\end{bmatrix}=v^TSv.\tag{A.14}
+\end{equation}
+由此可以得到分块矩阵 $X$ 正定或半正定的以下刻画：
+\begin{itemize}
+\item $X\succ0$ 当且仅当 $A\succ0$ 且 $S\succ0$；
+\item 若 $A\succ0$，则 $X\succeq0$ 当且仅当 $S\succeq0$。
+\end{itemize}
+
+% Source PDF page 665 (printed p. 651)
+\subsubsection*{$A$ 奇异时的 Schur 补}
+当 $A$ 奇异时，有些关于 Schur 补的结论可以推广，但细节更复杂。例如，若 $A\succeq0$ 且 $Bv\in\mathcal R(A)$，则以 $u$ 为变量的二次最小化问题(A.13)有解，其最优值为
+\[
+ v^T(C-B^TA^\dagger B)v,
+\]
+其中 $A^\dagger$ 为 $A$ 的伪逆。若 $Bv\notin\mathcal R(A)$，或 $A\not\succeq0$，则该问题无界。
+
+值域条件 $Bv\in\mathcal R(A)$ 也可以写成 $(I-AA^\dagger)Bv=0$，因此分块矩阵 $X$ 的半正定性可以刻画为
+\[
+ X\succeq0\quad\Longleftrightarrow\quad A\succeq0,\quad(I-AA^\dagger)B=0,\quad C-B^TA^\dagger B\succeq0.
+\]
+当 $A$ 奇异时，矩阵 $C-B^TA^\dagger B$ 起到广义 Schur 补的作用。
+
+% Source PDF page 666 (printed p. 652)
+\section*{文献说明}
+\addcontentsline{toc}{section}{文献说明}
+本附录内容的基础参考书，数学分析方面有 Rudin [Rud76]，线性代数方面有 Strang [Str80] 和 Meyer [Mey00]。更深入的线性代数教材包括 Horn 和 Johnson [HJ85, HJ91]、Parlett [Par98]、Golub 和 Van Loan [GL89]、Trefethen 和 Bau [TB97]，以及 Demmel [Dem97]。
+
+闭函数（第A.3.3节）这一概念在凸优化中经常出现，但不同书籍采用的术语有所不同。使用这一术语的著作包括 Rockafellar [Roc70，第51页]、Hiriart-Urruty 和 Lemaréchal [HUL93，第1卷，第149页]、Borwein 和 Lewis [BL00，第76页]，以及 Bertsekas、Nedić 和 Ozdaglar [Ber03，第28页]。

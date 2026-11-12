@@ -1,0 +1,261 @@
+% Source PDF page 535 (printed p. 521)
+\section{等式约束最小化问题}
+本章介绍求解带等式约束的凸优化问题的方法：
+\begin{equation}\begin{array}{ll}\text{最小化}&f(x)\\\text{约束条件}&Ax=b,\end{array}\tag{10.1}\end{equation}
+其中 $f:\R^n\to\R$ 是凸函数，且二阶连续可微，$A\in\R^{p\times n}$，$\rank A=p<n$。关于 $A$ 的假设表示：等式约束的数量少于变量数，而且等式约束彼此独立。假设最优解 $x^\star$ 存在，并以 $p^\star$ 表示最优值，$p^\star=\inf\{f(x)\mid Ax=b\}=f(x^\star)$。
+
+回顾第4.2.3节或第5.5.3节，点 $x^\star\in\dom f$ 是 (10.1) 的最优点，当且仅当存在 $\nu^\star\in\R^p$，使
+\begin{equation}Ax^\star=b,\qquad\nabla f(x^\star)+A^\T\nu^\star=0.\tag{10.2}\end{equation}
+因此，求解等式约束优化问题 (10.1)，等价于求解 KKT 方程 (10.2)。它是在 $n+p$ 个变量 $x^\star,\nu^\star$ 上的 $n+p$ 个方程。第一组方程 $Ax^\star=b$ 称为\emph{原始可行性方程}，是线性的。第二组方程 $\nabla f(x^\star)+A^\T\nu^\star=0$ 称为\emph{对偶可行性方程}，一般是非线性的。如同无约束优化，有少数问题的这些最优性条件可以解析求解。最重要的特例是 $f$ 为二次函数的情况，第10.1.1节将加以研究。
+
+任意等式约束最小化问题，都可以通过消去等式约束化成等价无约束问题，然后用第9章的方法求解。另一种方法，是用无约束最小化方法求解对偶问题（假定对偶函数二阶可微），然后从对偶解恢复等式约束问题 (10.1) 的解。第10.1.2节和第10.1.3节分别简要讨论消元法与对偶法。
+
+% Source PDF page 536 (printed p. 522)
+本章大部分内容讨论直接处理等式约束的牛顿法扩展。在许多情况下，这些方法优于把等式约束问题化为无约束问题的方法。一个原因是，消元或构造对偶常常破坏稀疏性等问题结构，而直接处理等式约束的方法可以利用这些结构。另一个原因来自概念层面：直接处理等式约束的方法，可以看作直接求解最优性条件 (10.2) 的方法。
+
+\subsection{等式约束凸二次最小化}
+考虑等式约束凸二次最小化问题
+\begin{equation}\begin{array}{ll}\text{最小化}&f(x)=(1/2)x^\T Px+q^\T x+r\\\text{约束条件}&Ax=b,\end{array}\tag{10.3}\end{equation}
+其中 $P\in\mathbf S_+^n$、$A\in\R^{p\times n}$。这个问题本身很重要，同时它也是将牛顿法扩展到等式约束问题的基础。
+
+这里的最优性条件 (10.2) 为
+\[Ax^\star=b,\qquad Px^\star+q+A^\T\nu^\star=0,\]
+可写成
+\begin{equation}\begin{bmatrix}P&A^\T\\A&0\end{bmatrix}\begin{bmatrix}x^\star\\\nu^\star\end{bmatrix}=\begin{bmatrix}-q\\b\end{bmatrix}.\tag{10.4}\end{equation}
+这组关于 $n+p$ 个变量 $x^\star,\nu^\star$ 的 $n+p$ 个线性方程，称为等式约束二次优化问题 (10.3) 的 \emph{KKT 系统}。系数矩阵称为 \emph{KKT 矩阵}。
+
+当 KKT 矩阵非奇异时，存在唯一的原始—对偶最优对 $(x^\star,\nu^\star)$。若 KKT 矩阵奇异，但 KKT 系统可解，则任意解都给出一个最优对 $(x^\star,\nu^\star)$。若 KKT 系统不可解，则二次优化问题无下界或不可行。事实上，此时存在 $v\in\R^n$ 和 $w\in\R^p$，使
+\[Pv+A^\T w=0,\qquad Av=0,\qquad-q^\T v+b^\T w>0.\]
+令 $\widehat x$ 为任意可行点。点 $x=\widehat x+tv$ 对所有 $t$ 都可行，且
+\[\begin{aligned}
+f(\widehat x+tv)&=f(\widehat x)+t(v^\T P\widehat x+q^\T v)+(1/2)t^2v^\T Pv\\
+&=f(\widehat x)+t(-\widehat x^\T A^\T w+q^\T v)-(1/2)t^2w^\T Av\\
+&=f(\widehat x)+t(-b^\T w+q^\T v),
+\end{aligned}\]
+当 $t\to\infty$ 时无界下降。
+
+% Source PDF page 537 (printed p. 523)
+\subsubsection*{KKT 矩阵的非奇异性}
+回顾假设 $P\in\mathbf S_+^n$、$\rank A=p<n$。以下几个条件与 KKT 矩阵非奇异等价：
+\begin{itemize}
+\item $\mathcal N(P)\cap\mathcal N(A)=\{0\}$，即 $P$ 和 $A$ 没有非平凡的公共零空间。
+\item $Ax=0$、$x\ne0\Longrightarrow x^\T Px>0$，即 $P$ 在 $A$ 的零空间上正定。
+\item $F^\T PF\succ0$，其中 $F\in\R^{n\times(n-p)}$ 满足 $\mathcal R(F)=\mathcal N(A)$。
+\end{itemize}
+（见习题10.1。）一个重要特例是：若 $P\succ0$，KKT 矩阵必非奇异。
+
+\subsection{消去等式约束}
+求解等式约束问题 (10.1) 的一种通用方法，是按第4.2.4节所述消去等式约束，再用无约束最小化方法求解所得无约束问题。首先寻找矩阵 $F\in\R^{n\times(n-p)}$ 和向量 $\widehat x\in\R^n$，将仿射可行集参数化：
+\[\{x\mid Ax=b\}=\{Fz+\widehat x\mid z\in\R^{n-p}\}.\]
+这里，$\widehat x$ 可以是 $Ax=b$ 的任意特解，$F\in\R^{n\times(n-p)}$ 可以是任意值域等于 $A$ 的零空间的矩阵。然后构造约化或消元后的优化问题
+\begin{equation}\text{最小化}\quad\widetilde f(z)=f(Fz+\widehat x),\tag{10.5}\end{equation}
+这是变量为 $z\in\R^{n-p}$ 的无约束问题。由其解 $z^\star$，得到等式约束问题的解 $x^\star=Fz^\star+\widehat x$。
+
+还可以为等式约束问题构造最优对偶变量
+\[\nu^\star=-(AA^\T)^{-1}A\nabla f(x^\star).\]
+为证明此式正确，需验证对偶可行性条件
+\begin{equation}\nabla f(x^\star)+A^\T\bigl(-(AA^\T)^{-1}A\nabla f(x^\star)\bigr)=0\tag{10.6}\end{equation}
+成立。为此，注意
+\[\begin{bmatrix}F^\T\\A\end{bmatrix}\bigl(\nabla f(x^\star)-A^\T(AA^\T)^{-1}A\nabla f(x^\star)\bigr)=0.\]
+在上方分块中使用了 $F^\T\nabla f(x^\star)=\nabla\widetilde f(z^\star)=0$ 和 $AF=0$。由于左侧矩阵非奇异，得到 (10.6)。
+
+\begin{origexample}{10.1}
+\emph{具有资源约束的最优分配。}考虑问题
+\[\begin{array}{ll}\text{最小化}&\displaystyle\sum_{i=1}^n f_i(x_i)\\\text{约束条件}&\displaystyle\sum_{i=1}^n x_i=b,\end{array}\]
+
+% Source PDF page 538 (printed p. 524)
+其中函数 $f_i:\R\to\R$ 为凸且二阶可微，$b\in\R$ 是问题参数。可将其解释为：将总量固定为 $b$（预算）的单一资源，最优分配给 $n$ 项彼此独立的活动。
+
+例如，可以用参数化
+\[x_n=b-x_1-\cdots-x_{n-1}\]
+消去 $x_n$，对应于选择
+\[\widehat x=be_n,\qquad F=\begin{bmatrix}I\\-\one^\T\end{bmatrix}\in\R^{n\times(n-1)}.\]
+约化问题为
+\[\text{最小化}\quad f_n(b-x_1-\cdots-x_{n-1})+\sum_{i=1}^{n-1}f_i(x_i),\]
+变量为 $x_1,\ldots,x_{n-1}$。
+\end{origexample}
+
+\subsubsection*{消元矩阵的选择}
+消元矩阵 $F$ 当然有许多选择，可以取 $\R^{n\times(n-p)}$ 中任意满足 $\mathcal R(F)=\mathcal N(A)$ 的矩阵。若 $F$ 是其中一个，$T\in\R^{(n-p)\times(n-p)}$ 非奇异，那么 $\widetilde F=FT$ 也是合适的消元矩阵，因为
+\[\mathcal R(\widetilde F)=\mathcal R(F)=\mathcal N(A).\]
+反过来，如果 $F$ 与 $\widetilde F$ 都是合适的消元矩阵，则存在某个非奇异 $T$，使 $\widetilde F=FT$。
+
+如果用 $F$ 消去等式约束，则求解无约束问题
+\[\text{最小化}\quad f(Fz+\widehat x);\]
+若用 $\widetilde F$，则求解无约束问题
+\[\text{最小化}\quad f(\widetilde F\widetilde z+\widehat x)=f(F(T\widetilde z)+\widehat x).\]
+两个问题等价，后者只是通过坐标变换 $z=T\widetilde z$ 得到。换言之，改变消元矩阵，可以看作在约化问题中作变量变换。
+
+\subsection{通过对偶求解等式约束问题}
+另一种求解 (10.1) 的方法是先求对偶，再按第5.5.5节所述恢复最优原始变量 $x^\star$。问题 (10.1) 的对偶函数为
+\[\begin{aligned}
+g(\nu)&=-b^\T\nu+\inf_x\bigl(f(x)+\nu^\T Ax\bigr)\\
+&=-b^\T\nu-\sup_x\bigl((-A^\T\nu)^\T x-f(x)\bigr)\\
+&=-b^\T\nu-f^*(-A^\T\nu),
+\end{aligned}\]
+
+% Source PDF page 539 (printed p. 525)
+其中 $f^*$ 是 $f$ 的共轭。因此对偶问题为
+\[\text{最大化}\quad-b^\T\nu-f^*(-A^\T\nu).\]
+由假设，最优点存在，因此问题严格可行，满足 Slater 条件。所以强对偶成立，对偶最优值可取得，即存在 $\nu^\star$，使 $g(\nu^\star)=p^\star$。
+
+如果对偶函数 $g$ 二阶可微，就可以用第9章的无约束最小化方法最大化 $g$。（一般而言，即使 $f$ 二阶可微，$g$ 也未必二阶可微。）找到最优对偶变量 $\nu^\star$ 后，从中重构最优原始解 $x^\star$。（这一步并不总是容易完成，见第5.5.5节。）
+
+\begin{origexample}{10.2}
+\emph{等式约束解析中心。}考虑问题
+\begin{equation}\begin{array}{ll}\text{最小化}&f(x)=-\displaystyle\sum_{i=1}^n\log x_i\\\text{约束条件}&Ax=b,\end{array}\tag{10.7}\end{equation}
+其中 $A\in\R^{p\times n}$，隐含约束为 $x\succ0$。利用
+\[f^*(y)=\sum_{i=1}^n(-1-\log(-y_i))=-n-\sum_{i=1}^n\log(-y_i)\]
+（$\dom f^*=-\R_{++}^n$），得到对偶问题
+\begin{equation}\text{最大化}\quad g(\nu)=-b^\T\nu+n+\sum_{i=1}^n\log(A^\T\nu)_i,\tag{10.8}\end{equation}
+隐含约束为 $A^\T\nu\succ0$。这里容易求解对偶可行性方程，也就是找到使 $L(x,\nu)$ 最小的 $x$：
+\[\nabla f(x)+A^\T\nu=-(1/x_1,\ldots,1/x_n)+A^\T\nu=0,\]
+因而
+\begin{equation}x_i(\nu)=1/(A^\T\nu)_i.\tag{10.9}\end{equation}
+要解等式约束解析中心问题 (10.7)，可先求无约束对偶问题 (10.8)，再通过 (10.9) 恢复 (10.7) 的最优解。
+\end{origexample}
+
+\section{带等式约束的牛顿法}
+本节介绍将牛顿法扩展到含等式约束的情况。它与无约束牛顿法几乎相同，只有两点区别：初始点必须可行，即 $x\in\dom f$ 且 $Ax=b$；牛顿步的定义要修改，以考虑等式约束。特别地，要保证牛顿步 $\Delta x_{\rm nt}$ 是可行方向，即 $A\Delta x_{\rm nt}=0$。
+
+% Source PDF page 540 (printed p. 526)
+\subsection{牛顿步}
+\subsubsection*{通过二阶近似定义}
+为了推导等式约束问题
+\[\begin{array}{ll}\text{最小化}&f(x)\\\text{约束条件}&Ax=b\end{array}\]
+在可行点 $x$ 处的牛顿步 $\Delta x_{\rm nt}$，用目标在 $x$ 附近的二阶 Taylor 近似代替目标，形成问题
+\begin{equation}\begin{array}{ll}\text{最小化}&\widehat f(x+v)=f(x)+\nabla f(x)^\T v+(1/2)v^\T\nabla^2 f(x)v\\\text{约束条件}&A(x+v)=b,\end{array}\tag{10.10}\end{equation}
+变量为 $v$。这是一个带等式约束的凸二次最小化问题，可以解析求解。假定相应 KKT 矩阵非奇异，把凸二次问题 (10.10) 的解定义为 $x$ 处的牛顿步 $\Delta x_{\rm nt}$。也就是说，当用二次近似代替 $f$ 时，为求解问题必须加到 $x$ 上的量，就是牛顿步 $\Delta x_{\rm nt}$。
+
+由第10.1.1节对等式约束二次问题的分析，牛顿步 $\Delta x_{\rm nt}$ 由下式刻画：
+\begin{equation}\begin{bmatrix}\nabla^2f(x)&A^\T\\A&0\end{bmatrix}\begin{bmatrix}\Delta x_{\rm nt}\\w\end{bmatrix}=\begin{bmatrix}-\nabla f(x)\\0\end{bmatrix},\tag{10.11}\end{equation}
+其中 $w$ 是二次问题对应的最优对偶变量。只有在 KKT 矩阵非奇异的点，牛顿步才有定义。
+
+如同无约束牛顿法，当目标 $f$ 恰为二次函数时，牛顿更新 $x+\Delta x_{\rm nt}$ 精确求解等式约束最小化问题，此时向量 $w$ 就是原问题的最优对偶变量。与无约束情况一样，这表明当 $f$ 接近二次函数时，$x+\Delta x_{\rm nt}$ 应是解 $x^\star$ 的良好估计，$w$ 应是最优对偶变量 $\nu^\star$ 的良好估计。
+
+\subsubsection*{线性化最优性条件的解}
+牛顿步 $\Delta x_{\rm nt}$ 及相应向量 $w$，可解释为最优性条件
+\[Ax^\star=b,\qquad\nabla f(x^\star)+A^\T\nu^\star=0\]
+的线性化近似的解。在其中用 $x+\Delta x_{\rm nt}$ 代替 $x^\star$，用 $w$ 代替 $\nu^\star$，并将第二个方程中的梯度项换为 $x$ 附近的线性近似，得到
+\[\begin{gathered}
+A(x+\Delta x_{\rm nt})=b,\\
+\nabla f(x+\Delta x_{\rm nt})+A^\T w\approx\nabla f(x)+\nabla^2 f(x)\Delta x_{\rm nt}+A^\T w=0.
+\end{gathered}\]
+利用 $Ax=b$，这些方程变为
+\[A\Delta x_{\rm nt}=0,\qquad\nabla^2f(x)\Delta x_{\rm nt}+A^\T w=-\nabla f(x),\]
+正是定义牛顿步的方程 (10.11)。
+
+% Source PDF page 541 (printed p. 527)
+\subsubsection*{牛顿减量}
+将等式约束问题的牛顿减量定义为
+\begin{equation}\lambda(x)=(\Delta x_{\rm nt}^\T\nabla^2f(x)\Delta x_{\rm nt})^{1/2}.\tag{10.12}\end{equation}
+这个表达式与无约束情形使用的 (9.29) 完全相同，也具有相同解释。例如，$\lambda(x)$ 是以 Hessian 确定的范数衡量的牛顿步范数。
+
+令
+\[\widehat f(x+v)=f(x)+\nabla f(x)^\T v+(1/2)v^\T\nabla^2f(x)v\]
+为 $f$ 在 $x$ 处的二阶 Taylor 近似。$f(x)$ 与二阶模型最小值之差满足
+\begin{equation}f(x)-\inf\{\widehat f(x+v)\mid A(x+v)=b\}=\lambda(x)^2/2,\tag{10.13}\end{equation}
+与无约束情况完全相同（见习题10.6）。这表示，与无约束情况一样，$\lambda(x)^2/2$ 给出基于 $x$ 处二次模型的 $f(x)-p^\star$ 的估计，$\lambda(x)$ 或 $\lambda(x)^2$ 的某个倍数，也可作为良好停止准则的基础。
+
+牛顿减量也出现在线搜索中，因为 $f$ 沿 $\Delta x_{\rm nt}$ 的方向导数为
+\begin{equation}\left.\frac{d}{dt}f(x+t\Delta x_{\rm nt})\right|_{t=0}=\nabla f(x)^\T\Delta x_{\rm nt}=-\lambda(x)^2,\tag{10.14}\end{equation}
+与无约束情形相同。
+
+\subsubsection*{可行下降方向}
+假设 $Ax=b$。若 $Av=0$，称 $v\in\R^n$ 为可行方向。此时，每个形如 $x+tv$ 的点也可行，即 $A(x+tv)=b$。如果对小的 $t>0$ 有 $f(x+tv)<f(x)$，就称 $v$ 是 $f$ 在 $x$ 处的下降方向。
+
+牛顿步始终是可行下降方向，除非 $x$ 已最优，此时 $\Delta x_{\rm nt}=0$。事实上，定义 $\Delta x_{\rm nt}$ 的第二组方程为 $A\Delta x_{\rm nt}=0$，说明它是可行方向；由 (10.14) 可知它也是下降方向。
+
+\subsubsection*{仿射不变性}
+与无约束优化中的牛顿步及牛顿减量一样，等式约束优化中的牛顿步与牛顿减量具有仿射不变性。假设 $T\in\R^{n\times n}$ 非奇异，定义 $\overline f(y)=f(Ty)$。有
+\[\nabla\overline f(y)=T^\T\nabla f(Ty),\qquad\nabla^2\overline f(y)=T^\T\nabla^2f(Ty)T,\]
+等式约束 $Ax=b$ 变为 $ATy=b$。
+
+现在考虑在 $ATy=b$ 下最小化 $\overline f(y)$。$y$ 处的牛顿步 $\Delta y_{\rm nt}$ 由下式的解给出：
+\[\begin{bmatrix}T^\T\nabla^2f(Ty)T&T^\T A^\T\\AT&0\end{bmatrix}\begin{bmatrix}\Delta y_{\rm nt}\\\overline w\end{bmatrix}=\begin{bmatrix}-T^\T\nabla f(Ty)\\0\end{bmatrix}.\]
+
+% Source PDF page 542 (printed p. 528)
+与 (10.11) 给出的 $f$ 在 $x=Ty$ 处的牛顿步 $\Delta x_{\rm nt}$ 比较，得到
+\[T\Delta y_{\rm nt}=\Delta x_{\rm nt}\]
+（以及 $w=\overline w$）。也就是说，$y$ 与 $x$ 处的牛顿步，由与 $Ty=x$ 相同的坐标变换相联系。
+
+\subsection{带等式约束的牛顿法}
+带等式约束的牛顿法，其概要与无约束问题完全相同。
+\begin{origalgorithm}{10.1}
+\emph{等式约束最小化的牛顿法。}
+
+给定满足 $Ax=b$ 的初始点 $x\in\dom f$，以及容差 $\epsilon>0$。
+
+重复：
+\begin{enumerate}
+\item 计算牛顿步与牛顿减量 $\Delta x_{\rm nt}$、$\lambda(x)$。
+\item \emph{停止准则。}若 $\lambda^2/2\le\epsilon$，则退出。
+\item \emph{线搜索。}用回溯线搜索选择步长 $t$。
+\item \emph{更新。}$x:=x+t\Delta x_{\rm nt}$。
+\end{enumerate}
+\end{origalgorithm}
+该方法称为\emph{可行下降法}，因为所有迭代点都可行，且 $f(x^{(k+1)})<f(x^{(k)})$，除非 $x^{(k)}$ 已最优。牛顿法要求每个 $x$ 处的 KKT 矩阵都可逆；第10.2.4节将更精确地给出保证收敛所需的假设。
+
+\subsection{牛顿法与消元}
+下面证明：等式约束问题 (10.1) 的牛顿法迭代点，与对约化问题 (10.5) 使用牛顿法的迭代点一致。假设 $F$ 满足 $\mathcal R(F)=\mathcal N(A)$、$\rank F=n-p$，且 $\widehat x$ 满足 $A\widehat x=b$。约化目标 $\widetilde f(z)=f(Fz+\widehat x)$ 的梯度与 Hessian 为
+\[\nabla\widetilde f(z)=F^\T\nabla f(Fz+\widehat x),\qquad\nabla^2\widetilde f(z)=F^\T\nabla^2f(Fz+\widehat x)F.\]
+从 Hessian 的表达式可以看出，等式约束问题的牛顿步有定义，即 KKT 矩阵
+\[\begin{bmatrix}\nabla^2f(x)&A^\T\\A&0\end{bmatrix}\]
+可逆，当且仅当约化问题的牛顿步有定义，即 $\nabla^2\widetilde f(z)$ 可逆。
+
+约化问题的牛顿步为
+\begin{equation}\Delta z_{\rm nt}=-\nabla^2\widetilde f(z)^{-1}\nabla\widetilde f(z)=-(F^\T\nabla^2f(x)F)^{-1}F^\T\nabla f(x),\tag{10.15}\end{equation}
+其中 $x=Fz+\widehat x$。
+
+% Source PDF page 543 (printed p. 529)
+约化问题的这个搜索方向，对应于原等式约束问题的方向
+\[F\Delta z_{\rm nt}=-F(F^\T\nabla^2f(x)F)^{-1}F^\T\nabla f(x).\]
+我们断言，它与 (10.11) 定义的原问题牛顿方向 $\Delta x_{\rm nt}$ 完全相同。
+
+为此，取 $\Delta x_{\rm nt}=F\Delta z_{\rm nt}$，并选择
+\[w=-(AA^\T)^{-1}A(\nabla f(x)+\nabla^2f(x)\Delta x_{\rm nt}),\]
+验证定义牛顿步的方程
+\begin{equation}\nabla^2f(x)\Delta x_{\rm nt}+A^\T w+\nabla f(x)=0,\qquad A\Delta x_{\rm nt}=0\tag{10.16}\end{equation}
+成立。第二个方程 $A\Delta x_{\rm nt}=0$ 由 $AF=0$ 成立。为了验证第一个方程，注意
+\[\begin{aligned}
+&\begin{bmatrix}F^\T\\A\end{bmatrix}(\nabla^2f(x)\Delta x_{\rm nt}+A^\T w+\nabla f(x))\\
+&\quad=\begin{bmatrix}F^\T\nabla^2f(x)\Delta x_{\rm nt}+F^\T A^\T w+F^\T\nabla f(x)\\A\nabla^2f(x)\Delta x_{\rm nt}+AA^\T w+A\nabla f(x)\end{bmatrix}\\
+&\quad=0.
+\end{aligned}\]
+由于第一行左侧矩阵非奇异，得到 (10.16) 成立。
+
+类似地，$\widetilde f$ 在 $z$ 处的牛顿减量 $\widetilde\lambda(z)$，与 $f$ 在 $x$ 处的牛顿减量相等：
+\[\begin{aligned}
+\widetilde\lambda(z)^2&=\Delta z_{\rm nt}^\T\nabla^2\widetilde f(z)\Delta z_{\rm nt}\\
+&=\Delta z_{\rm nt}^\T F^\T\nabla^2f(x)F\Delta z_{\rm nt}\\
+&=\Delta x_{\rm nt}^\T\nabla^2f(x)\Delta x_{\rm nt}\\
+&=\lambda(x)^2.
+\end{aligned}\]
+
+\subsection{收敛性分析}
+上面已经看到：带等式约束的牛顿法，与对消去等式约束后得到的约化问题使用牛顿法完全相同。因此，无约束问题牛顿法的全部收敛知识，都可移用于等式约束问题。特别地，带等式约束的牛顿法，其实际表现与无约束问题中的牛顿法完全一样。一旦 $x^{(k)}$ 接近 $x^\star$，收敛就非常迅速，只需少数几次迭代便能达到很高精度。
+
+\subsubsection*{假设}
+采用以下假设。
+
+% Source PDF page 544 (printed p. 530)
+\begin{itemize}
+\item 下水平集 $S=\{x\mid x\in\dom f,\ f(x)\le f(x^{(0)}),\ Ax=b\}$ 是闭集，其中 $x^{(0)}\in\dom f$ 满足 $Ax^{(0)}=b$。若 $f$ 是闭函数，这一点成立（见第A.3.3节）。
+\item 在集合 $S$ 上，有 $\nabla^2f(x)\preceq MI$，且
+\begin{equation}\left\|\begin{bmatrix}\nabla^2f(x)&A^\T\\A&0\end{bmatrix}^{-1}\right\|_2\le K,\tag{10.17}\end{equation}
+即 KKT 矩阵的逆在 $S$ 上有界。（当然，要使牛顿步在 $S$ 中每一点都有定义，该逆必须存在。）
+\item 对 $x,\widetilde x\in S$，$\nabla^2f$ 满足 Lipschitz 条件 $\norm{\nabla^2f(x)-\nabla^2f(\widetilde x)}_2\le L\norm{x-\widetilde x}_2$。
+\end{itemize}
+
+\subsubsection*{KKT 矩阵逆有界的假设}
+条件 (10.17) 起着标准牛顿法中强凸性假设的作用（第9.5.3节，第488页）。没有等式约束时，(10.17) 化为 $S$ 上的条件 $\norm{\nabla^2f(x)^{-1}}_2\le K$；因此，如果 $S$ 上有 $\nabla^2f(x)\succeq mI$、$m>0$，可取 $K=1/m$。存在等式约束时，条件不再像给最小特征值一个正下界那么简单。由于 KKT 矩阵对称，条件 (10.17) 表示它的特征值（其中 $n$ 个为正、$p$ 个为负）与零保持一定距离。
+
+\subsubsection*{通过消元后问题分析}
+上述假设蕴含：消元后的目标函数 $\widetilde f$，以及对应初始点 $z^{(0)}$（$x^{(0)}=\widehat x+Fz^{(0)}$），满足第9.5.3节无约束牛顿法收敛分析所需的假设，但常数换为不同的 $\widetilde m,\widetilde M,\widetilde L$。因此，带等式约束的牛顿法收敛到 $x^\star$，而相应对偶变量也收敛到 $\nu^\star$。
+
+证明上述假设蕴含消元问题满足无约束牛顿法的假设，大部分步骤都很直接（见习题10.4）。这里只证明较难的一步：KKT 矩阵逆有界条件，与上界 $\nabla^2f(x)\preceq MI$ 一起，蕴含对某个正常数 $m$ 有 $\nabla^2\widetilde f(z)\succeq mI$。更具体地，证明下式所给出的 $m$ 满足该不等式：
+\begin{equation}m=\frac{\sigma_{\min}(F)^2}{K^2M}.\tag{10.18}\end{equation}
+由于 $F$ 满秩，这个数为正。
+
+用反证法证明。假设 $F^\T HF\not\succeq mI$，其中 $H=\nabla^2f(x)$。那么存在满足 $\norm u_2=1$ 的 $u$，使 $u^\T F^\T HFu<m$，即 $\norm{H^{1/2}Fu}_2<m^{1/2}$。利用 $AF=0$，有
+\[\begin{bmatrix}H&A^\T\\A&0\end{bmatrix}\begin{bmatrix}Fu\\0\end{bmatrix}=\begin{bmatrix}HFu\\0\end{bmatrix},\]

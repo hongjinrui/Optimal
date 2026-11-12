@@ -1,0 +1,341 @@
+% Source PDF page 528 (printed p. 514)
+\section*{习题}
+\addcontentsline{toc}{section}{习题}
+\subsection*{无约束最小化}
+\paragraph{9.1} \emph{最小化二次函数。}考虑最小化二次函数的问题：
+\[
+ \text{最小化}\quad f(x)=\tfrac12x^\T Px+q^\T x+r,
+\]
+其中 $P\in\mathbf S^n$，但不假设 $P\succeq0$。
+\begin{enumerate}[label=(\alph*)]
+\item 证明，若 $P\not\succeq0$，即目标函数 $f$ 非凸，则问题向下无界。
+\item 现在设 $P\succeq0$，因此目标函数凸，但最优性条件 $Px^\star=-q$ 无解。证明问题向下无界。
+\end{enumerate}
+
+\paragraph{9.2} \emph{最小化二次除以线性分式函数。}考虑最小化函数 $f:\R^n\to\R$ 的问题，其中
+\[
+ f(x)=\frac{\norm{Ax-b}_2^2}{c^\T x+d},\qquad
+ \dom f=\{x\mid c^\T x+d>0\}.
+\]
+假设 $\rank A=n$ 且 $b\notin\mathcal R(A)$。
+\begin{enumerate}[label=(\alph*)]
+\item 证明 $f$ 为闭函数。
+\item 证明，$f$ 的最小点 $x^\star$ 为
+\[
+ x^\star=x_1+tx_2,
+\]
+其中 $x_1=(A^\T A)^{-1}A^\T b$、$x_2=(A^\T A)^{-1}c$，$t\in\R$ 可以通过求解一个二次方程得到。
+\end{enumerate}
+
+\paragraph{9.3} \emph{初始点与下水平集条件。}考虑函数 $f(x)=x_1^2+x_2^2$，其定义域为 $\dom f=\{(x_1,x_2)\mid x_1>1\}$。
+\begin{enumerate}[label=(\alph*)]
+\item $p^\star$ 是多少？
+\item 对 $x^{(0)}=(2,2)$，画出下水平集 $S=\{x\mid f(x)\le f(x^{(0)})\}$。$S$ 是否闭？$f$ 在 $S$ 上是否强凸？
+\item 从 $x^{(0)}$ 出发，应用带回溯线搜索的梯度法，会发生什么？$f(x^{(k)})$ 是否收敛到 $p^\star$？
+\end{enumerate}
+
+\paragraph{9.4} 你是否同意以下论证？向量 $x\in\R^m$ 的 $\ell_1$ 范数可以表示为
+\[
+ \norm x_1=\frac12\inf_{y\succ0}\left(\sum_{i=1}^m x_i^2/y_i+\one^\T y\right).
+\]
+因此，$\ell_1$ 范数逼近问题
+\[
+ \text{最小化}\quad\norm{Ax-b}_1
+\]
+等价于最小化问题
+\begin{equation}
+ \text{最小化}\quad f(x,y)=\sum_{i=1}^m(a_i^\T x-b_i)^2/y_i+\one^\T y,\tag{9.62}
+\end{equation}
+其中 $\dom f=\{(x,y)\in\R^n\times\R^m\mid y\succ0\}$，$a_i^\T$ 是 $A$ 的第 $i$ 行。由于 $f$ 二次可微且凸，可以对 (9.62) 应用牛顿法，求解 $\ell_1$ 范数逼近问题。
+
+\paragraph{9.5} \emph{回溯线搜索。}设 $f$ 强凸，满足 $mI\preceq\nabla^2f(x)\preceq MI$。设 $\Delta x$ 为 $x$ 处的下降方向。证明，在
+\[
+ 0<t\le-\frac{\nabla f(x)^\T\Delta x}{M\norm{\Delta x}_2^2}
+\]
+时，回溯停止条件成立。利用这一结论，给出回溯迭代次数的上界。
+
+% Source PDF page 529 (printed p. 515)
+\subsection*{梯度法与最速下降法}
+\paragraph{9.6} \emph{$\R^2$ 中的二次问题。}验证第9.3.2节第一个例子中迭代点 $x^{(k)}$ 的表达式。
+
+\paragraph{9.7} 设 $\Delta x_{\mathrm{nsd}}$ 和 $\Delta x_{\mathrm{sd}}$ 分别为范数 $\norm{\cdot}$ 下 $x$ 处的归一化与未归一化最速下降方向。证明以下恒等式。
+\begin{enumerate}[label=(\alph*)]
+\item $\nabla f(x)^\T\Delta x_{\mathrm{nsd}}=-\norm{\nabla f(x)}_*$。
+\item $\nabla f(x)^\T\Delta x_{\mathrm{sd}}=-\norm{\nabla f(x)}_*^2$。
+\item $\Delta x_{\mathrm{sd}}=\argmin_v\bigl(\nabla f(x)^\T v+\tfrac12\norm v^2\bigr)$。
+\end{enumerate}
+
+\paragraph{9.8} \emph{$\ell_\infty$ 范数下的最速下降法。}说明如何找到 $\ell_\infty$ 范数下的最速下降方向，并给出简单解释。
+
+\subsection*{牛顿法}
+\paragraph{9.9} \emph{牛顿减量。}证明，牛顿减量 $\lambda(x)$ 满足
+\[
+ \lambda(x)=\sup_{v^\T\nabla^2f(x)v=1}\bigl(-v^\T\nabla f(x)\bigr)
+ =\sup_{v\ne0}\frac{-v^\T\nabla f(x)}{(v^\T\nabla^2f(x)v)^{1/2}}.
+\]
+
+\paragraph{9.10} \emph{纯牛顿法。}若初始点不接近 $x^\star$，固定步长 $t=1$ 的牛顿法可能发散。本题考虑两个例子。
+\begin{enumerate}[label=(\alph*)]
+\item $f(x)=\log(e^x+e^{-x})$ 有唯一最小点 $x^\star=0$。分别从 $x^{(0)}=1$ 和 $x^{(0)}=1.1$ 出发，运行固定步长 $t=1$ 的牛顿法。
+\item $f(x)=-\log x+x$ 有唯一最小点 $x^\star=1$。从 $x^{(0)}=3$ 出发，运行固定步长 $t=1$ 的牛顿法。
+\end{enumerate}
+画出 $f$ 和 $f'$，并标出前几个迭代点。
+
+\paragraph{9.11} \emph{复合函数的梯度法与牛顿法。}设 $\phi:\R\to\R$ 递增且凸，$f:\R^n\to\R$ 凸，因此 $g(x)=\phi(f(x))$ 凸。假设 $f,g$ 二次可微。最小化 $f$ 与最小化 $g$ 两个问题显然等价。
+
+比较对 $f,g$ 分别应用的梯度法和牛顿法。其搜索方向有何关系？若采用精确线搜索，这些方法之间有何关系？\emph{提示：}使用矩阵求逆引理，见第C.4.3节。
+
+\paragraph{9.12} \emph{信赖域牛顿法。}若 $\nabla^2f(x)$ 奇异，或病态程度很高，则牛顿步
+\[
+ \Delta x_{\mathrm{nt}}=-\nabla^2f(x)^{-1}\nabla f(x)
+\]
+不能很好地定义。此时可以把搜索方向 $\Delta x_{\mathrm{tr}}$ 定义为下述问题的解：
+\[
+ \begin{aligned}\text{最小化}\quad&\tfrac12v^\T Hv+g^\T v\\
+ \text{约束为}\quad&\norm v_2\le\gamma,
+ \end{aligned}
+\]
+其中 $H=\nabla^2f(x)$、$g=\nabla f(x)$，$\gamma$ 为正常数。点 $x+\Delta x_{\mathrm{tr}}$ 在约束 $\norm{(x+\Delta x_{\mathrm{tr}})-x}_2\le\gamma$ 下，使 $f$ 在 $x$ 处的二阶近似最小。集合 $\{v\mid\norm v_2\le\gamma\}$ 称为\emph{信赖域}。参数 $\gamma$，即信赖域的大小，反映了我们对二阶模型的信心。
+
+证明，对于某个 $\hat\beta$，$\Delta x_{\mathrm{tr}}$ 使
+\[
+ \tfrac12v^\T Hv+g^\T v+\hat\beta\norm v_2^2
+\]
+最小。这个二次函数可以解释为 $f$ 在 $x$ 附近的正则化二次模型。
+
+% Source PDF page 530 (printed p. 516)
+\subsection*{自协调性}
+\paragraph{9.13} \emph{自协调性与倒数障碍。}
+\begin{enumerate}[label=(\alph*)]
+\item 证明，定义域为 $(0,8/9)$ 的函数 $f(x)=1/x$ 自协调。
+\item 证明，函数
+\[
+ f(x)=\alpha\sum_{i=1}^m\frac1{b_i-a_i^\T x},
+\]
+定义域为 $\dom f=\{x\in\R^n\mid a_i^\T x<b_i,\ i=1,\ldots,m\}$，在 $\dom f$ 有界且
+\[
+ \alpha>(9/8)\max_{i=1,\ldots,m}\sup_{x\in\dom f}(b_i-a_i^\T x)
+\]
+时自协调。
+\end{enumerate}
+
+\paragraph{9.14} \emph{与对数复合。}设 $g:\R\to\R$ 为凸函数，$\dom g=\R_{++}$，并对所有 $x$ 满足
+\[
+ \abs{g'''(x)}\le3\frac{g''(x)}x.
+\]
+证明，$f(x)=-\log(-g(x))-\log x$ 在 $\{x\mid x>0,\ g(x)<0\}$ 上自协调。\emph{提示：}使用不等式
+\[
+ \frac32rp^2+q^3+\frac32p^2q+r^3\le1,
+\]
+它对满足 $p^2+q^2+r^2=1$ 的 $p,q,r\in\R_+$ 成立。
+
+\paragraph{9.15} 证明下列函数自协调。证明时，将函数限制在直线上，并应用与对数复合的规则。
+\begin{enumerate}[label=(\alph*)]
+\item $f(x,y)=-\log(y^2-x^\T x)$，定义在 $\{(x,y)\mid\norm x_2<y\}$ 上。
+\item $f(x,y)=-2\log y-\log(y^{2/p}-x^2)$，其中 $p\ge1$，定义在 $\{(x,y)\in\R^2\mid\abs x^p<y\}$ 上。
+\item $f(x,y)=-\log y-\log(\log y-x)$，定义在 $\{(x,y)\mid e^x<y\}$ 上。
+\end{enumerate}
+
+\paragraph{9.16} 设 $f:\R\to\R$ 为自协调函数。
+\begin{enumerate}[label=(\alph*)]
+\item 假设 $f''(x)\ne0$。证明，自协调条件 (9.41) 可以表示为
+\[
+ \abs{\frac d{dx}\bigl(f''(x)^{-1/2}\bigr)}\le1.
+\]
+求一元“极端”自协调函数，即分别满足
+\[
+ \frac d{dx}\bigl(f''(x)^{-1/2}\bigr)=1,\qquad
+ \frac d{dx}\bigl(\widetilde f''(x)^{-1/2}\bigr)=-1
+\]
+的函数 $f$ 与 $\widetilde f$。
+\item 证明，或者对所有 $x\in\dom f$ 有 $f''(x)=0$，或者对所有 $x\in\dom f$ 有 $f''(x)>0$。
+\end{enumerate}
+
+\paragraph{9.17} \emph{自协调函数 Hessian 的上界与下界。}
+\begin{enumerate}[label=(\alph*)]
+\item 设 $f:\R^2\to\R$ 为自协调函数。证明，对所有 $x\in\dom f$，有
+\[
+ \abs{\frac{\partial^3f(x)}{\partial x_i^3}}
+ \le2\left(\frac{\partial^2f(x)}{\partial x_i^2}\right)^{3/2},\qquad i=1,2,
+\]
+\[
+ \abs{\frac{\partial^3f(x)}{\partial x_i^2\partial x_j}}
+ \le2\frac{\partial^2f(x)}{\partial x_i^2}
+ \left(\frac{\partial^2f(x)}{\partial x_j^2}\right)^{1/2},\qquad i\ne j.
+\]
+% Source PDF page 531 (printed p. 517)
+\emph{提示：}若 $h:\R^2\times\R^2\times\R^2\to\R$ 为对称三线性型，即
+\[
+\begin{aligned}
+ h(u,v,w)={}&a_1u_1v_1w_1+a_2(u_1v_1w_2+u_1v_2w_1+u_2v_1w_1)\\
+ &+a_3(u_1v_2w_2+u_2v_1w_1+u_2v_2w_1)+a_4u_2v_2w_2,
+\end{aligned}
+\]
+则
+\[
+ \sup_{u,v,w\ne0}\frac{h(u,v,w)}{\norm u_2\norm v_2\norm w_2}
+ =\sup_{u\ne0}\frac{h(u,u,u)}{\norm u_2^3}.
+\]
+\item 设 $f:\R^n\to\R$ 为自协调函数。证明，$\nabla^2f(x)$ 的零空间与 $x$ 无关。证明，若 $f$ 严格凸，则对所有 $x\in\dom f$，$\nabla^2f(x)$ 非奇异。
+
+\emph{提示：}证明，若对某个 $x\in\dom f$ 有 $w^\T\nabla^2f(x)w=0$，则对所有 $y\in\dom f$ 有 $w^\T\nabla^2f(y)w=0$。为此，将(a)的结论用于自协调函数 $\widetilde f(t,s)=f(x+t(y-x)+sw)$。
+\item 设 $f:\R^n\to\R$ 为自协调函数，$x\in\dom f$、$v\in\R^n$。证明，当 $x+tv\in\dom f$、$0\le t<\alpha$ 时，有
+\[
+ (1-t\alpha)^2\nabla^2f(x)\preceq\nabla^2f(x+tv)
+ \preceq\frac1{(1-t\alpha)^2}\nabla^2f(x),
+\]
+其中 $\alpha=(v^\T\nabla^2f(x)v)^{1/2}$。
+\end{enumerate}
+
+\paragraph{9.18} \emph{二次收敛。}设 $f:\R^n\to\R$ 为严格凸自协调函数，$\lambda(x)<1$，并定义 $x^+=x-\nabla^2f(x)^{-1}\nabla f(x)$。证明 $\lambda(x^+)\le\lambda(x)^2/(1-\lambda(x))^2$。\emph{提示：}使用习题9.17(c)中的不等式。
+
+\paragraph{9.19} \emph{距最优点距离的界。}设 $f:\R^n\to\R$ 为严格凸自协调函数。
+\begin{enumerate}[label=(\alph*)]
+\item 假设 $\lambda(\bar x)<1$，且下水平集 $\{x\mid f(x)\le f(\bar x)\}$ 闭。证明，$f$ 的最小值可以取到，且
+\[
+ \bigl((\bar x-x^\star)^\T\nabla^2f(\bar x)(\bar x-x^\star)\bigr)^{1/2}
+ \le\frac{\lambda(\bar x)}{1-\lambda(\bar x)}.
+\]
+\item 证明，若 $f$ 有一个闭下水平集，且 $f$ 有下界，则其最小值可以取到。
+\end{enumerate}
+
+\paragraph{9.20} \emph{自协调函数的共轭。}设 $f:\R^n\to\R$ 闭、严格凸且自协调。下面证明它的共轭，或 Legendre 变换 $f^*$，自协调。
+\begin{enumerate}[label=(\alph*)]
+\item 证明，对每个 $y\in\dom f^*$，都存在唯一的 $x\in\dom f$ 满足 $y=\nabla f(x)$。\emph{提示：}参阅习题9.19的结论。
+\item 设 $\bar y=\nabla f(\bar x)$。定义
+\[
+ g(t)=f(\bar x+tv),\qquad h(t)=f^*(\bar y+tw),
+\]
+其中 $v\in\R^n$、$w=\nabla^2f(\bar x)v$。证明
+\[
+ g''(0)=h''(0),\qquad g'''(0)=-h'''(0).
+\]
+利用这些恒等式证明 $f^*$ 自协调。
+\end{enumerate}
+
+\paragraph{9.21} \emph{最优线搜索参数。}考虑最小化严格凸自协调函数所需牛顿迭代次数的上界 (9.56)。若对 $\alpha,\beta$ 求最小值，这个上界的最小值是多少？
+
+\paragraph{9.22} 设 $f$ 严格凸，并满足 (9.42)。从 $x^{(0)}$ 出发，将 $p^\star$ 计算到精度 $\epsilon$ 所需的牛顿步数，有什么界？
+
+% Source PDF page 532 (printed p. 518)
+\subsection*{实现}
+\paragraph{9.23} \emph{线搜索中的预计算。}对下列每个函数，说明如何通过预计算降低线搜索的计算代价。分别给出预计算的代价，以及使用和不使用预计算时，计算 $g(t)=f(x+t\Delta x)$ 与 $g'(t)$ 的代价。
+\begin{enumerate}[label=(\alph*)]
+\item $f(x)=-\sum_{i=1}^m\log(b_i-a_i^\T x)$。
+\item $f(x)=\log\bigl(\sum_{i=1}^m\exp(a_i^\T x+b_i)\bigr)$。
+\item $f(x)=(Ax-b)^\T(P_0+x_1P_1+\cdots+x_nP_n)^{-1}(Ax-b)$，其中 $P_i\in\mathbf S^m$、$A\in\R^{m\times n}$、$b\in\R^m$，且 $\dom f=\{x\mid P_0+\sum_{i=1}^n x_iP_i\succ0\}$。
+\end{enumerate}
+
+\paragraph{9.24} \emph{利用牛顿方程组的分块对角结构。}设凸函数 $f$ 的 Hessian $\nabla^2f(x)$ 为分块对角矩阵。计算牛顿步时，如何利用这一结构？它意味着 $f$ 具有什么性质？
+
+\paragraph{9.25} \emph{给定数据的平滑拟合。}考虑问题
+\[
+ \text{最小化}\quad f(x)=\sum_{i=1}^n\psi(x_i-y_i)+\lambda\sum_{i=1}^{n-1}(x_{i+1}-x_i)^2,
+\]
+其中 $\lambda>0$ 为平滑参数，$\psi$ 为凸惩罚函数，$x\in\R^n$ 为变量。可以将 $x$ 解释为向量 $y$ 的平滑拟合。
+\begin{enumerate}[label=(\alph*)]
+\item $f$ 的 Hessian 具有什么结构？
+\item 推广到二维数据的平滑拟合问题，即最小化函数
+\[
+\begin{aligned}
+ &\sum_{i,j=1}^n\psi(x_{ij}-y_{ij})\\
+ &\quad+\lambda\left(\sum_{i=1}^{n-1}\sum_{j=1}^n(x_{i+1,j}-x_{ij})^2
+ +\sum_{i=1}^n\sum_{j=1}^{n-1}(x_{i,j+1}-x_{ij})^2\right),
+\end{aligned}
+\]
+变量为 $X\in\R^{n\times n}$，给定数据为 $Y\in\R^{n\times n}$ 和 $\lambda>0$。
+\end{enumerate}
+
+\paragraph{9.26} \emph{具有线性结构的牛顿方程。}考虑最小化形如
+\begin{equation}
+ f(x)=\sum_{i=1}^N\psi_i(A_ix+b_i)\tag{9.63}
+\end{equation}
+的函数，其中 $A_i\in\R^{m_i\times n}$、$b_i\in\R^{m_i}$，各函数 $\psi_i:\R^{m_i}\to\R$ 二次可微且凸。$f$ 在 $x$ 处的 Hessian $H$ 与梯度 $g$ 为
+\begin{equation}
+ H=\sum_{i=1}^N A_i^\T H_iA_i,\qquad
+ g=\sum_{i=1}^N A_i^\T g_i,\tag{9.64}
+\end{equation}
+其中 $H_i=\nabla^2\psi_i(A_ix+b_i)$、$g_i=\nabla\psi_i(A_ix+b_i)$。
+
+说明你会怎样实现最小化 $f$ 的牛顿法。假设 $n\gg m_i$，各矩阵 $A_i$ 非常稀疏，但 Hessian $H$ 稠密。
+
+\paragraph{9.27} \emph{带变量界的线性不等式解析中心。}给出计算下列函数牛顿步的最高效方法：
+\[
+ f(x)=-\sum_{i=1}^n\log(x_i+1)-\sum_{i=1}^n\log(1-x_i)
+ -\sum_{i=1}^m\log(b_i-a_i^\T x),
+\]
+其中 $\dom f=\{x\in\R^n\mid-\one\prec x\prec\one,\ Ax\prec b\}$，$a_i^\T$ 是 $A$ 的第 $i$ 行。假设 $A$ 稠密，并区分 $m\ge n$ 与 $m\le n$ 两种情况，另见习题9.30。
+
+% Source PDF page 533 (printed p. 519)
+\paragraph{9.28} \emph{二次不等式的解析中心。}描述一种高效计算下列函数牛顿步的方法：
+\[
+ f(x)=-\sum_{i=1}^m\log(-x^\T A_ix-b_i^\T x-c_i),
+\]
+其中 $\dom f=\{x\mid x^\T A_ix+b_i^\T x+c_i<0,\ i=1,\ldots,m\}$。假设各矩阵 $A_i\in\mathbf S_{++}^n$ 规模很大且稀疏，并且 $m\ll n$。
+
+\emph{提示：}$f$ 在 $x$ 处的 Hessian 与梯度为
+\[
+ H=\sum_{i=1}^m\bigl(2\alpha_iA_i+\alpha_i^2(2A_ix+b_i)(2A_ix+b_i)^\T\bigr),
+ \qquad g=\sum_{i=1}^m\alpha_i(2A_ix+b_i),
+\]
+其中 $\alpha_i=1/(-x^\T A_ix-b_i^\T x-c_i)$。
+
+\paragraph{9.29} \emph{利用两阶段优化的结构。}本题接续习题4.64，后者介绍了带补救的优化，即两阶段优化。采用习题4.64中的记号与假设，并进一步假设：对每个情景 $i=1,\ldots,S$，代价函数 $f$ 都是关于 $(x,z)$ 的二次可微函数。
+
+说明如何高效计算寻找最优策略这一问题的牛顿步。作为情景数量 $S$ 的函数，你的方法与不利用任何结构的通用方法相比，近似 flop 数有何差别？
+
+\subsection*{数值实验}
+\paragraph{9.30} \emph{梯度法与牛顿法。}考虑无约束问题
+\[
+ \text{最小化}\quad f(x)=-\sum_{i=1}^m\log(1-a_i^\T x)-\sum_{i=1}^n\log(1-x_i^2),
+\]
+变量为 $x\in\R^n$，定义域为 $\dom f=\{x\mid a_i^\T x<1,\ i=1,\ldots,m,\ \abs{x_i}<1,\ i=1,\ldots,n\}$。这是计算线性不等式组
+\[
+ a_i^\T x\le1,\quad i=1,\ldots,m,\qquad
+ \abs{x_i}\le1,\quad i=1,\ldots,n
+\]
+的解析中心问题。注意，可以选 $x^{(0)}=0$ 作为初始点。可以从 $\R^n$ 上的某个分布中抽取 $a_i$，来生成问题实例。
+\begin{enumerate}[label=(\alph*)]
+\item 使用梯度法求解，合理选择回溯参数，并使用 $\norm{\nabla f(x)}_2\le\eta$ 形式的停止准则。画出目标函数值与步长随迭代次数变化的曲线。在高精度确定 $p^\star$ 后，也可以画出 $f-p^\star$ 随迭代次数变化的曲线。尝试不同的回溯参数 $\alpha,\beta$，观察它们对所需总迭代次数的影响。对几个不同规模的问题实例进行实验。
+\item 使用牛顿法重复实验，采用基于牛顿减量 $\lambda^2$ 的停止准则。观察是否出现二次收敛。无需像习题9.27那样高效计算牛顿步，可以使用通用稠密求解器，不过最好使用基于 Cholesky 分解的求解器。
+\end{enumerate}
+\emph{提示：}利用链式法则，求出 $\nabla f(x)$ 与 $\nabla^2f(x)$ 的表达式。
+
+\paragraph{9.31} \emph{几种近似牛顿法。}牛顿法的代价主要由计算 Hessian $\nabla^2f(x)$ 与求解牛顿方程组的代价决定。对大规模问题，有时可以用一个正定近似替代 Hessian，使形成和求解搜索步更容易。本题研究这一思想的几个常见例子。
+
+对下面每种近似牛顿法，在习题9.30的解析中心问题的若干实例上进行测试，并将结果与牛顿法、梯度法所得结果比较。
+% Source PDF page 534 (printed p. 520)
+\begin{enumerate}[label=(\alph*)]
+\item \emph{复用 Hessian。}只在每隔 $N$ 次迭代时计算并分解 Hessian，其中 $N>1$，并使用搜索步 $\Delta x=-H^{-1}\nabla f(x)$，$H$ 为最近一次计算的 Hessian。每 $N$ 步只需计算并分解一次 Hessian；其他步骤通过回代与前代计算搜索方向。
+\item \emph{对角近似。}用 Hessian 的对角部分代替它，因此只需计算 $n$ 个二阶导数 $\partial^2f(x)/\partial x_i^2$，搜索步也很容易计算。
+\end{enumerate}
+
+\paragraph{9.32} \emph{凸非线性最小二乘问题的 Gauss--Newton 法。}考虑非线性最小二乘问题，最小化形如
+\[
+ f(x)=\frac12\sum_{i=1}^m f_i(x)^2
+\]
+的函数，其中各 $f_i$ 二次可微。$f$ 在 $x$ 处的梯度与 Hessian 为
+\[
+ \nabla f(x)=\sum_{i=1}^m f_i(x)\nabla f_i(x),\qquad
+ \nabla^2f(x)=\sum_{i=1}^m\bigl(\nabla f_i(x)\nabla f_i(x)^\T+f_i(x)\nabla^2f_i(x)\bigr).
+\]
+考虑 $f$ 凸的情形。例如，当每个 $f_i$ 或者非负且凸，或者非正且凹，或者为仿射函数时，就会如此。
+
+Gauss--Newton 法采用搜索方向
+\[
+ \Delta x_{\mathrm{gn}}=-\left(\sum_{i=1}^m\nabla f_i(x)\nabla f_i(x)^\T\right)^{-1}
+ \left(\sum_{i=1}^m f_i(x)\nabla f_i(x)\right).
+\]
+这里假设逆存在，即向量 $\nabla f_1(x),\ldots,\nabla f_m(x)$ 张成 $\R^n$。这个方向可以看作一种近似牛顿方向，见习题9.31：从 $f$ 的 Hessian 中去掉二阶导数项，就得到它。
+
+Gauss--Newton 搜索方向 $\Delta x_{\mathrm{gn}}$ 还有另一个简单解释。利用一阶近似 $f_i(x+v)\approx f_i(x)+\nabla f_i(x)^\T v$，得到
+\[
+ f(x+v)\approx\frac12\sum_{i=1}^m\bigl(f_i(x)+\nabla f_i(x)^\T v\bigr)^2.
+\]
+Gauss--Newton 搜索步 $\Delta x_{\mathrm{gn}}$ 恰好是使 $f$ 的这个近似最小的 $v$。因此，还可得出 $\Delta x_{\mathrm{gn}}$ 可以通过求解线性最小二乘问题计算。
+
+在形如下式的一些问题实例上测试 Gauss--Newton 法：
+\[
+ f_i(x)=\tfrac12x^\T A_ix+b_i^\T x+1,
+\]
+其中 $A_i\in\mathbf S_{++}^n$，且 $b_i^\T A_i^{-1}b_i\le2$，这一条件保证 $f$ 凸。

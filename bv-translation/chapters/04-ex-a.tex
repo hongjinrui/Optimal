@@ -1,0 +1,321 @@
+% Source PDF page 203 (printed p. 189)
+\subsection*{基本术语与最优性条件}
+\paragraph{4.1}考虑优化问题
+\[
+\begin{array}{ll}\text{最小化}&f_0(x_1,x_2)\\\text{约束为}&2x_1+x_2\ge1,\\&x_1+3x_2\ge1,\\&x_1\ge0,\quad x_2\ge0.\end{array}
+\]
+画出可行集示意图。对下列每个目标函数，给出最优集和最优值。
+\begin{enumerate}[label=(\alph*)]
+\item $f_0(x_1,x_2)=x_1+x_2$。
+\item $f_0(x_1,x_2)=-x_1-x_2$。
+\item $f_0(x_1,x_2)=x_1$。
+\item $f_0(x_1,x_2)=\max\{x_1,x_2\}$。
+\item $f_0(x_1,x_2)=x_1^2+9x_2^2$。
+\end{enumerate}
+
+\paragraph{4.2}考虑优化问题
+\[
+\text{最小化}\quad f_0(x)=-\sum_{i=1}^m\log(b_i-a_i^\T x),
+\]
+定义域为 $\dom f_0=\{x\mid Ax\prec b\}$，其中 $A\in\R^{m\times n}$，各行为 $a_i^\T$。假设 $\dom f_0$ 非空。
+
+证明下列事实，其中包括第141页未经证明引用的结果。
+\begin{enumerate}[label=(\alph*)]
+\item $\dom f_0$ 无界，当且仅当存在 $v\ne0$ 使 $Av\preceq0$。
+\item $f_0$ 无下界，当且仅当存在 $v$ 使 $Av\preceq0$、$Av\ne0$。提示：存在满足 $Av\preceq0$、$Av\ne0$ 的 $v$，当且仅当不存在 $z\succ0$ 使 $A^\T z=0$。这由第50页例2.21的择一定理推出。
+\item 若 $f_0$ 有下界，则其最小值可以达到，即存在满足最优性条件（4.23）的 $x$。
+\item 最优集是仿射集：$X_{\mathrm{opt}}=\{x^\star+v\mid Av=0\}$，其中 $x^\star$ 是任意最优点。
+\end{enumerate}
+
+\paragraph{4.3}证明 $x^\star=(1,1/2,-1)$ 对优化问题
+\[
+\begin{array}{ll}\text{最小化}&(1/2)x^\T Px+q^\T x+r\\\text{约束为}&-1\le x_i\le1,\quad i=1,2,3\end{array}
+\]
+最优，其中
+\[
+P=\begin{bmatrix}13&12&-2\\12&17&6\\-2&6&12\end{bmatrix},\qquad
+q=\begin{bmatrix}-22.0\\-14.5\\13.0\end{bmatrix},\qquad r=1.
+\]
+
+\paragraph{4.4}[P. Parrilo] \textbf{对称性与凸优化。}设 $G=\{Q_1,\ldots,Q_k\}\subseteq\R^{n\times n}$ 为群，即对乘法和求逆封闭。若对所有 $x$、所有 $i=1,\ldots,k$，有 $f(Q_ix)=f(x)$，就称函数 $f:\R^n\to\R$ 是 $G$-不变的，或关于 $G$ 对称。定义 $\bar x=(1/k)\sum_{i=1}^k Q_ix$，即 $x$ 在其 $G$-轨道上的平均。定义 $G$ 的不动子空间为
+\[
+\mathcal F=\{x\mid Q_ix=x,\ i=1,\ldots,k\}.
+\]
+\begin{enumerate}[label=(\alph*)]
+\item 证明对任意 $x\in\R^n$，有 $\bar x\in\mathcal F$。
+% Source PDF page 204 (printed p. 190)
+\item 证明，若 $f:\R^n\to\R$ 凸且 $G$-不变，则 $f(\bar x)\le f(x)$。
+\item 若优化问题
+\[
+\begin{array}{ll}\text{最小化}&f_0(x)\\\text{约束为}&f_i(x)\le0,\quad i=1,\ldots,m\end{array}
+\]
+的目标 $f_0$ 为 $G$-不变函数，可行集也是 $G$-不变的，即对 $i=1,\ldots,k$，
+\[
+f_1(x)\le0,\ldots,f_m(x)\le0\ \Longrightarrow\ f_1(Q_ix)\le0,\ldots,f_m(Q_ix)\le0,
+\]
+就称问题 $G$-不变。证明：若问题凸且 $G$-不变，并存在最优点，则 $\mathcal F$ 中存在最优点。换言之，不失一般性，可以向问题加入等式约束 $x\in\mathcal F$。
+\item 例如，设 $f$ 凸且对称，即对每个置换 $P$ 有 $f(Px)=f(x)$。证明：若 $f$ 有最小点，就有形如 $\alpha\one$ 的最小点。这意味着在 $x\in\R^n$ 上最小化 $f$，也可以改为在 $t\in\R$ 上最小化 $f(t\one)$。
+\end{enumerate}
+
+\paragraph{4.5}\textbf{等价凸问题。}证明以下三个凸问题等价，仔细说明如何由每一个问题的解得到其他问题的解。数据为矩阵 $A\in\R^{m\times n}$（各行为 $a_i^\T$）、向量 $b\in\R^m$ 和常数 $M>0$。
+\begin{enumerate}[label=(\alph*)]
+\item 鲁棒最小二乘问题
+\[
+\text{最小化}\quad\sum_{i=1}^m\phi(a_i^\T x-b_i),
+\]
+变量为 $x\in\R^n$，其中 $\phi:\R\to\R$ 定义为
+\[
+\phi(u)=\begin{cases}u^2,&|u|\le M,\\M(2|u|-M),&|u|>M.\end{cases}
+\]
+这个函数称为Huber罚函数，见§6.1.2。
+\item 可变权重最小二乘问题
+\[
+\begin{array}{ll}\text{最小化}&\displaystyle\sum_{i=1}^m\frac{(a_i^\T x-b_i)^2}{w_i+1}+M^2\one^\T w\\\text{约束为}&w\succeq0,\end{array}
+\]
+变量为 $x\in\R^n,w\in\R^m$，定义域 $\mathcal D=\{(x,w)\in\R^n\times\R^m\mid w\succ-\one\}$。提示：固定 $x$，对 $w$ 优化，建立与(a)的关系。
+
+此问题可解释为允许调整第 $i$ 个残差权重的加权最小二乘。$w_i=0$ 时权重为一，增大 $w_i$ 则权重下降。目标第二项惩罚较大的 $w$，即惩罚较大的权重调整。
+\item 二次规划
+\[
+\begin{array}{ll}\text{最小化}&\displaystyle\sum_{i=1}^m(u_i^2+2Mv_i)\\\text{约束为}&-u-v\preceq Ax-b\preceq u+v,\\&0\preceq u\preceq M\one,\\&v\succeq0.\end{array}
+\]
+\end{enumerate}
+
+% Source PDF page 205 (printed p. 191)
+\paragraph{4.6}\textbf{处理凸等式约束。}凸优化问题只能有线性等式约束函数。不过，在一些特殊情况下，可以处理凸等式约束函数，即 $h(x)=0$ 形式的约束，其中 $h$ 凸。本题研究这个思路。
+
+考虑优化问题
+\begin{equation}
+\begin{array}{ll}\text{最小化}&f_0(x)\\\text{约束为}&f_i(x)\le0,\quad i=1,\ldots,m,\\&h(x)=0,\end{array}\tag{4.65}
+\end{equation}
+其中 $f_i,h$ 均为定义域为 $\R^n$ 的凸函数。除非 $h$ 仿射，否则这不是凸优化问题。考虑将凸等式放松为凸不等式的相关问题
+\begin{equation}
+\begin{array}{ll}\text{最小化}&f_0(x)\\\text{约束为}&f_i(x)\le0,\quad i=1,\ldots,m,\\&h(x)\le0.\end{array}\tag{4.66}
+\end{equation}
+它当然是凸问题。
+
+现在假设能保证，凸问题（4.66）的任意最优解 $x^\star$ 均满足 $h(x^\star)=0$，即不等式 $h(x)\le0$ 在解处总活跃。于是可通过求解凸问题（4.66）解出非凸问题（4.65）。证明若存在指标 $r$ 满足下列条件，就属于这种情况：
+\begin{itemize}
+\item $f_0$ 关于 $x_r$ 单调递增；
+\item $f_1,\ldots,f_m$ 关于 $x_r$ 非减；
+\item $h$ 关于 $x_r$ 单调递减。
+\end{itemize}
+习题4.31和4.58将给出具体例子。
+
+\paragraph{4.7}\textbf{凸凹分式问题。}考虑问题
+\[
+\begin{array}{ll}\text{最小化}&f_0(x)/(c^\T x+d)\\\text{约束为}&f_i(x)\le0,\quad i=1,\ldots,m,\\&Ax=b,\end{array}
+\]
+其中 $f_0,f_1,\ldots,f_m$ 凸，目标定义域为 $\{x\in\dom f_0\mid c^\T x+d>0\}$。
+\begin{enumerate}[label=(\alph*)]
+\item 证明这是拟凸优化问题。
+\item 证明它等价于
+\[
+\begin{array}{ll}\text{最小化}&g_0(y,t)\\\text{约束为}&g_i(y,t)\le0,\quad i=1,\ldots,m,\\&Ay=bt,\\&c^\T y+dt=1,\end{array}
+\]
+其中 $g_i$ 为 $f_i$ 的透视函数，见§3.2.6。变量为 $y\in\R^n,t\in\R$。证明此问题凸。
+\item 沿用类似论证，为凸凹分式问题
+\[
+\begin{array}{ll}\text{最小化}&f_0(x)/h(x)\\\text{约束为}&f_i(x)\le0,\quad i=1,\ldots,m,\\&Ax=b\end{array}
+\]
+推导凸表述，
+% Source PDF page 206 (printed p. 192)
+其中 $f_0,f_1,\ldots,f_m$ 凸，$h$ 凹，目标定义域为 $\{x\in\dom f_0\cap\dom h\mid h(x)>0\}$，且处处有 $f_0(x)\ge0$。
+
+例如，将你的技巧用于无约束问题，其中
+\[
+f_0(x)=\tr F(x)/m,\qquad h(x)=(\det(F(x)))^{1/m},
+\]
+$\dom(f_0/h)=\{x\mid F(x)\succ0\}$，$F(x)=F_0+x_1F_1+\cdots+x_nF_n$，矩阵 $F_i\in\mathbf S^m$ 给定。此问题最小化仿射矩阵函数 $F(x)$ 的特征值算术平均与几何平均之比。
+\end{enumerate}
+
+\subsection*{线性优化问题}
+\paragraph{4.8}\textbf{若干简单LP。}给出下列各LP的显式解。
+\begin{enumerate}[label=(\alph*)]
+\item 在仿射集上最小化线性函数。
+\[
+\begin{array}{ll}\text{最小化}&c^\T x\\\text{约束为}&Ax=b.\end{array}
+\]
+\item 在半空间上最小化线性函数。
+\[
+\begin{array}{ll}\text{最小化}&c^\T x\\\text{约束为}&a^\T x\le b,\end{array}
+\]
+其中 $a\ne0$。
+\item 在长方体上最小化线性函数。
+\[
+\begin{array}{ll}\text{最小化}&c^\T x\\\text{约束为}&l\preceq x\preceq u,\end{array}
+\]
+其中 $l\preceq u$。
+\item 在概率单纯形上最小化线性函数。
+\[
+\begin{array}{ll}\text{最小化}&c^\T x\\\text{约束为}&\one^\T x=1,\quad x\succeq0.\end{array}
+\]
+若将等式约束替换为不等式 $\one^\T x\le1$，会怎样？
+
+此LP可解释为简单投资组合优化。向量 $x$ 表示总预算在各资产上的配置，$x_i$ 为投资于资产 $i$ 的比例。各项投资回报固定，为 $-c_i$，所以希望最大化的总回报为 $-c^\T x$。若将预算等式改为 $\one^\T x\le1$，就可以选择不投资一部分预算。
+\item 在有总预算约束的单位盒上最小化线性函数。
+\[
+\begin{array}{ll}\text{最小化}&c^\T x\\\text{约束为}&\one^\T x=\alpha,\quad0\preceq x\preceq\one,\end{array}
+\]
+其中 $\alpha$ 为0到 $n$ 之间的整数。若 $\alpha$ 非整数，但满足 $0\le\alpha\le n$，会怎样？若将等式改为 $\one^\T x\le\alpha$ 呢？
+\item 在有加权预算约束的单位盒上最小化线性函数。
+\[
+\begin{array}{ll}\text{最小化}&c^\T x\\\text{约束为}&d^\T x=\alpha,\quad0\preceq x\preceq\one,\end{array}
+\]
+其中 $d\succ0$、$0\le\alpha\le\one^\T d$。
+\end{enumerate}
+
+% Source PDF page 207 (printed p. 193)
+\paragraph{4.9}\textbf{方阵LP。}考虑LP
+\[
+\begin{array}{ll}\text{最小化}&c^\T x\\\text{约束为}&Ax\preceq b,\end{array}
+\]
+其中 $A$ 为非奇异方阵。证明最优值为
+\[
+p^\star=\begin{cases}c^\T A^{-1}b,&A^{-\T}c\preceq0,\\-\infty,&\text{其他情形。}\end{cases}
+\]
+
+\paragraph{4.10}\textbf{将一般LP化为标准形式。}补全§4.3第147页的细节。详细说明标准形式LP与原LP的可行集、最优解及最优值之间的关系。
+
+\paragraph{4.11}\textbf{涉及 $\ell_1$ 和 $\ell_\infty$ 范数的问题。}将下列问题表述为LP，详细说明每个问题的最优解与其等价LP的解之间的关系。
+\begin{enumerate}[label=(\alph*)]
+\item 最小化 $\norm{Ax-b}_\infty$，即 $\ell_\infty$ 范数逼近。
+\item 最小化 $\norm{Ax-b}_1$，即 $\ell_1$ 范数逼近。
+\item 在 $\norm{x}_\infty\le1$ 下最小化 $\norm{Ax-b}_1$。
+\item 在 $\norm{Ax-b}_\infty\le1$ 下最小化 $\norm{x}_1$。
+\item 最小化 $\norm{Ax-b}_1+\norm{x}_\infty$。
+\end{enumerate}
+各题中 $A\in\R^{m\times n},b\in\R^m$ 给定。更多逼近和约束逼近问题见§6.1。
+
+\paragraph{4.12}\textbf{网络流问题。}考虑一个有 $n$ 个结点、每对结点间均有有向连接的网络。变量为每条连接上的流量：$x_{ij}$ 表示从结点 $i$ 到结点 $j$ 的流量。连接 $i$ 到 $j$ 上流的成本为 $c_{ij}x_{ij}$，其中 $c_{ij}$ 为给定常数。全网络总成本为
+\[
+C=\sum_{i,j=1}^n c_{ij}x_{ij}.
+\]
+每条连接的流量 $x_{ij}$ 还有给定下界 $l_{ij}$（通常假设非负）和上界 $u_{ij}$。
+
+结点 $i$ 的外部供给为 $b_i$，其中 $b_i>0$ 表示外部流从结点 $i$ 进入网络，$b_i<0$ 表示数量为 $|b_i|$ 的流从结点 $i$ 流出网络。假设 $\one^\T b=0$，即外部总供给等于外部总需求。每个结点都满足流量守恒：沿连接进入结点 $i$ 的总流量加外部供给，再减去沿连接流出的总流量，等于零。
+
+问题是在上述约束下最小化网络总流成本。将其表述为LP。
+
+\paragraph{4.13}\textbf{系数为区间的鲁棒LP。}考虑变量为 $x\in\R^n$ 的问题
+\[
+\begin{array}{ll}\text{最小化}&c^\T x\\\text{约束为}&Ax\preceq b\quad\text{对所有 }A\in\mathcal A,\end{array}
+\]
+其中 $\mathcal A\subseteq\R^{m\times n}$ 为
+\[
+\mathcal A=\{A\in\R^{m\times n}\mid\bar A_{ij}-V_{ij}\le A_{ij}\le\bar A_{ij}+V_{ij},\ i=1,\ldots,m,\ j=1,\ldots,n\}.
+\]
+矩阵 $\bar A,V$ 给定。此问题可解释为LP，其矩阵 $A$ 的每个系数只知道位于一个区间内，要求 $x$ 对全部可能系数取值均满足约束。
+
+将其表示为LP。构造的LP应当高效，即维数不应随 $n$ 或 $m$ 指数增长。
+
+% Source PDF page 208 (printed p. 194)
+\paragraph{4.14}\textbf{无穷范数下的矩阵逼近。}矩阵 $A\in\R^{m\times n}$ 的 $\ell_\infty$ 诱导范数，记为 $\norm{A}_\infty$，为
+\[
+\norm{A}_\infty=\sup_{x\ne0}\frac{\norm{Ax}_\infty}{\norm{x}_\infty}
+=\max_{i=1,\ldots,m}\sum_{j=1}^n|a_{ij}|.
+\]
+这个范数也称为最大行和范数，原因显而易见，见§A.1.5。考虑以其他矩阵的线性组合，在最大行和范数下逼近一个矩阵的问题。具体而言，给定 $k+1$ 个矩阵 $A_0,\ldots,A_k\in\R^{m\times n}$，需找 $x\in\R^k$，使
+\[
+\norm{A_0+x_1A_1+\cdots+x_kA_k}_\infty
+\]
+最小。将其表示为LP，解释所引入额外变量的意义。仔细说明LP表述如何求解原问题，例如，LP可行集与原问题是什么关系？
+
+\paragraph{4.15}\textbf{布尔LP的放松。}布尔线性规划中，变量 $x$ 的各分量被限制为零或一：
+\begin{equation}
+\begin{array}{ll}\text{最小化}&c^\T x\\\text{约束为}&Ax\preceq b,\\&x_i\in\{0,1\},\quad i=1,\ldots,n.\end{array}\tag{4.67}
+\end{equation}
+一般而言，即使可行集有限、至多包含 $2^n$ 个点，这类问题也很难求解。
+
+一种称为放松的一般方法，是将 $x_i$ 为零或一的约束替换为线性不等式 $0\le x_i\le1$：
+\begin{equation}
+\begin{array}{ll}\text{最小化}&c^\T x\\\text{约束为}&Ax\preceq b,\\&0\le x_i\le1,\quad i=1,\ldots,n.\end{array}\tag{4.68}
+\end{equation}
+称其为布尔LP（4.67）的LP放松。LP放松远比原布尔LP容易求解。
+\begin{enumerate}[label=(\alph*)]
+\item 证明LP放松（4.68）的最优值是布尔LP（4.67）最优值的下界。若LP放松不可行，对布尔LP能作何判断？
+\item 有时LP放松的某个解满足 $x_i\in\{0,1\}$，此时能作何判断？
+\end{enumerate}
+
+\paragraph{4.16}\textbf{最小燃料最优控制。}考虑线性动态系统，状态为 $x(t)\in\R^n$（$t=0,\ldots,N$），执行器或输入信号为 $u(t)\in\R$（$t=0,\ldots,N-1$）。系统动态为线性递推
+\[
+x(t+1)=Ax(t)+bu(t),\quad t=0,\ldots,N-1,
+\]
+其中 $A\in\R^{n\times n},b\in\R^n$ 给定。假设初始状态为零，即 $x(0)=0$。
+
+最小燃料最优控制问题是选择输入 $u(0),\ldots,u(N-1)$，使总耗油量
+\[
+F=\sum_{t=0}^{N-1}f(u(t))
+\]
+最小，
+% Source PDF page 209 (printed p. 195)
+并满足 $x(N)=x^{\mathrm{des}}$。其中 $N$ 为给定时间范围，$x^{\mathrm{des}}\in\R^n$ 为给定的期望最终状态或目标状态。函数 $f:\R\to\R$ 是执行器的耗油映射，给出耗油量随执行器信号幅度的变化。本题采用
+\[
+f(a)=\begin{cases}|a|,&|a|\le1,\\2|a|-1,&|a|>1.\end{cases}
+\]
+这意味着信号在 $-1$ 到 $1$ 之间时，耗油量与信号绝对值成正比；信号更大时，边际燃料效率减半。将最小燃料最优控制问题表述为LP。
+
+\paragraph{4.17}\textbf{最优活动水平。}考虑选择 $n$ 个非负活动水平 $x_1,\ldots,x_n$。活动消耗有限的 $m$ 种资源。活动 $j$ 消耗资源 $i$ 的数量为 $A_{ij}x_j$，$A_{ij}$ 给定。资源消耗可加，所以资源 $i$ 的总消耗为 $c_i=\sum_{j=1}^n A_{ij}x_j$。（通常 $A_{ij}\ge0$，即活动 $j$ 消耗资源 $i$；但允许 $A_{ij}<0$，这表示活动 $j$ 实际上以副产品的形式产生资源 $i$。）每种资源消耗有限，要求 $c_i\le c_i^{\max}$，其中 $c_i^{\max}$ 给定。每项活动产生收益，它是活动水平的分段线性凹函数：
+\[
+r_j(x_j)=\begin{cases}p_jx_j,&0\le x_j\le q_j,\\p_jq_j+p_j^{\mathrm{disc}}(x_j-q_j),&x_j\ge q_j.\end{cases}
+\]
+其中 $p_j>0$ 为基本价格，$q_j>0$ 为数量折扣阈值，$p_j^{\mathrm{disc}}$ 为活动 $j$ 的产品的数量折扣价格，满足 $0<p_j^{\mathrm{disc}}<p_j$。总收益为各项活动收益之和 $\sum_{j=1}^n r_j(x_j)$。
+
+目标是在满足资源限制时选择使总收益最大的活动水平。说明如何将此问题表述为LP。
+
+\paragraph{4.18}\textbf{分离超平面与球面。}给定 $\R^n$ 中两组点 $\{v_1,v_2,\ldots,v_K\}$ 和 $\{w_1,w_2,\ldots,w_L\}$。将下列两个问题表述为LP可行性问题。
+\begin{enumerate}[label=(\alph*)]
+\item 确定分离两组点的超平面，即求 $a\in\R^n,b\in\R$，$a\ne0$，使
+\[
+a^\T v_i\le b,\quad i=1,\ldots,K,\qquad a^\T w_i\ge b,\quad i=1,\ldots,L.
+\]
+注意要求 $a\ne0$，所以表述中须排除平凡解 $a=0,b=0$。可以假设
+\[
+\rank\begin{bmatrix}v_1&v_2&\cdots&v_K&w_1&w_2&\cdots&w_L\\1&1&\cdots&1&1&1&\cdots&1\end{bmatrix}=n+1,
+\]
+即这 $K+L$ 个点的仿射包维数为 $n$。
+\item 确定分离两组点的球面，即求 $x_c\in\R^n,R\ge0$，使
+\[
+\norm{v_i-x_c}_2\le R,\quad i=1,\ldots,K,\qquad
+\norm{w_i-x_c}_2\ge R,\quad i=1,\ldots,L.
+\]
+这里 $x_c$ 为球心，$R$ 为半径。
+\end{enumerate}
+关于分离超平面、分离球面及相关主题的更多内容，见第8章。
+
+% Source PDF page 210 (printed p. 196)
+\paragraph{4.19}考虑问题
+\[
+\begin{array}{ll}\text{最小化}&\norm{Ax-b}_1/(c^\T x+d)\\\text{约束为}&\norm{x}_\infty\le1,\end{array}
+\]
+其中 $A\in\R^{m\times n},b\in\R^m,c\in\R^n,d\in\R$。假设 $d>\norm{c}_1$，从而对所有可行 $x$ 都有 $c^\T x+d>0$。
+\begin{enumerate}[label=(\alph*)]
+\item 证明这是拟凸优化问题。
+\item 证明它等价于以下凸优化问题，变量为 $y\in\R^n,t\in\R$：
+\[
+\begin{array}{ll}\text{最小化}&\norm{Ay-bt}_1\\\text{约束为}&\norm{y}_\infty\le t,\\&c^\T y+dt=1.\end{array}
+\]
+\end{enumerate}
+
+\paragraph{4.20}\textbf{无线通信系统中的功率分配。}考虑 $n$ 个发射机，以功率 $p_1,\ldots,p_n\ge0$ 向 $n$ 个接收机发送信号。这些功率是优化变量。用 $G\in\R^{n\times n}$ 表示发射机至接收机的路径增益矩阵；$G_{ij}\ge0$ 为发射机 $j$ 到接收机 $i$ 的路径增益。接收机 $i$ 的信号功率为 $S_i=G_{ii}p_i$，干扰功率为 $I_i=\sum_{k\ne i}G_{ik}p_k$。接收机 $i$ 的信干噪比（SINR）为 $S_i/(I_i+\sigma_i)$，其中 $\sigma_i>0$ 为接收机 $i$ 的自身噪声功率。目标是最大化所有接收机中的最小SINR，即最大化
+\[
+\min_{i=1,\ldots,n}\frac{S_i}{I_i+\sigma_i}.
+\]
+除显然的 $p_i\ge0$ 外，功率还需满足若干约束。首先每个发射机有最大允许功率，即 $p_i\le P_i^{\max}$，其中 $P_i^{\max}>0$ 给定。此外，发射机分为若干组，每组共享电源，所以每组发射功率有总量约束。具体地，给定 $\{1,\ldots,n\}$ 的子集 $K_1,\ldots,K_m$，满足 $K_1\cup\cdots\cup K_m=\{1,\ldots,n\}$，且 $j\ne l$ 时 $K_j\cap K_l=\varnothing$。对每组 $K_l$，相关发射机总功率不能超过 $P_l^{\mathrm{gp}}>0$：
+\[
+\sum_{k\in K_l}p_k\le P_l^{\mathrm{gp}},\quad l=1,\ldots,m.
+\]
+最后，每个接收机的总接收功率有上限 $P_k^{\mathrm{rc}}>0$：
+\[
+\sum_{k=1}^nG_{ik}p_k\le P_i^{\mathrm{rc}},\quad i=1,\ldots,n.
+\]
+这反映了总接收功率过大时接收机会饱和。将SINR最大化问题表述为广义线性分式规划。
+
+\subsection*{二次优化问题}
+\paragraph{4.21}\textbf{若干简单QCQP。}给出下列各QCQP的显式解。
+\begin{enumerate}[label=(\alph*)]
+\item 在以原点为中心的椭球上最小化线性函数。
+\[
+\begin{array}{ll}\text{最小化}&c^\T x\\\text{约束为}&x^\T Ax\le1,\end{array}
+\]
+其中 $A\in\mathbf S_{++}^n,c\ne0$。若问题非凸，即 $A\notin\mathbf S_+^n$，解是什么？

@@ -1,0 +1,340 @@
+% Source PDF page 637 (printed p. 623)
+\section*{习题}
+\addcontentsline{toc}{section}{习题}
+\subsection*{障碍法}
+
+\paragraph{11.1} \emph{障碍法示例。} 考虑简单问题
+\[
+\begin{aligned}\text{最小化}\quad&x^2+1\\\text{约束为}\quad&2\le x\le4,\end{aligned}
+\]
+其可行集为 $[2,4]$，最优点为 $x^\star=2$。对若干 $t>0$，画出 $f_0$ 与 $tf_0+\phi$ 随 $x$ 的变化，并标出 $x^\star(t)$。
+
+\paragraph{11.2} 对变量为 $x\in\R^2$ 的 LP
+\[
+\begin{aligned}\text{最小化}\quad&x_2\\\text{约束为}\quad&x_1\le x_2,\qquad0\le x_2,\end{aligned}
+\]
+应用障碍法会发生什么？
+
+\paragraph{11.3} \emph{中心化问题的有界性。} 假设 (11.1)
+\[
+\begin{aligned}\text{最小化}\quad&f_0(x)\\\text{约束为}\quad&f_i(x)\le0,\quad i=1,\ldots,m,\\&Ax=b\end{aligned}
+\]
+的下水平集有界。证明相应中心化问题
+\[
+\begin{aligned}\text{最小化}\quad&tf_0(x)+\phi(x)\\\text{约束为}\quad&Ax=b\end{aligned}
+\]
+的下水平集有界。
+
+\paragraph{11.4} \emph{增加范数界以保证中心化问题强凸。} 假设在问题 (11.1) 中增加约束 $x^\T x\le R^2$：
+\[
+\begin{aligned}\text{最小化}\quad&f_0(x)\\\text{约束为}\quad&f_i(x)\le0,\quad i=1,\ldots,m,\\&Ax=b,\\&x^\T x\le R^2.\end{aligned}
+\]
+以 $\widetilde\phi$ 表示修改后问题的对数障碍函数。求 $a>0$，使对所有可行 $x$ 都有 $\nabla^2(tf_0(x)+\widetilde\phi(x))\succeq a\I$。
+
+\paragraph{11.5} \emph{二阶锥规划的障碍法。} 考虑 SOCP，为简便起见省略等式约束，
+\begin{equation}\begin{aligned}
+\text{最小化}\quad&f^\T x\\\text{约束为}\quad&\norm{A_i x+b_i}_2\le c_i^\T x+d_i,\quad i=1,\ldots,m.
+\end{aligned}\tag{11.63}\end{equation}
+该问题的约束函数不可微，因为欧氏范数 $\norm{u}_2$ 在 $u=0$ 处不可微，所以不能应用标准障碍法。第11.6节介绍了如何用处理广义不等式的障碍法扩展求解这个 SOCP，见例11.8（第599页）和第601页。本题说明怎样用具有标量约束函数的标准障碍法求解 SOCP。
+
+首先将 SOCP 重新表述为
+\begin{equation}\begin{aligned}
+\text{最小化}\quad&f^\T x\\
+\text{约束为}\quad&\norm{A_i x+b_i}_2^2/(c_i^\T x+d_i)\le c_i^\T x+d_i,\quad i=1,\ldots,m,\\
+&c_i^\T x+d_i\ge0,\quad i=1,\ldots,m.
+\end{aligned}\tag{11.64}\end{equation}
+% Source PDF page 638 (printed p. 624)
+约束函数
+\[
+f_i(x)=\frac{\norm{A_i x+b_i}_2^2}{c_i^\T x+d_i}-c_i^\T x-d_i
+\]
+是二次除以线性函数与仿射函数的复合。只要把定义域取为 $\dom f_i=\{x\mid c_i^\T x+d_i>0\}$，它就是二阶可微凸函数。注意，(11.63) 和 (11.64) 并不完全等价。若 SOCP (11.63) 的最优解 $x^\star$ 对某个 $i$ 满足 $c_i^\T x^\star+d_i=0$，则重新表述的问题 (11.64) 不可解，因为 $x^\star$ 不在其定义域内。不过，应用于 (11.64) 的障碍法能产生任意高精度的 (11.64) 次优解，因而也能产生 (11.63) 的任意高精度次优解。
+\begin{enumerate}
+\item[(a)] 写出问题 (11.64) 的对数障碍 $\phi$。将它与使用第11.6节广义不等式障碍法求解 SOCP (11.63) 时产生的对数障碍比较。
+\item[(b)] 证明：若最小化 $tf^\T x+\phi(x)$，则最小化点 $x^\star(t)$ 对问题 (11.63) 的次优程度为 $2m/t$。因此，对重新表述的问题 (11.64) 应用标准障碍法，就能在产生任意高精度次优解的意义下求解 SOCP (11.63)，即使最优点 $x^\star$ 不一定在 (11.64) 的定义域内也如此。
+\end{enumerate}
+
+\paragraph{11.6} \emph{一般障碍。} 对数障碍基于用 $-(1/t)\log(-u)$ 近似示性函数 $\widehat I_-(u)$，见第11.2.1节（第563页）。也可以从其他近似构造障碍，进而推广中心路径和障碍法。设 $h:\R\to\R$ 是二阶可微、闭、递增的凸函数，$\dom h=-\R_{++}$。这意味着当 $u\to0$ 时，$h(u)\to\infty$。$h(u)=-\log(-u)$ 是一个例子；另一个例子是 $h(u)=-1/u$，$u<0$。
+
+现考虑优化问题，为简便起见不含等式约束，
+\[
+\begin{aligned}\text{最小化}\quad&f_0(x)\\\text{约束为}\quad&f_i(x)\le0,\quad i=1,\ldots,m,\end{aligned}
+\]
+其中 $f_i$ 二阶可微。将该问题的 $h$ 障碍定义为
+\[
+\phi_h(x)=\sum_{i=1}^m h(f_i(x)),
+\]
+定义域为 $\{x\mid f_i(x)<0,\ i=1,\ldots,m\}$。当 $h(u)=-\log(-u)$ 时，这是通常的对数障碍；当 $h(u)=-1/u$ 时，$\phi_h$ 称为\emph{倒数障碍}。定义 $h$ 中心路径为
+\[
+x^\star(t)=\argmin_x\bigl(tf_0(x)+\phi_h(x)\bigr),
+\]
+其中 $t>0$ 为参数，并假设对每个 $t$，最小化点存在且唯一。
+\begin{enumerate}
+\item[(a)] 说明为什么对每个 $t>0$，$tf_0(x)+\phi_h(x)$ 关于 $x$ 为凸函数。
+\item[(b)] 说明怎样由 $x^\star(t)$ 构造对偶可行 $\lambda$，并求对应的对偶间隙。
+\item[(c)] 对哪些函数 $h$，(b) 中的对偶间隙只依赖 $t$ 和 $m$，而不依赖任何其他问题数据？
+\end{enumerate}
+
+\paragraph{11.7} \emph{中心路径的切线。} 本题研究 $dx^\star(t)/dt$，它给出中心路径在 $x^\star(t)$ 处的切线。为简便起见，不考虑等式约束；结果很容易推广到有等式约束的问题。
+\begin{enumerate}
+\item[(a)] 求 $dx^\star(t)/dt$ 的显式表达式。\emph{提示：} 将中心性方程 (11.7) 关于 $t$ 求导。
+% Source PDF page 639 (printed p. 625)
+\item[(b)] 证明 $f_0(x^\star(t))$ 随 $t$ 增大而减小。因此，障碍法的目标值随参数 $t$ 增大而减小。我们已经知道，对偶间隙 $m/t$ 随 $t$ 增大而减小。
+\end{enumerate}
+
+\paragraph{11.8} \emph{中心化问题的预测—校正法。} 标准障碍法以 $x^\star(t)$ 为起点，用牛顿法计算 $x^\star(\mu t)$。已经有人提出另一种做法：先近似或预测 $x^\star(\mu t)$，得到 $\widehat x$，再以 $\widehat x$ 为起点，用牛顿法计算 $x^\star(\mu t)$。由于 $\widehat x$ 可能是比 $x^\star(t)$ 更好的初始点，这样应能减少牛顿步数。这种中心化方法称为\emph{预测—校正法}，因为它先预测 $x^\star(\mu t)$，再用牛顿法修正预测。
+
+最常用的是一阶预测，它基于习题11.7研究的中心路径切线：
+\[
+\widehat x=x^\star(t)+\frac{dx^\star(t)}{dt}(\mu t-t).
+\]
+推导一阶预测 $\widehat x$ 的表达式。将它与牛顿更新 $x^\star(t)+\Delta x_{\mathrm{nt}}$ 比较，其中 $\Delta x_{\mathrm{nt}}$ 是函数 $\mu t f_0(x)+\phi(x)$ 在 $x^\star(t)$ 处的牛顿步。当目标 $f_0$ 为线性函数时，能得到什么结论？为简便起见，可以不考虑等式约束。
+
+\paragraph{11.9} \emph{中心路径附近的对偶可行点。} 考虑变量为 $x\in\R^n$ 的问题
+\[
+\begin{aligned}\text{最小化}\quad&f_0(x)\\\text{约束为}\quad&f_i(x)\le0,\quad i=1,\ldots,m.\end{aligned}
+\]
+假设 $f_i$ 为凸且二阶可微函数，为简便起见没有等式约束。回忆第11.2.2节（第565页），$\lambda_i=-1/(tf_i(x^\star(t)))$，$i=1,\ldots,m$，对偶可行，而且 $x^\star(t)$ 最小化 $L(x,\lambda)$。因此可以计算 $\lambda$ 对应的对偶函数，得到 $g(\lambda)=f_0(x^\star(t))-m/t$，特别地，$x^\star(t)$ 的次优程度为 $m/t$。
+
+本题考虑 $x$ 接近 $x^\star(t)$、但未完全中心化的情形，例如中心化提前终止或未求到足够精度。此时当然不能断言 $\lambda_i=-1/(tf_i(x))$，$i=1,\ldots,m$，对偶可行，或 $x$ 的次优程度为 $m/t$。但可以证明，只要 $x$ 足够接近中心化点，稍复杂的公式就能给出对偶可行点。
+
+设 $\Delta x_{\mathrm{nt}}$ 是中心化问题
+\[
+\text{最小化}\quad tf_0(x)-\sum_{i=1}^m\log(-f_i(x))
+\]
+在 $x$ 处的牛顿步。当 $\Delta x_{\mathrm{nt}}$ 很小，即 $x$ 几乎中心化时，下式通常给出对偶可行点：
+\[
+\lambda_i=\frac1{-tf_i(x)}\left(1+\frac{\nabla f_i(x)^\T\Delta x_{\mathrm{nt}}}{-f_i(x)}\right),\quad i=1,\ldots,m.
+\]
+此时 $x$ 不最小化 $L(x,\lambda)$，所以没有对应对偶函数值 $g(\lambda)$ 的通式。不过，如果有对偶目标的解析表达式，直接计算 $g(\lambda)$ 即可。
+
+验证：对 QCQP
+\[
+\begin{aligned}
+\text{最小化}\quad&(1/2)x^\T P_0x+q_0^\T x+r_0\\
+\text{约束为}\quad&(1/2)x^\T P_ix+q_i^\T x+r_i\le0,\quad i=1,\ldots,m,
+\end{aligned}
+\]
+当 $\Delta x_{\mathrm{nt}}$ 足够小时，上式给出的 $\lambda$ 对偶可行，即 $\lambda\succeq0$ 且 $L(x,\lambda)$ 下有界。
+% Source PDF page 640 (printed p. 626)
+\emph{提示：} 定义
+\[
+x_0=x+\Delta x_{\mathrm{nt}},\qquad
+x_i=x-\frac1{t\lambda_i f_i(x)}\Delta x_{\mathrm{nt}},\quad i=1,\ldots,m.
+\]
+证明
+\[
+\nabla f_0(x_0)+\sum_{i=1}^m\lambda_i\nabla f_i(x_i)=0.
+\]
+再利用 $f_i(z)\ge f_i(x_i)+\nabla f_i(x_i)^\T(z-x_i)$，$i=0,\ldots,m$，推导 $L(z,\lambda)$ 的下界。
+
+\paragraph{11.10} \emph{中心路径的另一种参数化。} 考虑问题 (11.1)，对 $t>0$，其中心路径 $x^\star(t)$ 定义为问题
+\[
+\begin{aligned}\text{最小化}\quad&tf_0(x)-\sum_{i=1}^m\log(-f_i(x))\\\text{约束为}\quad&Ax=b\end{aligned}
+\]
+的解。本题研究中心路径的另一种参数化。
+
+对 $u>p^\star$，以 $z^\star(u)$ 表示问题
+\[
+\begin{aligned}\text{最小化}\quad&-\log(u-f_0(x))-\sum_{i=1}^m\log(-f_i(x))\\\text{约束为}\quad&Ax=b\end{aligned}
+\]
+的解。证明，由 $z^\star(u)$，$u>p^\star$，定义的曲线就是中心路径。换言之，对每个 $u>p^\star$，存在 $t>0$ 使 $x^\star(t)=z^\star(u)$；反之，对每个 $t>0$，存在 $u>p^\star$ 使 $z^\star(u)=x^\star(t)$。
+
+\paragraph{11.11} \emph{解析中心法。} 本题考虑障碍法的一个变体，基于习题11.10中的中心路径参数化。为简便起见，不考虑等式约束：
+\[
+\begin{aligned}\text{最小化}\quad&f_0(x)\\\text{约束为}\quad&f_i(x)\le0,\quad i=1,\ldots,m.\end{aligned}
+\]
+解析中心法从任意严格可行点 $x^{(0)}$ 及任意 $u^{(0)}>f_0(x^{(0)})$ 出发，令
+\[
+u^{(1)}=\theta u^{(0)}+(1-\theta)f_0(x^{(0)}),
+\]
+其中 $\theta\in(0,1)$ 是通常取较小值的算法参数，再计算下一迭代点
+\[
+x^{(1)}=z^\star(u^{(1)}),
+\]
+用牛顿法从 $x^{(0)}$ 出发计算。这里 $z^\star(s)$ 表示
+\[
+-\log(s-f_0(x))-\sum_{i=1}^m\log(-f_i(x))
+\]
+的最小化点，假设存在且唯一。重复这一过程。
+
+点 $z^\star(s)$ 是不等式组
+\[
+f_0(x)\le s,\qquad f_1(x)\le0,\ldots,f_m(x)\le0
+\]
+的解析中心，算法因此得名。
+
+证明中心法有效，即 $x^{(k)}$ 收敛到最优点。给出停止准则，保证 $x$ 为 $\epsilon$ 次优，其中 $\epsilon>0$。
+
+\emph{提示：} 点 $x^{(k)}$ 在中心路径上，见习题11.10。利用这一点证明
+\[
+u^+-p^\star\le\frac{m+\theta}{m+1}(u-p^\star),
+\]
+其中 $u,u^+$ 是相邻两次迭代中的 $u$ 值。
+
+% Source PDF page 641 (printed p. 627)
+\paragraph{11.12} \emph{凸—凹博弈的障碍法。} 考虑带不等式约束的凸—凹博弈
+\[
+\begin{aligned}
+\underset{w}{\text{最小化}}\ \underset{z}{\text{最大化}}\quad&f_0(w,z)\\
+\text{约束为}\quad&f_i(w)\le0,\quad i=1,\ldots,m,\\
+&\widetilde f_i(z)\le0,\quad i=1,\ldots,\widetilde m.
+\end{aligned}
+\]
+其中 $w\in\R^n$ 是最小化目标一方的变量，$z\in\R^{\widetilde n}$ 是最大化目标一方的变量。约束函数 $f_i,\widetilde f_i$ 为凸且可微函数，目标函数 $f_0$ 可微且凸—凹，即对每个 $z$ 关于 $w$ 凸，对每个 $w$ 关于 $z$ 凹。为简便起见，假设 $\dom f_0=\R^n\times\R^{\widetilde n}$。
+
+博弈的解或鞍点是点对 $w^\star,z^\star$，对任意可行 $w,z$ 都有
+\[
+f_0(w^\star,z)\le f_0(w^\star,z^\star)\le f_0(w,z^\star).
+\]
+关于凸—凹博弈及函数的背景，见第5.4.3节、第10.3.4节，以及习题3.14、5.24、5.25、10.10、10.13。本题说明如何用障碍法的扩展及不可行初始点牛顿法求解这一博弈，见第10.3节。
+\begin{enumerate}
+\item[(a)] 设 $t>0$。说明函数
+\[
+tf_0(w,z)-\sum_{i=1}^m\log(-f_i(w))+\sum_{i=1}^{\widetilde m}\log(-\widetilde f_i(z))
+\]
+为什么关于 $(w,z)$ 凸—凹。假设它具有唯一鞍点 $(w^\star(t),z^\star(t))$，且可用不可行初始点牛顿法求得。
+\item[(b)] 与求解凸优化问题的障碍法一样，可以推导一个关于 $(w^\star(t),z^\star(t))$ 次优程度的简单界，仅依赖问题维数，而且随 $t$ 增大趋于零。设 $W,Z$ 分别为 $w,z$ 的可行集，
+\[
+W=\{w\mid f_i(w)\le0,\ i=1,\ldots,m\},\qquad
+Z=\{z\mid\widetilde f_i(z)\le0,\ i=1,\ldots,\widetilde m\}.
+\]
+证明
+\begin{align*}
+f_0(w^\star(t),z^\star(t))&\le\inf_{w\in W}f_0(w,z^\star(t))+\frac mt,\\
+f_0(w^\star(t),z^\star(t))&\ge\sup_{z\in Z}f_0(w^\star(t),z)-\frac{\widetilde m}t,
+\end{align*}
+因此
+\[
+\sup_{z\in Z}f_0(w^\star(t),z)-\inf_{w\in W}f_0(w,z^\star(t))\le\frac{m+\widetilde m}t.
+\]
+\end{enumerate}
+
+\subsection*{自协调性与复杂度分析}
+\paragraph{11.13} \emph{自协调性与负熵。}
+\begin{enumerate}
+\item[(a)] 证明负熵函数 $x\log x$（在 $\R_{++}$ 上）不自协调。
+\item[(b)] 证明对任意 $t>0$，$tx\log x-\log x$ 在 $\R_{++}$ 上自协调。
+\end{enumerate}
+
+\paragraph{11.14} \emph{自协调性与中心化问题。} 设 $\phi$ 为问题 (11.1) 的对数障碍函数。假设 (11.1) 的下水平集有界，且 $tf_0+\phi$ 为自协调闭函数。证明对所有 $x\in\dom\phi$，都有 $t\nabla^2 f_0(x)+\nabla^2\phi(x)\succ0$。\emph{提示：} 见习题9.17与11.3。
+
+% Source PDF page 642 (printed p. 628)
+\subsection*{广义不等式的障碍法}
+\paragraph{11.15} \emph{广义对数是 $K$ 递增的。} 设 $\psi$ 是正常锥 $K$ 的广义对数，且 $y\succ_K0$。
+\begin{enumerate}
+\item[(a)] 证明 $\nabla\psi(y)\succeq_{K^*}0$，即 $\psi$ 为 $K$ 非减。\emph{提示：} 若 $\nabla\psi(y)\not\succeq_{K^*}0$，则存在 $w\succ_K0$ 使 $w^\T\nabla\psi(y)\le0$。使用 $s>0$ 时的不等式 $\psi(sw)\le\psi(y)+\nabla\psi(y)^\T(sw-y)$。
+\item[(b)] 再证明 $\nabla\psi(y)\succ_{K^*}0$，即 $\psi$ 为 $K$ 递增。\emph{提示：} 证明 $\nabla^2\psi(y)\prec0$、$\nabla\psi(y)\succeq_{K^*}0$ 蕴含 $\nabla\psi(y)\succ_{K^*}0$。
+\end{enumerate}
+
+\paragraph{11.16} [NN94, 第41页] \emph{广义对数的性质。} 设 $\psi$ 是正常锥 $K$ 的广义对数，次数为 $\theta$。证明对任意 $y\succ_K0$，以下性质成立。
+\begin{enumerate}
+\item[(a)] 对所有 $s>0$，$\nabla\psi(sy)=\nabla\psi(y)/s$。
+\item[(b)] $\nabla\psi(y)=-\nabla^2\psi(y)y$。
+\item[(c)] $y^\T\nabla\psi^2(y)y=-\theta$。
+\item[(d)] $\nabla\psi(y)^\T\nabla^2\psi(y)^{-1}\nabla\psi(y)=-\theta$。
+\end{enumerate}
+
+\paragraph{11.17} \emph{对偶广义对数。} 设 $\psi$ 是正常锥 $K$ 的广义对数，次数为 $\theta$。证明 (11.49) 定义的对偶广义对数 $\bar\psi$ 满足
+\[
+\bar\psi(sv)=\bar\psi(v)+\theta\log s,
+\]
+其中 $v\succ_{K^*}0$、$s>0$。
+
+\paragraph{11.18} 函数
+\[
+\psi(y)=\log\left(y_{n+1}-\frac{\sum_{i=1}^n y_i^2}{y_{n+1}}\right),
+\]
+定义域为 $\dom\psi=\{y\in\R^{n+1}\mid y_{n+1}>\sum_{i=1}^n y_i^2\}$，它是否为 $\R^{n+1}$ 中二阶锥的广义对数？
+
+\subsection*{实现}
+\paragraph{11.19} \emph{计算牛顿步的又一种方法。} 障碍法的牛顿步由线性方程 (11.14) 的解给出。证明也可以通过求解一个更大的线性方程组得到，其系数矩阵为
+\[
+\begin{bmatrix}
+t\nabla^2 f_0(x)+\sum_i\frac1{-f_i(x)}\nabla^2 f_i(x)&Df(x)^\T&A^\T\\
+Df(x)&-\diag(f(x))^2&0\\
+A&0&0
+\end{bmatrix},
+\]
+其中 $f(x)=(f_1(x),\ldots,f_m(x))$。
+
+对哪些问题结构，求解这个更大的系统可能值得考虑？
+
+\paragraph{11.20} \emph{通过对偶问题进行网络速率优化。} 本题研究求解第11.8.4节网络速率优化问题的对偶方法。为简化表述，假设效用函数 $U_i$ 严格凹，$\dom U_i=\R_{++}$，当 $x_i\to0$ 时 $U_i'(x_i)\to\infty$，当 $x_i\to\infty$ 时 $U_i'(x_i)\to0$。
+\begin{enumerate}
+\item[(a)] 用共轭效用函数 $V_i=(-U_i)^*$ 表示 (11.62) 的对偶问题，其中
+\[
+V_i(\lambda)=\sup_{x>0}(\lambda x+U_i(x)).
+\]
+证明 $\dom V_i=-\R_{++}$，而且对每个 $\lambda<0$，都存在唯一 $x$ 满足 $U_i'(x)=-\lambda$。
+\item[(b)] 描述求解对偶问题的障碍法。将每次迭代的复杂度与第11.8.4节方法的复杂度比较，区分第11.8.4节的两种情形：$A^\T A$ 稀疏与 $AA^\T$ 稀疏。
+\end{enumerate}
+
+% Source PDF page 643 (printed p. 629)
+\subsection*{数值实验}
+\paragraph{11.21} \emph{带变量界的对数 Chebyshev 逼近。} 考虑逼近问题：寻找 $x\in\R^n$，满足变量界 $l\preceq x\preceq u$，并使 $Ax\approx b$，其中 $b\in\R^m$。可以假设 $l\prec u$、$b\succ0$，原因将在下面解释。用 $a_i^\T$ 表示矩阵 $A$ 的第 $i$ 行。
+
+用\emph{最大相对偏差}衡量逼近 $Ax\approx b$ 的好坏，即当 $Ax\succ0$ 时，取
+\[
+\max_{i=1,\ldots,n}\max\{(a_i^\T x)/b_i,\ b_i/(a_i^\T x)\}
+=\max_{i=1,\ldots,n}\frac{\max\{a_i^\T x,b_i\}}{\min\{a_i^\T x,b_i\}},
+\]
+当 $Ax\not\succ0$ 时，将最大相对偏差定义为 $\infty$。
+
+最小化最大相对偏差的问题称为\emph{相对 Chebyshev 逼近问题}，或\emph{对数 Chebyshev 逼近问题}，因为它等价于最小化目标
+\[
+\max_{i=1,\ldots,n}\abs{\log(a_i^\T x)-\log b_i}.
+\]
+亦见习题6.3的(c)。
+\begin{enumerate}
+\item[(a)] 将带变量界的相对 Chebyshev 逼近问题表述为目标函数与约束函数二阶可微的凸优化问题。
+\item[(b)] 实现求解相对 Chebyshev 逼近问题的障碍法。可以假设已知初始点 $x^{(0)}$，满足 $l\prec x^{(0)}\prec u$、$Ax^{(0)}\succ0$。
+\end{enumerate}
+
+\paragraph{11.22} \emph{多面体内的最大体积矩形。} 考虑习题8.16描述的问题，即寻找包含在多面体 $\mathcal P=\{x\mid Ax\preceq b\}$ 内的最大体积矩形 $\mathcal R=\{x\mid l\preceq x\preceq u\}$。实现求解该问题的障碍法。可以假设 $b\succ0$，意味着当 $l\prec0$、$u\succ0$ 足够小时，矩形 $\mathcal R$ 位于 $\mathcal P$ 内。
+
+在几个简单例子上测试实现。求以下多面体内的最大体积矩形：
+\[
+A=\begin{bmatrix}0&-1\\2&-4\\2&1\\-4&4\\-4&0\end{bmatrix},\qquad b=\one.
+\]
+画出这个多面体及其内部的最大体积矩形。
+
+\paragraph{11.23} \emph{二路划分问题的 SDP 界与启发式方法。} 本题考虑第219页以及习题5.39中的二路划分问题 (5.7)：
+\begin{equation}\begin{aligned}
+\text{最小化}\quad&x^\T Wx\\
+\text{约束为}\quad&x_i^2=1,\quad i=1,\ldots,n,
+\end{aligned}\tag{11.65}\end{equation}
+变量为 $x\in\R^n$。不失一般性，假设 $W\in\mathbf S^n$ 满足 $W_{ii}=0$。以 $p^\star$ 表示划分问题的最优值，$x^\star$ 表示一个最优划分。注意 $-x^\star$ 也是最优划分。
+
+二路划分问题 (11.65) 的拉格朗日对偶为 SDP
+\begin{equation}\begin{aligned}
+\text{最大化}\quad&-\one^\T\nu\\
+\text{约束为}\quad&W+\diag(\nu)\succeq0,
+\end{aligned}\tag{11.66}\end{equation}
+% Source PDF page 644 (printed p. 630)
+变量为 $\nu\in\R^n$。这一 SDP 的对偶为
+\begin{equation}\begin{aligned}
+\text{最小化}\quad&\tr(WX)\\
+\text{约束为}\quad&X\succeq0,\\
+&X_{ii}=1,\quad i=1,\ldots,n,
+\end{aligned}\tag{11.67}\end{equation}
+变量为 $X\in\mathbf S^n$。这一 SDP 可解释为二路划分问题 (11.65) 的松弛，见习题5.39。两个 SDP 的最优值相等，为最优值 $p^\star$ 提供下界，以 $d^\star$ 表示。令 $\nu^\star$、$X^\star$ 为两个 SDP 的最优点。
+\begin{enumerate}
+\item[(a)] 给定权矩阵 $W$，实现求解 SDP (11.66) 及其对偶 (11.67) 的障碍法。说明怎样获得近似最优的 $\nu$ 与 $X$，给出方法所需的 Hessian 矩阵与梯度公式，并说明怎样计算牛顿步。在一些小型实例上测试实现，将得到的界与最优值比较；最优值可通过检查全部 $2^n$ 个划分的目标值得到。再随机选一个足够大的实例，例如 $n=100$，使穷举搜索无法找到最优划分，测试实现。
+\item[(b)] \emph{划分的启发式方法。} 习题5.39表明，若 $X^\star$ 的秩为一，则一定有 $X^\star=x^\star(x^\star)^\T$，其中 $x^\star$ 对二路划分问题最优。这提示了寻找较好划分（即便不是最好划分）的一种简单启发式方法：求解上述 SDP，得到 $X^\star$ 和下界 $d^\star$。令 $v$ 为 $X^\star$ 最大特征值对应的特征向量，取 $\widehat x=\operatorname{sign}(v)$。向量 $\widehat x$ 就是我们对较好划分的猜测。
+
+在一些小型实例以及(a)的大型实例上尝试这一方法。将启发式划分的目标值 $\widehat x^\T W\widehat x$ 与下界 $d^\star$ 比较。
+\item[(c)] \emph{随机化方法。} 给定 SDP (11.67) 的解 $X^\star$，另一种寻找较好划分的启发式技术基于随机化。方法很简单：从 $\R^n$ 上均值为零、协方差为 $X^\star$ 的正态分布生成独立样本 $x^{(1)},\ldots,x^{(K)}$。对每个样本，构造启发式近似解 $\widehat x^{(k)}=\operatorname{sign}(x^{(k)})$，再选择其中成本最低的最好者。在一些小型实例以及(a)的大型实例上尝试这一过程。
+\item[(d)] \emph{贪心启发式改进。} 假设给定一个划分 $x$，即 $x_i\in\{-1,1\}$，$i=1,\ldots,n$。若把元素 $i$ 从一个集合移到另一个集合，即把 $x_i$ 改为 $-x_i$，目标值怎样变化？现在考虑简单的贪心算法：给定初始划分 $x$，每次移动能使目标值下降最多的元素。重复这一过程，直到无法通过将一个元素从一个集合移到另一个集合来进一步降低目标。
+
+在若干实例（包括大型实例）上尝试这一启发式方法，采用不同初始划分，包括 $x=\one$、(b)中求得的启发式近似解，以及(c)中随机生成的近似解。这种贪心改进使(b)、(c)的近似解改善了多少？
+\end{enumerate}
+
+\paragraph{11.24} \emph{二次规划的障碍法与原始—对偶内点法。} 实现障碍法与原始—对偶方法，求解 QP，为简便起见不含等式约束，
+\[
+\begin{aligned}
+\text{最小化}\quad&(1/2)x^\T Px+q^\T x\\
+\text{约束为}\quad&Ax\preceq b,
+\end{aligned}
+\]
+其中 $A\in\R^{m\times n}$。可以假设给定严格可行初始点。在几个例子上测试程序。对障碍法，画出对偶间隙与牛顿步数的关系；对原始—对偶内点法，画出代理对偶间隙、对偶残差范数与迭代次数的关系。

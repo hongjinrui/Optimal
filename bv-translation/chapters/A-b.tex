@@ -1,0 +1,212 @@
+% Source PDF page 654 (printed p. 640)
+是闭集。（这个定义适用于一般函数，但通常只用于凸函数。）
+
+若 $f:\R^n\to\R$ 连续，且 $\dom f$ 是闭集，则 $f$ 是闭函数。若 $f:\R^n\to\R$ 连续，且 $\dom f$ 是开集，则 $f$ 为闭函数，当且仅当沿着每个收敛到 $\dom f$ 边界点的序列，$f$ 都趋于 $\infty$。换句话说，若 $x_i\in\dom f$，且 $\lim_{i\to\infty}x_i=x\in\operatorname{bd}\dom f$，则有 $\lim_{i\to\infty}f(x_i)=\infty$。
+
+\begin{origexample}{A.1}
+$\R$ 上的例子。
+\begin{itemize}
+\item 函数 $f:\R\to\R$，$f(x)=x\log x$，$\dom f=\R_{++}$，不是闭函数。
+\item 函数 $f:\R\to\R$，
+\[
+ f(x)=\begin{cases}x\log x,&x>0,\\0,&x=0,\end{cases}
+ \qquad\dom f=\R_+,
+\]
+是闭函数。
+\item 函数 $f(x)=-\log x$，$\dom f=\R_{++}$，是闭函数。
+\end{itemize}
+\end{origexample}
+
+\section{导数}
+\subsection{导数与梯度}
+设 $f:\R^n\to\R^m$，$x\in\operatorname{int}\dom f$。若存在矩阵 $Df(x)\in\R^{m\times n}$ 满足
+\begin{equation}
+ \lim_{\substack{z\in\dom f,\ z\neq x\\z\to x}}
+ \frac{\norm{f(z)-f(x)-Df(x)(z-x)}_2}{\norm{z-x}_2}=0,\tag{A.4}
+\end{equation}
+则称 $f$ 在 $x$ 处\emph{可微}，并称 $Df(x)$ 为 $f$ 在 $x$ 处的\emph{导数}（或 \emph{Jacobian 矩阵}）。（满足(A.4)的矩阵至多有一个。）若 $\dom f$ 是开集，且 $f$ 在其定义域的每一点都可微，则称 $f$ 可微。
+
+关于 $z$ 的仿射函数
+\[
+ f(x)+Df(x)(z-x)
+\]
+称为 $f$ 在 $x$ 处（或附近）的\emph{一阶近似}。显然，当 $z=x$ 时，这个函数与 $f$ 相等；当 $z$ 接近 $x$ 时，这个仿射函数与 $f$ 非常接近。
+
+导数可以通过推导函数 $f$ 在 $x$ 处的一阶近似（即求出满足(A.4)的矩阵 $Df(x)$）得到，也可以由偏导数得到：
+\[
+ Df(x)_{ij}=\frac{\partial f_i(x)}{\partial x_j},\qquad
+ i=1,\ldots,m,\quad j=1,\ldots,n.
+\]
+
+% Source PDF page 655 (printed p. 641)
+\subsubsection*{梯度}
+当 $f$ 取实数值（即 $f:\R^n\to\R$）时，导数 $Df(x)$ 是 $1\times n$ 矩阵，即行向量。它的转置称为函数的\emph{梯度}：
+\[
+ \nabla f(x)=Df(x)^T,
+\]
+它是一个列向量，即属于 $\R^n$。其分量是 $f$ 的各个偏导数：
+\[
+ \nabla f(x)_i=\frac{\partial f(x)}{\partial x_i},\qquad i=1,\ldots,n.
+\]
+$f$ 在 $x\in\operatorname{int}\dom f$ 处的一阶近似，可以表示为关于 $z$ 的仿射函数
+\[
+ f(x)+\nabla f(x)^T(z-x).
+\]
+
+\subsubsection*{例子}
+一个简单的例子是二次函数 $f:\R^n\to\R$，
+\[
+ f(x)=\tfrac12x^TPx+q^Tx+r,
+\]
+其中 $P\in\mathbf S^n$、$q\in\R^n$、$r\in\R$。它在 $x$ 处的导数为行向量 $Df(x)=x^TP+q^T$，梯度为
+\[
+ \nabla f(x)=Px+q.
+\]
+
+再考虑一个更有意思的例子：函数 $f:\mathbf S^n\to\R$，
+\[
+ f(X)=\log\det X,\qquad\dom f=\mathbf S_{++}^n.
+\]
+求 $f$ 的梯度，一种繁琐的做法是先引入 $\mathbf S^n$ 的一组基，求相应函数的梯度，最后再把结果换回 $\mathbf S^n$ 上的表达式。这里改为直接求 $f$ 在 $X\in\mathbf S_{++}^n$ 处的一阶近似。设 $Z\in\mathbf S_{++}^n$ 接近 $X$，并令 $\Delta X=Z-X$，假设它很小。则
+\begin{align*}
+ \log\det Z
+ &=\log\det(X+\Delta X)\\
+ &=\log\det\bigl(X^{1/2}(I+X^{-1/2}\Delta XX^{-1/2})X^{1/2}\bigr)\\
+ &=\log\det X+\log\det(I+X^{-1/2}\Delta XX^{-1/2})\\
+ &=\log\det X+\sum_{i=1}^n\log(1+\lambda_i),
+\end{align*}
+其中 $\lambda_i$ 为 $X^{-1/2}\Delta XX^{-1/2}$ 的第 $i$ 个特征值。现在利用 $\Delta X$ 很小这一事实，可知各个 $\lambda_i$ 都很小，因此在一阶精度下有 $\log(1+\lambda_i)\approx\lambda_i$。将这个一阶近似代入上式，得到
+\begin{align*}
+ \log\det Z
+ &\approx\log\det X+\sum_{i=1}^n\lambda_i\\
+ &=\log\det X+\tr(X^{-1/2}\Delta XX^{-1/2})\\
+ &=\log\det X+\tr(X^{-1}\Delta X)\\
+ &=\log\det X+\tr\bigl(X^{-1}(Z-X)\bigr),
+\end{align*}
+% Source PDF page 656 (printed p. 642)
+这里利用了特征值之和等于迹，以及 $\tr(AB)=\tr(BA)$ 这两个性质。
+
+因此，$f$ 在 $X$ 处的一阶近似，是下面这个关于 $Z$ 的仿射函数：
+\[
+ f(Z)\approx f(X)+\tr\bigl(X^{-1}(Z-X)\bigr).
+\]
+注意右端第二项是 $X^{-1}$ 与 $Z-X$ 的标准内积，因此可将 $X^{-1}$ 识别为 $f$ 在 $X$ 处的梯度。于是得到简单的公式
+\[
+ \nabla f(X)=X^{-1}.
+\]
+这个结果并不意外，因为 $\R_{++}$ 上 $\log x$ 的导数是 $1/x$。
+
+\subsection{链式法则}
+设 $f:\R^n\to\R^m$ 在 $x\in\operatorname{int}\dom f$ 处可微，$g:\R^m\to\R^p$ 在 $f(x)\in\operatorname{int}\dom g$ 处可微。定义复合函数 $h:\R^n\to\R^p$ 为 $h(z)=g(f(z))$。则 $h$ 在 $x$ 处可微，且导数为
+\begin{equation}
+ Dh(x)=Dg(f(x))Df(x).\tag{A.5}
+\end{equation}
+例如，设 $f:\R^n\to\R$、$g:\R\to\R$，且 $h(x)=g(f(x))$。对 $Dh(x)=Dg(f(x))Df(x)$ 两边取转置，得到
+\begin{equation}
+ \nabla h(x)=g'(f(x))\nabla f(x).\tag{A.6}
+\end{equation}
+
+\subsubsection*{与仿射函数复合}
+设 $f:\R^n\to\R^m$ 可微，$A\in\R^{n\times p}$、$b\in\R^n$。定义 $g:\R^p\to\R^m$ 为 $g(x)=f(Ax+b)$，其定义域为 $\dom g=\{x\mid Ax+b\in\dom f\}$。由链式法则(A.5)，$g$ 的导数为 $Dg(x)=Df(Ax+b)A$。
+
+当 $f$ 为实值函数（即 $m=1$）时，得到函数与仿射函数复合后的梯度公式：
+\[
+ \nabla g(x)=A^T\nabla f(Ax+b).
+\]
+例如，设 $f:\R^n\to\R$、$x,v\in\R^n$，定义函数 $\widetilde f:\R\to\R$ 为 $\widetilde f(t)=f(x+tv)$。大致说来，$\widetilde f$ 就是把 $f$ 限制在直线 $\{x+tv\mid t\in\R\}$ 上得到的函数。于是
+\[
+ D\widetilde f(t)=\widetilde f'(t)=\nabla f(x+tv)^Tv.
+\]
+标量 $\widetilde f'(0)$ 是 $f$ 在 $x$ 处沿方向 $v$ 的\emph{方向导数}。
+
+\begin{origexample}{A.2}
+考虑函数 $f:\R^n\to\R$，定义域 $\dom f=\R^n$，且
+\[
+ f(x)=\log\sum_{i=1}^m\exp(a_i^Tx+b_i),
+\]
+% Source PDF page 657 (printed p. 643)
+其中 $a_1,\ldots,a_m\in\R^n$，$b_1,\ldots,b_m\in\R$。注意到它是仿射函数 $Ax+b$ 与函数 $g:\R^m\to\R$，$g(y)=\log(\sum_{i=1}^m\exp y_i)$ 的复合，就能求出它的梯度的简单表达式。其中 $A\in\R^{m\times n}$，各行为 $a_1^T,\ldots,a_m^T$。直接求导，或利用公式(A.6)，可得
+\begin{equation}
+ \nabla g(y)=\frac1{\sum_{i=1}^m\exp y_i}
+ \begin{bmatrix}\exp y_1\\\vdots\\\exp y_m\end{bmatrix},\tag{A.7}
+\end{equation}
+因此由复合公式，
+\[
+ \nabla f(x)=\frac1{\one^Tz}A^Tz,
+\]
+其中 $z_i=\exp(a_i^Tx+b_i)$，$i=1,\ldots,m$。
+\end{origexample}
+
+\begin{origexample}{A.3}
+推导以下函数的梯度 $\nabla f(x)$：
+\[
+ f(x)=\log\det(F_0+x_1F_1+\cdots+x_nF_n),
+\]
+其中 $F_0,\ldots,F_n\in\mathbf S^p$，且
+\[
+ \dom f=\{x\in\R^n\mid F_0+x_1F_1+\cdots+x_nF_n\succ0\}.
+\]
+函数 $f$ 是从 $x\in\R^n$ 到 $F_0+x_1F_1+\cdots+x_nF_n\in\mathbf S^p$ 的仿射映射与函数 $\log\det X$ 的复合。由链式法则，
+\[
+ \frac{\partial f(x)}{\partial x_i}
+ =\tr\bigl(F_i\nabla\log\det(F)\bigr)=\tr(F^{-1}F_i),
+\]
+其中 $F=F_0+x_1F_1+\cdots+x_nF_n$。因此
+\[
+ \nabla f(x)=\begin{bmatrix}\tr(F^{-1}F_1)\\\vdots\\\tr(F^{-1}F_n)\end{bmatrix}.
+\]
+\end{origexample}
+
+\subsection{二阶导数}
+本节回顾实值函数 $f:\R^n\to\R$ 的二阶导数。若 $f$ 在 $x\in\operatorname{int}\dom f$ 处二次可微，则 $f$ 在 $x$ 处的\emph{二阶导数}，即 \emph{Hessian 矩阵}，记为 $\nabla^2f(x)$，其元素为
+\[
+ \nabla^2f(x)_{ij}=\frac{\partial^2f(x)}{\partial x_i\partial x_j},\qquad
+ i=1,\ldots,n,\quad j=1,\ldots,n,
+\]
+其中偏导数在 $x$ 处求值。$f$ 在 $x$ 处或附近的\emph{二阶近似}是下面这个关于 $z$ 的二次函数：
+\[
+ \widehat f(z)=f(x)+\nabla f(x)^T(z-x)
+ +\tfrac12(z-x)^T\nabla^2f(x)(z-x).
+\]
+% Source PDF page 658 (printed p. 644)
+这个二阶近似满足
+\[
+ \lim_{\substack{z\in\dom f,\ z\neq x\\z\to x}}
+ \frac{\abs{f(z)-\widehat f(z)}}{\norm{z-x}_2^2}=0.
+\]
+
+二阶导数也可以解释为一阶导数的导数。若 $f$ 可微，则\emph{梯度映射}是函数 $\nabla f:\R^n\to\R^n$，其定义域为 $\dom\nabla f=\dom f$，在 $x$ 处的值为 $\nabla f(x)$。这个映射的导数是
+\[
+ D\nabla f(x)=\nabla^2f(x).
+\]
+
+\subsubsection*{例子}
+一个简单例子是二次函数 $f:\R^n\to\R$，
+\[
+ f(x)=\tfrac12x^TPx+q^Tx+r,
+\]
+其中 $P\in\mathbf S^n$、$q\in\R^n$、$r\in\R$。其梯度为 $\nabla f(x)=Px+q$，所以 Hessian 矩阵为 $\nabla^2f(x)=P$。二次函数的二阶近似就是它本身。
+
+再考虑一个较复杂的例子：函数 $f:\mathbf S^n\to\R$，$f(X)=\log\det X$，$\dom f=\mathbf S_{++}^n$。为求二阶近似及 Hessian 矩阵，先推导梯度 $\nabla f(X)=X^{-1}$ 的一阶近似。对于接近 $X\in\mathbf S_{++}^n$ 的 $Z\in\mathbf S_{++}^n$，令 $\Delta X=Z-X$，则
+\begin{align*}
+ Z^{-1}&=(X+\Delta X)^{-1}\\
+ &=\bigl(X^{1/2}(I+X^{-1/2}\Delta XX^{-1/2})X^{1/2}\bigr)^{-1}\\
+ &=X^{-1/2}(I+X^{-1/2}\Delta XX^{-1/2})^{-1}X^{-1/2}\\
+ &\approx X^{-1/2}(I-X^{-1/2}\Delta XX^{-1/2})X^{-1/2}\\
+ &=X^{-1}-X^{-1}\Delta XX^{-1},
+\end{align*}
+这里使用了当 $A$ 很小时成立的一阶近似 $(I+A)^{-1}\approx I-A$。
+
+由这个近似就足以识别 $f$ 在 $X$ 处的 Hessian。它是 $\mathbf S^n$ 上的一个二次型。一般情况下，这样的二次型需要四个指标，表述起来比较繁琐。不过，由上面梯度的一阶近似，可将它写为
+\[
+ -\tr(X^{-1}UX^{-1}V),
+\]
+其中 $U,V\in\mathbf S^n$ 是这个二次型的两个自变量。这推广了标量情形的表达式 $(\log x)''=-1/x^2$。
+
+于是，$f$ 在 $X$ 附近的二阶近似为
+\begin{align*}
+ f(Z)&=f(X+\Delta X)\\
+ &\approx f(X)+\tr(X^{-1}\Delta X)-\tfrac12\tr(X^{-1}\Delta XX^{-1}\Delta X)\\
+ &\approx f(X)+\tr\bigl(X^{-1}(Z-X)\bigr)\\
+ &\qquad-\tfrac12\tr\bigl(X^{-1}(Z-X)X^{-1}(Z-X)\bigr).
+\end{align*}

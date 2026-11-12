@@ -1,0 +1,414 @@
+% Source PDF page 287 (printed p. 273)
+\section*{习题}
+\addcontentsline{toc}{section}{习题}
+\subsection*{基本定义}
+
+\paragraph{5.1} \emph{一个简单例子。}考虑优化问题
+\[
+\begin{array}{ll}\text{最小化}&x^2+1\\
+\text{约束为}&(x-2)(x-4)\le0,\end{array}
+\]
+变量为 $x\in\R$。
+\begin{enumerate}[label=(\alph*)]
+\item \emph{原始问题分析。}给出可行集、最优值和最优解。
+\item \emph{拉格朗日函数和对偶函数。}画出目标 $x^2+1$ 关于 $x$ 的图。在同一图上表示可行集、最优点和最优值，并对几个正的 $\lambda$ 画出 $L(x,\lambda)$ 关于 $x$ 的图。验证下界性质（$\lambda\ge0$ 时 $p^\star\ge\inf_xL(x,\lambda)$）。推导并画出拉格朗日对偶函数 $g$ 的示意图。
+\item \emph{拉格朗日对偶问题。}写出对偶问题，验证它是凹函数最大化问题。求对偶最优值和对偶最优解 $\lambda^\star$。强对偶是否成立？
+\item \emph{灵敏度分析。}用 $p^\star(u)$ 表示问题
+\[
+\begin{array}{ll}\text{最小化}&x^2+1\\
+\text{约束为}&(x-2)(x-4)\le u\end{array}
+\]
+的最优值关于参数 $u$ 的函数。画出 $p^\star(u)$，验证 $\mathrm dp^\star(0)/\mathrm du=-\lambda^\star$。
+\end{enumerate}
+
+\paragraph{5.2} \emph{无界和不可行问题的弱对偶。}当 $d^\star=-\infty$ 或 $p^\star=\infty$ 时，弱对偶不等式 $d^\star\le p^\star$ 显然成立。证明它在另外两种情况下也成立：若 $p^\star=-\infty$，必有 $d^\star=-\infty$；若 $d^\star=\infty$，必有 $p^\star=\infty$。
+
+\paragraph{5.3} \emph{单个不等式约束的问题。}利用共轭 $f^*$ 表示问题
+\[
+\begin{array}{ll}\text{最小化}&c^\T x\\\text{约束为}&f(x)\le0,\end{array}
+\]
+的对偶，其中 $c\ne0$。解释所给问题为何凸。这里不假设 $f$ 凸。
+
+\subsection*{例子与应用}
+\paragraph{5.4} \emph{通过松弛问题解释线性规划对偶。}考虑不等式形式线性规划
+\[
+\begin{array}{ll}\text{最小化}&c^\T x\\\text{约束为}&Ax\preceq b,\end{array}
+\]
+其中 $A\in\R^{m\times n}$、$b\in\R^m$。本题给出对偶线性规划（5.22）的简单几何解释。
+
+设 $w\in\R_+^m$。若 $x$ 是线性规划可行点，即满足 $Ax\preceq b$，则还满足
+\[
+w^\T Ax\le w^\T b.
+\]
+几何上，对任意 $w\succeq0$，半空间 $H_w=\{x\mid w^\T Ax\le w^\T b\}$ 包含线性规划可行集。因此，在 $H_w$ 上最小化 $c^\T x$，就得到 $p^\star$ 的一个下界。
+
+% Source PDF page 288 (printed p. 274)
+\begin{enumerate}[label=(\alph*)]
+\item 推导 $c^\T x$ 在 $H_w$ 上最小值的表达式（它取决于 $w\succeq0$ 的选择）。
+\item 在 $w\succeq0$ 上最大化该下界，写出寻找这类最佳下界的问题。
+\item 将(a)、(b)的结果与（5.22）给出的线性规划拉格朗日对偶联系起来。
+\end{enumerate}
+
+\paragraph{5.5} \emph{一般线性规划的对偶。}求线性规划
+\[
+\begin{array}{ll}\text{最小化}&c^\T x\\
+\text{约束为}&Gx\preceq h\\&Ax=b\end{array}
+\]
+的对偶函数。给出对偶问题，将隐含等式约束显式写出。
+
+\paragraph{5.6} \emph{由最小二乘得到Chebyshev逼近的下界。}考虑Chebyshev逼近，即 $\ell_\infty$ 范数逼近问题
+\begin{equation}
+\text{最小化}\quad\norm{Ax-b}_\infty,\tag{5.103}
+\end{equation}
+其中 $A\in\R^{m\times n}$、$\rank A=n$。以 $x_{\mathrm{ch}}$ 表示一个最优解（可能有多个，$x_{\mathrm{ch}}$ 是其中之一）。
+
+Chebyshev问题没有闭式解，但相应最小二乘问题有。定义
+\[
+x_{\mathrm{ls}}=\argmin_x\norm{Ax-b}_2=(A^\T A)^{-1}A^\T b.
+\]
+我们要问：对给定的 $A,b$，假设已计算最小二乘解 $x_{\mathrm{ls}}$（但尚未求 $x_{\mathrm{ch}}$），那么它对Chebyshev问题的次优程度是多少？换言之，$\norm{Ax_{\mathrm{ls}}-b}_\infty$ 比 $\norm{Ax_{\mathrm{ch}}-b}_\infty$ 大多少？
+\begin{enumerate}[label=(\alph*)]
+\item 利用对所有 $z\in\R^m$ 都有
+\[
+\frac1{\sqrt m}\norm z_2\le\norm z_\infty\le\norm z_2,
+\]
+证明下界
+\[
+\norm{Ax_{\mathrm{ls}}-b}_\infty
+\le\sqrt m\,\norm{Ax_{\mathrm{ch}}-b}_\infty.
+\]
+\item 第254页例5.6推导了一般范数逼近问题的对偶。将结果用于 $\ell_\infty$ 范数（及其对偶范数 $\ell_1$），可得Chebyshev逼近问题的对偶：
+\begin{equation}
+\begin{array}{ll}\text{最大化}&b^\T\nu\\
+\text{约束为}&\norm\nu_1\le1\\&A^\T\nu=0.\end{array}\tag{5.104}
+\end{equation}
+任意可行 $\nu$ 给出 $\norm{Ax_{\mathrm{ch}}-b}_\infty$ 的下界 $b^\T\nu$。
+
+以 $r_{\mathrm{ls}}=b-Ax_{\mathrm{ls}}$ 表示最小二乘残差。假设 $r_{\mathrm{ls}}\ne0$，证明
+\[
+\widehat\nu=-r_{\mathrm{ls}}/\norm{r_{\mathrm{ls}}}_1,\qquad
+\widetilde\nu=r_{\mathrm{ls}}/\norm{r_{\mathrm{ls}}}_1
+\]
+都是（5.104）的可行点。由对偶，$b^\T\widehat\nu$、$b^\T\widetilde\nu$ 都是 $\norm{Ax_{\mathrm{ch}}-b}_\infty$ 的下界。哪个更好？它们与(a)的下界相比如何？
+\end{enumerate}
+
+\paragraph{5.7} \emph{分段线性最小化。}考虑凸分段线性最小化问题
+\begin{equation}
+\text{最小化}\quad\max_{i=1,\ldots,m}(a_i^\T x+b_i),\tag{5.105}
+\end{equation}
+变量为 $x\in\R^n$。
+
+% Source PDF page 289 (printed p. 275)
+\begin{enumerate}[label=(\alph*)]
+\item 以等价问题
+\[
+\begin{array}{ll}\text{最小化}&\max_{i=1,\ldots,m} y_i\\
+\text{约束为}&a_i^\T x+b_i=y_i,\quad i=1,\ldots,m,\end{array}
+\]
+的拉格朗日对偶为基础，推导对偶问题。变量为 $x\in\R^n,y\in\R^m$。
+\item 把分段线性问题（5.105）写成线性规划，再构造其对偶。将线性规划对偶与(a)所得对偶联系起来。
+\item 假设用光滑函数
+\[
+f_0(x)=\log\left(\sum_{i=1}^m\exp(a_i^\T x+b_i)\right)
+\]
+近似（5.105）的目标，并求解无约束几何规划
+\begin{equation}
+\text{最小化}\quad
+\log\left(\sum_{i=1}^m\exp(a_i^\T x+b_i)\right).\tag{5.106}
+\end{equation}
+（5.62）给出其一个对偶。以 $p_{\mathrm{pwl}}^\star,p_{\mathrm{gp}}^\star$ 分别表示（5.105）、（5.106）的最优值。证明
+\[
+0\le p_{\mathrm{gp}}^\star-p_{\mathrm{pwl}}^\star\le\log m.
+\]
+\item 对以下问题的最优值与 $p_{\mathrm{pwl}}^\star$ 之差，推导类似的界：
+\[
+\text{最小化}\quad
+(1/\gamma)\log\left(\sum_{i=1}^m\exp(\gamma(a_i^\T x+b_i))\right),
+\]
+其中 $\gamma>0$ 是参数。增大 $\gamma$ 会怎样？
+\end{enumerate}
+
+\paragraph{5.8} 说明第257页例5.9中推导的两个对偶问题之间的关系。
+
+\paragraph{5.9} \emph{简单覆盖椭球的次优程度。}回顾寻找包含 $a_1,\ldots,a_m\in\R^n$、以原点为中心的最小体积椭球的问题（第222页问题（5.14））：
+\[
+\begin{array}{ll}\text{最小化}&f_0(X)=\log\det(X^{-1})\\
+\text{约束为}&a_i^\T Xa_i\le1,\quad i=1,\ldots,m,\end{array}
+\]
+其中 $\dom f_0=\mathbf S_{++}^n$。假设向量 $a_1,\ldots,a_m$ 张成 $\R^n$（从而问题有下界）。
+\begin{enumerate}[label=(\alph*)]
+\item 证明矩阵
+\[
+X_{\mathrm{sim}}=\left(\sum_{k=1}^m a_ka_k^\T\right)^{-1}
+\]
+可行。\emph{提示：}证明
+\[
+\begin{bmatrix}\sum_{k=1}^m a_ka_k^\T&a_i\\a_i^\T&1\end{bmatrix}\succeq0,
+\]
+并用Schur补（§A.5.5）证明 $a_i^\T Xa_i\le1$，$i=1,\ldots,m$。
+\item 利用对偶问题
+\[
+\begin{array}{ll}\text{最大化}&
+\log\det\left(\sum_{i=1}^m\lambda_i a_ia_i^\T\right)-\one^\T\lambda+n\\
+\text{约束为}&\lambda\succeq0,\end{array}
+\]
+为可行点 $X_{\mathrm{sim}}$ 的次优程度求界，其中有隐含约束 $\sum_{i=1}^m\lambda_i a_ia_i^\T\succ0$。（该对偶在第222页推导。）
+
+为求界，仅考虑形如 $\lambda=t\one$ 的对偶变量，$t>0$。解析地求最优 $t$，并计算对应 $\lambda$ 的对偶目标。由此证明，椭球 $\{u\mid u^\T X_{\mathrm{sim}}u\le1\}$ 的体积至多是最小体积椭球的 $(m/n)^{n/2}$ 倍。
+\end{enumerate}
+
+% Source PDF page 290 (printed p. 276)
+\paragraph{5.10} \emph{最优实验设计。}下列问题出现在实验设计中（见§7.5）。
+\begin{enumerate}[label=(\alph*)]
+\item \emph{D最优设计。}
+\[
+\begin{array}{ll}\text{最小化}&
+\log\det\left(\sum_{i=1}^p x_iv_iv_i^\T\right)^{-1}\\
+\text{约束为}&x\succeq0,\quad\one^\T x=1.\end{array}
+\]
+\item \emph{A最优设计。}
+\[
+\begin{array}{ll}\text{最小化}&
+\tr\left(\left(\sum_{i=1}^p x_iv_iv_i^\T\right)^{-1}\right)\\
+\text{约束为}&x\succeq0,\quad\one^\T x=1.\end{array}
+\]
+\end{enumerate}
+两问题的定义域均为 $\{x\mid\sum_{i=1}^p x_iv_iv_i^\T\succ0\}$。变量为 $x\in\R^p$，给定向量 $v_1,\ldots,v_p\in\R^n$。
+
+先引入新变量 $X\in\mathbf S^n$ 和等式约束 $X=\sum_{i=1}^p x_iv_iv_i^\T$，再应用拉格朗日对偶，推导对偶问题。尽可能简化所得对偶。
+
+\paragraph{5.11} 为问题
+\[
+\text{最小化}\quad
+\sum_{i=1}^N\norm{A_ix+b_i}_2+(1/2)\norm{x-x_0}_2^2
+\]
+推导对偶。数据为 $A_i\in\R^{m_i\times n}$、$b_i\in\R^{m_i}$、$x_0\in\R^n$。先引入新变量 $y_i\in\R^{m_i}$ 和等式约束 $y_i=A_ix+b_i$。
+
+\paragraph{5.12} \emph{解析定心。}为问题
+\[
+\text{最小化}\quad-\sum_{i=1}^m\log(b_i-a_i^\T x)
+\]
+推导对偶，定义域为 $\{x\mid a_i^\T x<b_i,\ i=1,\ldots,m\}$。先引入新变量 $y_i$ 和等式约束 $y_i=b_i-a_i^\T x$。
+
+（此问题的解称为线性不等式 $a_i^\T x\le b_i$，$i=1,\ldots,m$ 的\emph{解析中心}。解析中心有几何应用（见§8.5.3），也在障碍方法中起重要作用（见第11章）。）
+
+\paragraph{5.13} \emph{布尔线性规划的拉格朗日松弛。}布尔线性规划具有形式
+\[
+\begin{array}{ll}\text{最小化}&c^\T x\\
+\text{约束为}&Ax\preceq b\\&x_i\in\{0,1\},\quad i=1,\ldots,n,\end{array}
+\]
+一般非常难解。在习题4.15中研究了它的线性规划松弛
+\begin{equation}
+\begin{array}{ll}\text{最小化}&c^\T x\\
+\text{约束为}&Ax\preceq b\\&0\le x_i\le1,\quad i=1,\ldots,n,\end{array}\tag{5.107}
+\end{equation}
+该问题容易求解得多，并给出布尔线性规划最优值的下界。本题推导另一个下界，讨论两个下界间的关系。
+\begin{enumerate}[label=(\alph*)]
+\item \emph{拉格朗日松弛。}可将布尔线性规划改写为
+\[
+\begin{array}{ll}\text{最小化}&c^\T x\\
+\text{约束为}&Ax\preceq b\\&x_i(1-x_i)=0,\quad i=1,\ldots,n,\end{array}
+\]
+其等式约束为二次。求该问题的拉格朗日对偶。对偶问题（凸）的最优值给出布尔线性规划最优值的下界。这种求最优值下界的方法称为\emph{拉格朗日松弛}。
+
+% Source PDF page 291 (printed p. 277)
+\item 证明拉格朗日松弛与线性规划松弛（5.107）得到的下界相同。\emph{提示：}推导线性规划松弛（5.107）的对偶。
+\end{enumerate}
+
+\paragraph{5.14} \emph{等式约束的罚函数法。}考虑问题
+\begin{equation}
+\begin{array}{ll}\text{最小化}&f_0(x)\\\text{约束为}&Ax=b,\end{array}\tag{5.108}
+\end{equation}
+其中 $f_0:\R^n\to\R$ 凸且可微，$A\in\R^{m\times n}$、$\rank A=m$。
+\emph{二次罚函数法}构造辅助函数
+\[
+\phi(x)=f_0(x)+\alpha\norm{Ax-b}_2^2,
+\]
+其中 $\alpha>0$ 为参数。它由目标加上罚项 $\alpha\norm{Ax-b}_2^2$ 组成。基本思想是辅助函数的最小点 $\widetilde x$ 应近似求解原问题。直觉表明罚权重 $\alpha$ 越大，$\widetilde x$ 对原问题解的近似越好。
+
+假设 $\widetilde x$ 是 $\phi$ 的最小点。说明如何从 $\widetilde x$ 找到（5.108）的对偶可行点。求相应的（5.108）最优值下界。
+
+\paragraph{5.15} 考虑问题
+\begin{equation}
+\begin{array}{ll}\text{最小化}&f_0(x)\\
+\text{约束为}&f_i(x)\le0,\quad i=1,\ldots,m,\end{array}\tag{5.109}
+\end{equation}
+其中 $f_i:\R^n\to\R$ 可微且凸。设 $h_1,\ldots,h_m:\R\to\R$ 是递增、可微、凸函数。证明
+\[
+\phi(x)=f_0(x)+\sum_{i=1}^m h_i(f_i(x))
+\]
+凸。设 $\widetilde x$ 最小化 $\phi$，说明如何从 $\widetilde x$ 找到（5.109）的一个对偶可行点，求相应的最优值下界。
+
+\paragraph{5.16} \emph{不等式约束的精确罚函数法。}考虑问题
+\begin{equation}
+\begin{array}{ll}\text{最小化}&f_0(x)\\
+\text{约束为}&f_i(x)\le0,\quad i=1,\ldots,m,\end{array}\tag{5.110}
+\end{equation}
+其中 $f_i:\R^n\to\R$ 可微且凸。\emph{精确罚函数法}求解辅助问题
+\begin{equation}
+\text{最小化}\quad
+\phi(x)=f_0(x)+\alpha\max_{i=1,\ldots,m}\max\{0,f_i(x)\},\tag{5.111}
+\end{equation}
+其中 $\alpha>0$ 为参数。$\phi$ 的第二项惩罚 $x$ 偏离可行性的程度。如果 $\alpha$ 足够大时，辅助问题（5.111）的解也求解原问题（5.110），就称该方法为\emph{精确罚函数法}。
+\begin{enumerate}[label=(\alph*)]
+\item 证明 $\phi$ 凸。
+\item 辅助问题可写为
+\[
+\begin{array}{ll}\text{最小化}&f_0(x)+\alpha y\\
+\text{约束为}&f_i(x)\le y,\quad i=1,\ldots,m\\&0\le y,\end{array}
+\]
+变量为 $x$ 和 $y\in\R$。求其拉格朗日对偶，用（5.110）的拉格朗日对偶函数 $g$ 表示。
+
+% Source PDF page 292 (printed p. 278)
+\item 用(b)证明以下性质：设 $\lambda^\star$ 为（5.110）拉格朗日对偶的最优解，且强对偶成立。若 $\alpha>\one^\T\lambda^\star$，则辅助问题（5.111）的任意解也是（5.110）的最优解。
+\end{enumerate}
+
+\paragraph{5.17} \emph{多面体不确定性下的鲁棒线性规划。}考虑鲁棒线性规划
+\[
+\begin{array}{ll}\text{最小化}&c^\T x\\
+\text{约束为}&\sup_{a\in P_i}a^\T x\le b_i,\quad i=1,\ldots,m,\end{array}
+\]
+变量为 $x\in\R^n$，其中 $P_i=\{a\mid C_ia\preceq d_i\}$。数据为 $c\in\R^n$、$C_i\in\R^{m_i\times n}$、$d_i\in\R^{m_i}$、$b\in\R^m$。假设多面体 $P_i$ 非空。证明它等价于线性规划
+\[
+\begin{array}{ll}\text{最小化}&c^\T x\\
+\text{约束为}&d_i^\T z_i\le b_i,\quad i=1,\ldots,m\\
+&C_i^\T z_i=x,\quad i=1,\ldots,m\\
+&z_i\succeq0,\quad i=1,\ldots,m,\end{array}
+\]
+变量为 $x\in\R^n$、$z_i\in\R^{m_i}$，$i=1,\ldots,m$。
+\emph{提示：}求在 $a_i\in P_i$ 上最大化 $a_i^\T x$ 的问题的对偶（变量为 $a_i$）。
+
+\paragraph{5.18} \emph{两个多面体之间的分离超平面。}将以下问题表述为线性规划或线性规划可行性问题：寻找严格分离两个多面体
+\[
+P_1=\{x\mid Ax\preceq b\},\qquad P_2=\{x\mid Cx\preceq d\}
+\]
+的超平面，即寻找 $a\in\R^n$、标量 $\gamma$，使
+\[
+a^\T x>\gamma\quad(x\in P_1),\qquad
+a^\T x<\gamma\quad(x\in P_2).
+\]
+可假设 $P_1,P_2$ 不相交。
+
+\emph{提示：}向量 $a$ 和标量 $\gamma$ 必须满足
+\[
+\inf_{x\in P_1}a^\T x>\gamma>\sup_{x\in P_2}a^\T x.
+\]
+用线性规划对偶简化这些条件中的下确界和上确界。
+
+\paragraph{5.19} \emph{向量中最大若干元素之和。}定义 $f:\R^n\to\R$：
+\[
+f(x)=\sum_{i=1}^r x_{[i]},
+\]
+其中 $r$ 为1到 $n$ 之间的整数，$x_{[1]}\ge x_{[2]}\ge\cdots\ge x_{[r]}$ 为 $x$ 的分量按降序排列的结果。换言之，$f(x)$ 是 $x$ 最大 $r$ 个元素之和。本题研究约束
+\[
+f(x)\le\alpha.
+\]
+正如第3章第80页所见，它是凸约束，并等价于 $n!/(r!(n-r)!)$ 个线性不等式
+\[
+x_{i_1}+\cdots+x_{i_r}\le\alpha,\qquad
+1\le i_1<i_2<\cdots<i_r\le n.
+\]
+本题目的是推导更紧凑的表示。
+
+% Source PDF page 293 (printed p. 279)
+\begin{enumerate}[label=(\alph*)]
+\item 给定 $x\in\R^n$，证明 $f(x)$ 等于以下线性规划的最优值：
+\[
+\begin{array}{ll}\text{最大化}&x^\T y\\
+\text{约束为}&0\preceq y\preceq\one\\&\one^\T y=r,\end{array}
+\]
+变量为 $y\in\R^n$。
+\item 推导(a)的线性规划对偶，证明可写为
+\[
+\begin{array}{ll}\text{最小化}&rt+\one^\T u\\
+\text{约束为}&t\one+u\succeq x\\&u\succeq0,\end{array}
+\]
+变量为 $t\in\R,u\in\R^n$。由对偶，它与(a)中线性规划有相同最优值，即 $f(x)$。因此得到：$x$ 满足 $f(x)\le\alpha$，当且仅当存在 $t\in\R,u\in\R^n$ 使
+\[
+rt+\one^\T u\le\alpha,\qquad t\one+u\succeq x,\qquad u\succeq0.
+\]
+这是关于 $2n+1$ 个变量 $x,u,t$ 的 $2n+1$ 个线性不等式。
+\item 作为应用，考虑经典Markowitz投资组合优化问题的推广：
+\[
+\begin{array}{ll}\text{最小化}&x^\T\Sigma x\\
+\text{约束为}&\overline p^\T x\ge r_{\min}\\
+&\one^\T x=1,\quad x\succeq0,\end{array}
+\]
+该问题在第4章第155页讨论过。变量为投资组合 $x\in\R^n$；$\overline p,\Sigma$ 分别是价格变化向量 $p$ 的均值和协方差矩阵。
+
+现增加多样化约束，要求对任意10\%的资产，投入的总预算不超过80\%。此约束可表示为
+\[
+\sum_{i=1}^{\lfloor0.1n\rfloor}x_{[i]}\le0.8.
+\]
+将带多样化约束的投资组合优化问题写成二次规划。
+\end{enumerate}
+
+\paragraph{5.20} \emph{信道容量问题的对偶。}为问题
+\[
+\begin{array}{ll}\text{最小化}&-c^\T x+\sum_{i=1}^m y_i\log y_i\\
+\text{约束为}&Px=y\\&x\succeq0,\quad\one^\T x=1,\end{array}
+\]
+推导对偶，其中 $P\in\R^{m\times n}$ 的元素非负，每列之和为1（即 $P^\T\one=\one$）。变量为 $x\in\R^n,y\in\R^m$。（当 $c_j=\sum_{i=1}^m p_{ij}\log p_{ij}$ 时，最优值除去一个 $\log2$ 因子，就是转移概率矩阵为 $P$ 的离散无记忆信道容量的相反数；见习题4.57。）
+
+尽可能简化对偶问题。
+
+% Source PDF page 294 (printed p. 280)
+\subsection*{强对偶与Slater条件}
+\paragraph{5.21} \emph{一个强对偶失败的凸问题。}考虑优化问题
+\[
+\begin{array}{ll}\text{最小化}&e^{-x}\\
+\text{约束为}&x^2/y\le0,\end{array}
+\]
+变量为 $x,y$，定义域为 $D=\{(x,y)\mid y>0\}$。
+\begin{enumerate}[label=(\alph*)]
+\item 验证它是凸优化问题。求最优值。
+\item 给出拉格朗日对偶问题，求其最优解 $\lambda^\star$ 和最优值 $d^\star$。最优对偶间隙是多少？
+\item 该问题满足Slater条件吗？
+\item 扰动问题
+\[
+\begin{array}{ll}\text{最小化}&e^{-x}\\
+\text{约束为}&x^2/y\le u\end{array}
+\]
+的最优值 $p^\star(u)$ 关于 $u$ 的函数是什么？验证全局灵敏度不等式
+\[
+p^\star(u)\ge p^\star(0)-\lambda^\star u
+\]
+不成立。
+\end{enumerate}
+
+\paragraph{5.22} \emph{对偶的几何解释。}对以下每个优化问题，画出集合
+\[
+\begin{aligned}
+\mathcal G&=\{(u,t)\mid\exists x\in D,\ f_0(x)=t,\ f_1(x)=u\},\\
+\mathcal A&=\{(u,t)\mid\exists x\in D,\ f_0(x)\le t,\ f_1(x)\le u\}
+\end{aligned}
+\]
+的示意图，给出对偶，并求解原始和对偶问题。问题凸吗？满足Slater条件吗？强对偶成立吗？
+
+除特别说明外，定义域为 $\R$。
+\begin{enumerate}[label=(\alph*)]
+\item 在 $x^2\le1$ 下最小化 $x$。
+\item 在 $x^2\le0$ 下最小化 $x$。
+\item 在 $|x|\le0$ 下最小化 $x$。
+\item 在 $f_1(x)\le0$ 下最小化 $x$，其中
+\[
+f_1(x)=\begin{cases}
+-x+2&x\ge1,\\
+x&-1\le x\le1,\\
+-x-2&x\le-1.
+\end{cases}
+\]
+\item 在 $-x+1\le0$ 下最小化 $x^3$。
+\item 在 $-x+1\le0$ 下最小化 $x^3$，定义域 $D=\R_+$。
+\end{enumerate}
+
+\paragraph{5.23} \emph{线性规划的强对偶。}证明只要至少一个问题可行，线性规划
+\[
+\begin{array}{ll}\text{最小化}&c^\T x\\\text{约束为}&Ax\preceq b\end{array}
+\]
+与其对偶
+\[
+\begin{array}{ll}\text{最大化}&-b^\T z\\
+\text{约束为}&A^\T z+c=0,\quad z\succeq0\end{array}
+\]
+就有强对偶。换言之，强对偶唯一可能的例外发生在 $p^\star=\infty$、$d^\star=-\infty$ 时。

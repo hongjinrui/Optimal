@@ -1,0 +1,397 @@
+% Source PDF page 73 (printed p. 59)
+\section*{文献说明}
+\addcontentsline{toc}{section}{文献说明}
+通常认为，Minkowski 首先系统研究了凸集，并引入支撑超平面、支撑超平面定理、Minkowski距离函数（习题3.34）、凸集的极点等许多基本概念。
+
+一些著名的早期综述包括 Bonnesen 和 Fenchel [BF48]、Eggleston [Egg58]、Klee [Kle63] 和 Valentine [Val64]。较新、专门讨论凸集几何的著作有 Lay [Lay82] 和 Webster [Web94]。Klee [Kle71]、Fenchel [Fen83]、Tikhomorov [Tik90] 和 Berger [Ber90] 对凸性的历史及其在数学各领域中的应用，给出了十分易读的概述。
+
+线性不等式和多面体集，与线性规划密切相关，已经得到广泛研究；相关文献见第4章末。线性不等式与线性规划历史上的一些里程碑著作包括 Motzkin [Mot33]、von Neumann 和 Morgenstern [vNM53]、Kantorovich [Kan60]、Koopmans [Koo51] 和 Dantzig [Dan63]。Dantzig [Dan63，第2章] 综述了截至1963年前后的线性不等式发展史。
+
+广义不等式在20世纪60年代被引入非线性优化，参见 Luenberger [Lue69，第8.2节] 和 Isii [Isi64]，此后广泛应用于锥规划，见第4章参考文献。Bellman 和 Fan [BF63] 是研究相对于半正定锥的广义线性不等式组的一篇早期论文。
+
+分离超平面定理的证明及扩展，可参阅 Rockafellar [Roc70，第三部分] 以及 Hiriart-Urruty 和 Lemar\'echal [HUL93，第1卷，第III4节]。Dantzig [Dan63，第21页] 将“择一定理”这一术语归于 von Neumann 和 Morgenstern [vNM53，第138页]。更多择一定理文献见第5章。
+
+例2.27中的术语，包括Pareto最优性、有效生产和 $\lambda$ 的价格解释，见 Luenberger [Lue95] 的详细讨论。
+
+凸几何在经典矩理论中占有重要地位，参见 Krein 和 Nudelman [KN77]、Karlin 和 Studden [KS66]。一个著名例子是非负多项式锥与幂矩锥之间的对偶关系，见习题2.37。
+
+% Source PDF page 74 (printed p. 60)
+\section*{习题}
+\addcontentsline{toc}{section}{习题}
+\subsection*{凸性的定义}
+\paragraph{2.1}
+设 $C\subseteq\R^n$ 为凸集，$x_1,\ldots,x_k\in C$，$\theta_1,\ldots,\theta_k\in\R$ 满足 $\theta_i\ge0$、$\theta_1+\cdots+\theta_k=1$。证明 $\theta_1x_1+\cdots+\theta_kx_k\in C$。凸性的定义只要求 $k=2$ 时成立，这里需对任意 $k$ 证明。\emph{提示：}对 $k$ 使用归纳法。
+
+\paragraph{2.2}
+证明：一个集合凸，当且仅当它与任意直线的交凸。证明：一个集合仿射，当且仅当它与任意直线的交仿射。
+
+\paragraph{2.3}
+\textbf{中点凸性。}如果只要 $a,b\in C$，两者的平均值或中点 $(a+b)/2$ 就在 $C$ 中，则称 $C$ 为\emph{中点凸集}。显然，凸集一定中点凸。可以证明，在较弱条件下，中点凸性蕴含凸性。证明一个简单情形：如果 $C$ 闭且中点凸，则 $C$ 凸。
+
+\paragraph{2.4}
+证明：集合 $S$ 的凸包是所有包含 $S$ 的凸集的交。同样的方法还可证明，$S$ 的锥包、仿射包或线性包，分别为所有包含 $S$ 的锥集、仿射集或子空间的交。
+
+\subsection*{例子}
+\paragraph{2.5}
+两个平行超平面 $\{x\in\R^n\mid a^{\T}x=b_1\}$ 与 $\{x\in\R^n\mid a^{\T}x=b_2\}$ 之间的距离是多少？
+
+\paragraph{2.6}
+一个半空间何时包含另一个半空间？给出下式成立的条件：
+\[
+ \{x\mid a^{\T}x\le b\}\subseteq
+ \{x\mid\widetilde a^{\T}x\le\widetilde b\},
+\]
+其中 $a\ne0$、$\widetilde a\ne0$。再找出两个半空间相等的条件。
+
+\paragraph{2.7}
+\textbf{半空间的Voronoi描述。}设 $a,b$ 是 $\R^n$ 中不同的点。证明：所有到 $a$ 的欧几里得距离不超过到 $b$ 的距离的点组成的集合，即
+$\{x\mid\norm{x-a}_2\le\norm{x-b}_2\}$，是半空间。将它明确写成 $c^{\T}x\le d$ 的形式，并画图说明。
+
+\paragraph{2.8}
+下列集合 $S$ 中，哪些是多面体？若可能，将 $S$ 写成 $S=\{x\mid Ax\preceq b,\ Fx=g\}$ 的形式。
+\begin{enumerate}[label=(\alph*)]
+\item $S=\{y_1a_1+y_2a_2\mid-1\le y_1\le1,\ -1\le y_2\le1\}$，其中 $a_1,a_2\in\R^n$。
+\item $S=\{x\in\R^n\mid x\succeq0,\ \one^{\T}x=1,\ \sum_{i=1}^nx_ia_i=b_1,\ \sum_{i=1}^nx_ia_i^2=b_2\}$，其中 $a_1,\ldots,a_n\in\R$、$b_1,b_2\in\R$。
+\item $S=\{x\in\R^n\mid x\succeq0,\ x^{\T}y\le1,\ \text{对所有满足 }\norm y_2=1\text{ 的 }y\}$。
+\item $S=\{x\in\R^n\mid x\succeq0,\ x^{\T}y\le1,\ \text{对所有满足 }\sum_{i=1}^n\abs{y_i}=1\text{ 的 }y\}$。
+\end{enumerate}
+
+\paragraph{2.9}
+\textbf{Voronoi集与多面体分解。}设 $x_0,\ldots,x_K\in\R^n$ 两两不同。考虑到 $x_0$ 的欧几里得距离不超过到其他各 $x_i$ 的距离的点集，即
+\[
+ V=\{x\in\R^n\mid\norm{x-x_0}_2\le\norm{x-x_i}_2,\ i=1,\ldots,K\}.
+\]
+$V$ 称为相对于 $x_1,\ldots,x_K$ 的 $x_0$ 的\emph{Voronoi区域}。
+\begin{enumerate}[label=(\alph*)]
+\item 证明 $V$ 是多面体，并写成 $V=\{x\mid Ax\preceq b\}$。
+\item 反过来，给定内部非空的多面体 $P$，说明如何找到 $x_0,\ldots,x_K$，使该多面体正是相对于 $x_1,\ldots,x_K$ 的 $x_0$ 的Voronoi区域。
+\item 还可考虑集合
+\[
+ V_k=\{x\in\R^n\mid\norm{x-x_k}_2\le\norm{x-x_i}_2,\ i\ne k\}.
+\]
+$V_k$ 由 $\R^n$ 中那些在集合 $\{x_0,\ldots,x_K\}$ 中以 $x_k$ 为最近点的点组成。
+
+% Source PDF page 75 (printed p. 61)
+集合 $V_0,\ldots,V_K$ 给出 $\R^n$ 的一个\emph{多面体分解}。更准确地说，$V_k$ 都是内部非空的多面体，$\bigcup_{k=0}^KV_k=\R^n$，且当 $i\ne j$ 时，$\operatorname{int}V_i\cap\operatorname{int}V_j=\varnothing$，也就是说，$V_i$ 与 $V_j$ 至多在边界处相交。
+
+设 $P_1,\ldots,P_m$ 为内部非空的多面体，满足 $\bigcup_{i=1}^mP_i=\R^n$，且对 $i\ne j$ 有 $\operatorname{int}P_i\cap\operatorname{int}P_j=\varnothing$。这样的 $\R^n$ 多面体分解，能否描述为某组适当点生成的Voronoi区域？
+\end{enumerate}
+
+\paragraph{2.10}
+\textbf{二次不等式的解集。}设 $C\subseteq\R^n$ 为二次不等式的解集，
+\[
+ C=\{x\in\R^n\mid x^{\T}Ax+b^{\T}x+c\le0\},
+\]
+其中 $A\in\mathbf S^n$、$b\in\R^n$、$c\in\R$。
+\begin{enumerate}[label=(\alph*)]
+\item 证明：若 $A\succeq0$，则 $C$ 凸。
+\item 证明：若存在 $\lambda\in\R$ 使 $A+\lambda gg^{\T}\succeq0$，则 $C$ 与超平面 $g^{\T}x+h=0$ 的交凸，其中 $g\ne0$。
+\end{enumerate}
+这些结论的逆命题是否成立？
+
+\paragraph{2.11}
+\textbf{双曲集。}证明双曲集 $\{x\in\R_+^2\mid x_1x_2\ge1\}$ 凸。进而证明 $\{x\in\R_+^n\mid\prod_{i=1}^nx_i\ge1\}$ 凸。\emph{提示：}若 $a,b\ge0$、$0\le\theta\le1$，则 $a^\theta b^{1-\theta}\le\theta a+(1-\theta)b$，见第3.1.9节。
+
+\paragraph{2.12}
+下列集合中哪些是凸集？
+\begin{enumerate}[label=(\alph*)]
+\item 带状区域，即形如 $\{x\in\R^n\mid\alpha\le a^{\T}x\le\beta\}$ 的集合。
+\item 矩形，即 $\{x\in\R^n\mid\alpha_i\le x_i\le\beta_i,\ i=1,\ldots,n\}$。当 $n>2$ 时，矩形有时称为超矩形。
+\item 楔形区域，即 $\{x\in\R^n\mid a_1^{\T}x\le b_1,\ a_2^{\T}x\le b_2\}$。
+\item 到给定点的距离不超过到给定集合的距离的点集，即
+\[
+ \{x\mid\norm{x-x_0}_2\le\norm{x-y}_2,\ \text{对所有 }y\in S\},
+\]
+其中 $S\subseteq\R^n$。
+\item 到某个集合的距离不超过到另一个集合的距离的点集，即
+\[
+ \{x\mid\dist(x,S)\le\dist(x,T)\},
+\]
+其中 $S,T\subseteq\R^n$，且
+\[
+ \dist(x,S)=\inf\{\norm{x-z}_2\mid z\in S\}.
+\]
+\item [HUL93，第1卷，第93页] 集合 $\{x\mid x+S_2\subseteq S_1\}$，其中 $S_1,S_2\subseteq\R^n$，且 $S_1$ 凸。
+\item 到 $a$ 的距离不超过到 $b$ 的距离的固定比例 $\theta$ 的点集，即 $\{x\mid\norm{x-a}_2\le\theta\norm{x-b}_2\}$。可假设 $a\ne b$ 且 $0\le\theta\le1$。
+\end{enumerate}
+
+\paragraph{2.13}
+\textbf{外积的锥包。}考虑秩为 $k$ 的外积所成的集合 $\{XX^{\T}\mid X\in\R^{n\times k},\ \rank X=k\}$。用简单形式描述其锥包。
+
+\paragraph{2.14}
+\textbf{扩张集与收缩集。}设 $S\subseteq\R^n$，$\norm{\cdot}$ 是 $\R^n$ 上的范数。
+\begin{enumerate}[label=(\alph*)]
+\item 对 $a\ge0$，定义 $S_a=\{x\mid\dist(x,S)\le a\}$，其中 $\dist(x,S)=\inf_{y\in S}\norm{x-y}$。称 $S_a$ 为 $S$ 扩张或延伸 $a$ 后的集合。证明：若 $S$ 凸，则 $S_a$ 凸。
+\item 对 $a\ge0$，定义 $S_{-a}=\{x\mid B(x,a)\subseteq S\}$，其中 $B(x,a)$ 是范数 $\norm{\cdot}$ 下以 $x$ 为中心、半径为 $a$ 的球。称 $S_{-a}$ 为 $S$ 收缩或限制 $a$ 后的集合，因为其中各点到 $\R^n\setminus S$ 的距离至少为 $a$。证明：若 $S$ 凸，则 $S_{-a}$ 凸。
+\end{enumerate}
+
+% Source PDF page 76 (printed p. 62)
+\paragraph{2.15}
+\textbf{一些概率分布集合。}设 $x$ 为实值随机变量，$\Prob(x=a_i)=p_i$，$i=1,\ldots,n$，其中 $a_1<a_2<\cdots<a_n$。当然，$p\in\R^n$ 位于标准概率单纯形 $P=\{p\mid\one^{\T}p=1,\ p\succeq0\}$ 中。下列哪些条件关于 $p$ 是凸的？也就是说，哪些条件使满足条件的 $p\in P$ 构成凸集？
+\begin{enumerate}[label=(\alph*)]
+\item $\alpha\le\E f(x)\le\beta$，其中 $\E f(x)=\sum_{i=1}^np_if(a_i)$ 为 $f(x)$ 的期望，给定函数为 $f:\R\to\R$。
+\item $\Prob(x>\alpha)\le\beta$。
+\item $\E\abs{x^3}\le\alpha\E\abs x$。
+\item $\E x^2\le\alpha$。
+\item $\E x^2\ge\alpha$。
+\item $\operatorname{var}(x)\le\alpha$，其中 $\operatorname{var}(x)=\E(x-\E x)^2$ 为 $x$ 的方差。
+\item $\operatorname{var}(x)\ge\alpha$。
+\item $\operatorname{quartile}(x)\ge\alpha$，其中 $\operatorname{quartile}(x)=\inf\{\beta\mid\Prob(x\le\beta)\ge0.25\}$。
+\item $\operatorname{quartile}(x)\le\alpha$。
+\end{enumerate}
+
+\subsection*{保持凸性的运算}
+\paragraph{2.16}
+证明：若 $S_1$ 和 $S_2$ 是 $\R^{m+n}$ 中的凸集，则其部分和
+\[
+ S=\{(x,y_1+y_2)\mid x\in\R^m,\ y_1,y_2\in\R^n,
+ \ (x,y_1)\in S_1,\ (x,y_2)\in S_2\}
+\]
+也凸。
+
+\paragraph{2.17}
+\textbf{多面体集在透视函数下的像。}研究超平面、半空间及多面体在透视函数 $P(x,t)=x/t$、$\dom P=\R^n\times\R_{++}$ 下的像。对下列各集合 $C$，给出
+\[
+ P(C)=\{v/t\mid(v,t)\in C,\ t>0\}
+\]
+的简单描述。
+\begin{enumerate}[label=(\alph*)]
+\item 多面体 $C=\conv\{(v_1,t_1),\ldots,(v_K,t_K)\}$，其中 $v_i\in\R^n$、$t_i>0$。
+\item 超平面 $C=\{(v,t)\mid f^{\T}v+gt=h\}$，$f$ 与 $g$ 不同时为零。
+\item 半空间 $C=\{(v,t)\mid f^{\T}v+gt\le h\}$，$f$ 与 $g$ 不同时为零。
+\item 多面体 $C=\{(v,t)\mid Fv+gt\preceq h\}$。
+\end{enumerate}
+
+\paragraph{2.18}
+\textbf{可逆的线性分式函数。}设线性分式函数 $f:\R^n\to\R^n$ 为
+\[
+ f(x)=(Ax+b)/(c^{\T}x+d),\qquad\dom f=\{x\mid c^{\T}x+d>0\}.
+\]
+假设矩阵
+\[
+ Q=\begin{bmatrix}A&b\\c^{\T}&d\end{bmatrix}
+\]
+非奇异。证明 $f$ 可逆，且 $f^{-1}$ 是线性分式映射。用 $A,b,c,d$ 给出 $f^{-1}$ 及其定义域的显式表达式。\emph{提示：}用 $Q$ 表示 $f^{-1}$ 可能更容易。
+
+\paragraph{2.19}
+\textbf{线性分式函数与凸集。}设线性分式函数 $f:\R^m\to\R^n$ 为
+\[
+ f(x)=(Ax+b)/(c^{\T}x+d),\qquad\dom f=\{x\mid c^{\T}x+d>0\}.
+\]
+本题研究凸集 $C$ 在 $f$ 下的逆像，即
+\[
+ f^{-1}(C)=\{x\in\dom f\mid f(x)\in C\}.
+\]
+对下列各集合 $C\subseteq\R^n$，给出 $f^{-1}(C)$ 的简单描述。
+\begin{enumerate}[label=(\alph*)]
+\item 半空间 $C=\{y\mid g^{\T}y\le h\}$，其中 $g\ne0$。
+\item 多面体 $C=\{y\mid Gy\preceq h\}$。
+\item 椭球 $\{y\mid y^{\T}P^{-1}y\le1\}$，其中 $P\in\mathbf S_{++}^n$。
+\item 线性矩阵不等式的解集 $C=\{y\mid y_1A_1+\cdots+y_nA_n\preceq B\}$，其中 $A_1,\ldots,A_n,B\in\mathbf S^p$。
+\end{enumerate}
+
+% Source PDF page 77 (printed p. 63)
+\subsection*{分离定理与支撑超平面}
+\paragraph{2.20}
+\textbf{线性方程的严格正解。}设 $A\in\R^{m\times n}$、$b\in\R^m$，且 $b\in\mathcal R(A)$。证明：存在 $x$ 满足
+\[
+ x\succ0,\qquad Ax=b,
+\]
+当且仅当不存在 $\lambda$ 满足
+\[
+ A^{\T}\lambda\succeq0,\qquad A^{\T}\lambda\ne0,\qquad b^{\T}\lambda\le0.
+\]
+\emph{提示：}先证明以下线性代数事实：对所有满足 $Ax=b$ 的 $x$ 都有 $c^{\T}x=d$，当且仅当存在向量 $\lambda$，使 $c=A^{\T}\lambda$、$d=b^{\T}\lambda$。
+
+\paragraph{2.21}
+\textbf{分离超平面的集合。}设 $C$、$D$ 是 $\R^n$ 中不相交的子集。考虑所有 $(a,b)\in\R^{n+1}$ 构成的集合，其中对所有 $x\in C$ 有 $a^{\T}x\le b$，对所有 $x\in D$ 有 $a^{\T}x\ge b$。证明它是凸锥；如果没有超平面分离 $C$ 和 $D$，该集合为单点集 $\{0\}$。
+
+\paragraph{2.22}
+补全第2.5.1节的分离超平面定理证明：证明任意两个不相交的凸集 $C$、$D$ 之间都存在分离超平面。可以使用第2.5.1节已经证明的结果，即当两个集合中有一对点的距离等于两集合距离时，存在分离超平面。
+
+\emph{提示：}若 $C$ 和 $D$ 是不相交的凸集，则集合 $\{x-y\mid x\in C,\ y\in D\}$ 凸且不包含原点。
+
+\paragraph{2.23}
+举出两个闭凸集的例子，它们不相交，但不能被严格分离。
+
+\paragraph{2.24}
+\textbf{支撑超平面。}
+\begin{enumerate}[label=(\alph*)]
+\item 将闭凸集 $\{x\in\R_+^2\mid x_1x_2\ge1\}$ 表示为若干半空间的交。
+\item 设 $C=\{x\in\R^n\mid\norm x_\infty\le1\}$ 为 $\R^n$ 中 $\ell_\infty$ 范数单位球，$\widehat x$ 为 $C$ 的边界点。明确找出 $C$ 在 $\widehat x$ 处的支撑超平面。
+\end{enumerate}
+
+\paragraph{2.25}
+\textbf{多面体内外逼近。}设 $C\subseteq\R^n$ 为闭凸集，$x_1,\ldots,x_K$ 位于 $C$ 的边界。对每个 $i$，假设 $a_i^{\T}(x-x_i)=0$ 定义 $C$ 在 $x_i$ 处的支撑超平面，即 $C\subseteq\{x\mid a_i^{\T}(x-x_i)\le0\}$。考虑两个多面体
+\[
+\begin{aligned}
+ P_{\mathrm{inner}}&=\conv\{x_1,\ldots,x_K\},\\
+ P_{\mathrm{outer}}&=\{x\mid a_i^{\T}(x-x_i)\le0,\ i=1,\ldots,K\}.
+\end{aligned}
+\]
+证明 $P_{\mathrm{inner}}\subseteq C\subseteq P_{\mathrm{outer}}$，并画图说明。
+
+\paragraph{2.26}
+\textbf{支撑函数。}集合 $C\subseteq\R^n$ 的支撑函数定义为
+\[
+ S_C(y)=\sup\{y^{\T}x\mid x\in C\}.
+\]
+允许 $S_C(y)$ 取值 $+\infty$。设 $C$、$D$ 是 $\R^n$ 中的闭凸集。证明：$C=D$ 当且仅当两者的支撑函数相等。
+
+\paragraph{2.27}
+\textbf{逆支撑超平面定理。}设集合 $C$ 闭、内部非空，且在每个边界点处都有支撑超平面。证明 $C$ 凸。
+
+\subsection*{凸锥与广义不等式}
+\paragraph{2.28}
+\textbf{$n=1,2,3$ 时的半正定锥。}对 $n=1,2,3$，用矩阵元素和普通不等式给出半正定锥 $\mathbf S_+^n$ 的显式描述。分别使用下列记号表示 $\mathbf S^n$ 中的一般元素：
+\[
+ x_1,\qquad
+ \begin{bmatrix}x_1&x_2\\x_2&x_3\end{bmatrix},\qquad
+ \begin{bmatrix}x_1&x_2&x_3\\x_2&x_4&x_5\\x_3&x_5&x_6\end{bmatrix}.
+\]
+
+% Source PDF page 78 (printed p. 64)
+\paragraph{2.29}
+\textbf{$\R^2$ 中的锥。}设 $K\subseteq\R^2$ 为闭凸锥。
+\begin{enumerate}[label=(\alph*)]
+\item 用元素的极坐标 $x=r(\cos\phi,\sin\phi)$、$r\ge0$，给出 $K$ 的简单描述。
+\item 给出 $K^*$ 的简单描述，并画图说明 $K$ 与 $K^*$ 的关系。
+\item $K$ 在什么条件下是尖的？
+\item $K$ 在什么条件下是正常的，从而定义广义不等式？画图说明当 $K$ 正常时，$x\preceq_K y$ 的含义。
+\end{enumerate}
+
+\paragraph{2.30}
+\textbf{广义不等式的性质。}证明第2.4.1节列出的非严格与严格广义不等式的各项性质。
+
+\paragraph{2.31}
+\textbf{对偶锥的性质。}设 $K^*$ 为凸锥 $K$ 的对偶锥，定义见（2.19）。证明下列结论。
+\begin{enumerate}[label=(\alph*)]
+\item $K^*$ 确实为凸锥。
+\item $K_1\subseteq K_2$ 蕴含 $K_2^*\subseteq K_1^*$。
+\item $K^*$ 闭。
+\item $K^*$ 的内部为 $\operatorname{int}K^*=\{y\mid y^{\T}x>0,\ \text{对所有 }x\in\cl K\}$。
+\item 如果 $K$ 内部非空，则 $K^*$ 尖。
+\item $K^{**}$ 是 $K$ 的闭包。因此，若 $K$ 闭，则 $K^{**}=K$。
+\item 如果 $K$ 的闭包尖，则 $K^*$ 内部非空。
+\end{enumerate}
+
+\paragraph{2.32}
+求 $\{Ax\mid x\succeq0\}$ 的对偶锥，其中 $A\in\R^{m\times n}$。
+
+\paragraph{2.33}
+\textbf{单调非负锥。}定义单调非负锥
+\[
+ K_{m+}=\{x\in\R^n\mid x_1\ge x_2\ge\cdots\ge x_n\ge0\},
+\]
+即所有分量按非递增次序排列的非负向量构成的集合。
+\begin{enumerate}[label=(\alph*)]
+\item 证明 $K_{m+}$ 为正常锥。
+\item 求对偶锥 $K_{m+}^*$。\emph{提示：}使用恒等式
+\[
+\begin{aligned}
+ \sum_{i=1}^n x_iy_i
+ &=(x_1-x_2)y_1+(x_2-x_3)(y_1+y_2)\\
+ &\quad +(x_3-x_4)(y_1+y_2+y_3)+\cdots\\
+ &\quad +(x_{n-1}-x_n)(y_1+\cdots+y_{n-1})
+       +x_n(y_1+\cdots+y_n).
+\end{aligned}
+\]
+\end{enumerate}
+
+\paragraph{2.34}
+\textbf{字典序锥与字典序。}字典序锥定义为
+\[
+ K_{\mathrm{lex}}=\{0\}\cup
+ \{x\in\R^n\mid x_1=\cdots=x_k=0,\ x_{k+1}>0,
+ \ \text{对某个 }k,\ 0\le k<n\},
+\]
+即所有第一个非零分量为正的向量，以及零向量。
+\begin{enumerate}[label=(\alph*)]
+\item 验证 $K_{\mathrm{lex}}$ 是锥，但不是正常锥。
+\item 定义 $\R^n$ 上的\emph{字典序}：$x\le_{\mathrm{lex}}y$ 当且仅当 $y-x\in K_{\mathrm{lex}}$。因为 $K_{\mathrm{lex}}$ 不是正常锥，字典序不属于广义不等式。证明字典序为全序：对任意 $x,y\in\R^n$，$x\le_{\mathrm{lex}}y$ 或 $y\le_{\mathrm{lex}}x$ 总有一个成立。因此，可以按字典序锥对任意一组向量排序，得到字典中熟悉的排序方式。
+\item 求 $K_{\mathrm{lex}}^*$。
+\end{enumerate}
+
+\paragraph{2.35}
+\textbf{共正矩阵。}若矩阵 $X\in\mathbf S^n$ 对所有 $z\succeq0$ 满足 $z^{\T}Xz\ge0$，则称 $X$ 为\emph{共正矩阵}。验证共正矩阵集合为正常锥，并求其对偶锥。
+
+% Source PDF page 79 (printed p. 65)
+\paragraph{2.36}
+\textbf{欧几里得距离矩阵。}设 $x_1,\ldots,x_n\in\R^k$。由 $D_{ij}=\norm{x_i-x_j}_2^2$ 定义的矩阵 $D\in\mathbf S^n$ 称为\emph{欧几里得距离矩阵}。它满足一些显然的性质，例如 $D_{ij}=D_{ji}$、$D_{ii}=0$、$D_{ij}\ge0$；由三角不等式还有 $D_{ik}^{1/2}\le D_{ij}^{1/2}+D_{jk}^{1/2}$。
+
+现在问：矩阵 $D\in\mathbf S^n$ 什么时候是某个 $\R^k$ 中某些点的欧几里得距离矩阵？一个著名结果回答了这一问题：$D\in\mathbf S^n$ 是欧几里得距离矩阵，当且仅当 $D_{ii}=0$，且对所有满足 $\one^{\T}x=0$ 的 $x$，有 $x^{\T}Dx\le0$，见第8.3.3节。
+
+证明欧几里得距离矩阵的集合为凸锥。
+
+\paragraph{2.37}
+\textbf{非负多项式与Hankel线性矩阵不等式。}设 $K_{\mathrm{pol}}$ 为 $\R$ 上非负的 $2k$ 次多项式的系数集：
+\[
+ K_{\mathrm{pol}}=\{x\in\R^{2k+1}\mid
+ x_1+x_2t+x_3t^2+\cdots+x_{2k+1}t^{2k}\ge0,
+ \ \text{对所有 }t\in\R\}.
+\]
+\begin{enumerate}[label=(\alph*)]
+\item 证明 $K_{\mathrm{pol}}$ 是正常锥。
+\item 一个基本结果指出：$2k$ 次多项式在 $\R$ 上非负，当且仅当它可以写成两个次数不超过 $k$ 的多项式的平方和。换言之，$x\in K_{\mathrm{pol}}$，当且仅当多项式
+\[
+ p(t)=x_1+x_2t+x_3t^2+\cdots+x_{2k+1}t^{2k}
+\]
+可写成
+\[
+ p(t)=r(t)^2+s(t)^2,
+\]
+其中 $r$、$s$ 是 $k$ 次多项式。
+
+利用该结果证明
+\[
+ K_{\mathrm{pol}}=\left\{x\in\R^{2k+1}\ \middle|\
+ x_i=\sum_{m+n=i+1}Y_{mn},\ \text{对某个 }Y\in\mathbf S_+^{k+1}\right\}.
+\]
+也就是说，$p(t)=x_1+x_2t+x_3t^2+\cdots+x_{2k+1}t^{2k}$ 非负，当且仅当存在 $Y\in\mathbf S_+^{k+1}$，使
+\[
+\begin{aligned}
+ x_1&=Y_{11},\\
+ x_2&=Y_{12}+Y_{21},\\
+ x_3&=Y_{13}+Y_{22}+Y_{31},\\
+ &\ \vdots\\
+ x_{2k+1}&=Y_{k+1,k+1}.
+\end{aligned}
+\]
+\item 证明 $K_{\mathrm{pol}}^*=K_{\mathrm{han}}$，其中
+\[
+ K_{\mathrm{han}}=\{z\in\R^{2k+1}\mid H(z)\succeq0\},
+\]
+且
+\[
+ H(z)=\begin{bmatrix}
+ z_1&z_2&z_3&\cdots&z_k&z_{k+1}\\
+ z_2&z_3&z_4&\cdots&z_{k+1}&z_{k+2}\\
+ z_3&z_4&z_5&\cdots&z_{k+2}&z_{k+4}\\
+ \vdots&\vdots&\vdots&\ddots&\vdots&\vdots\\
+ z_k&z_{k+1}&z_{k+2}&\cdots&z_{2k-1}&z_{2k}\\
+ z_{k+1}&z_{k+2}&z_{k+3}&\cdots&z_{2k}&z_{2k+1}
+ \end{bmatrix}.
+\]
+这是以 $z_1,\ldots,z_{2k+1}$ 为系数的Hankel矩阵。
+
+% Source PDF page 80 (printed p. 66)
+\item 设 $K_{\mathrm{mom}}$ 为所有形如 $(1,t,t^2,\ldots,t^{2k})$、$t\in\R$ 的向量的锥包。证明：$y\in K_{\mathrm{mom}}$，当且仅当 $y_1\ge0$，且对某个随机变量 $u$，有
+\[
+ y=y_1(1,\E u,\E u^2,\ldots,\E u^{2k}).
+\]
+换言之，$K_{\mathrm{mom}}$ 的元素是 $\R$ 上所有可能分布的矩向量的非负倍数。证明 $K_{\mathrm{pol}}=K_{\mathrm{mom}}^*$。
+\item 结合(c)、(d)的结果，推出 $K_{\mathrm{han}}=\cl K_{\mathrm{mom}}$。
+
+作为说明 $K_{\mathrm{mom}}$ 与 $K_{\mathrm{han}}$ 关系的一个例子，取 $k=2$、$z=(1,0,0,0,1)$。证明 $z\in K_{\mathrm{han}}$、$z\notin K_{\mathrm{mom}}$，并给出一个收敛到 $z$ 的 $K_{\mathrm{mom}}$ 中点的显式序列。
+\end{enumerate}
+
+\paragraph{2.38}
+[Roc70，第15、61页]\quad\textbf{由集合构造凸锥。}
+\begin{enumerate}[label=(\alph*)]
+\item 集合 $C$ 的\emph{障碍锥}定义为使 $y^{\T}x$ 在 $x\in C$ 上有上界的所有向量 $y$ 构成的集合。换言之，非零向量 $y$ 属于障碍锥，当且仅当它是某个包含 $C$ 的半空间 $\{x\mid y^{\T}x\le\alpha\}$ 的法向量。验证障碍锥为凸锥，不对 $C$ 作任何假设。
+\item 集合 $C$ 的\emph{衰退锥}，也称\emph{渐近锥}，定义为所有满足下列条件的向量 $y$ 的集合：对每个 $x\in C$ 和所有 $t\ge0$，均有 $x-ty\in C$。证明凸集的衰退锥是凸锥。证明：如果 $C$ 非空、闭且凸，则 $C$ 的衰退锥是其障碍锥的对偶。
+\item 集合 $C$ 在边界点 $x_0$ 处的\emph{法锥}，是所有满足 $y^{\T}(x-x_0)\le0$（对所有 $x\in C$）的向量 $y$ 构成的集合，也就是在 $x_0$ 处定义 $C$ 的支撑超平面的向量集。证明法锥为凸锥，不对 $C$ 作任何假设。简单描述多面体 $\{x\mid Ax\preceq b\}$ 在其边界某点处的法锥。
+\end{enumerate}
+
+\paragraph{2.39}
+\textbf{锥的分离。}设 $K$、$\widetilde K$ 为两个凸锥，其内部非空且不相交。证明存在非零 $y$，使 $y\in K^*$、$-y\in\widetilde K^*$。

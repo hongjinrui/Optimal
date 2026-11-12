@@ -1,0 +1,250 @@
+% Source PDF page 545 (printed p. 531)
+所以
+\[\left\|\begin{bmatrix}H&A^\T\\A&0\end{bmatrix}^{-1}\right\|_2\ge\frac{\left\|\begin{bmatrix}Fu\\0\end{bmatrix}\right\|_2}{\left\|\begin{bmatrix}HFu\\0\end{bmatrix}\right\|_2}=\frac{\norm{Fu}_2}{\norm{HFu}_2}.\]
+利用 $\norm{Fu}_2\ge\sigma_{\min}(F)$ 以及
+\[\norm{HFu}_2\le\norm{H^{1/2}}_2\norm{H^{1/2}Fu}_2<M^{1/2}m^{1/2},\]
+得到
+\[\left\|\begin{bmatrix}H&A^\T\\A&0\end{bmatrix}^{-1}\right\|_2\ge\frac{\norm{Fu}_2}{\norm{HFu}_2}>\frac{\sigma_{\min}(F)}{M^{1/2}m^{1/2}}=K,\]
+其中使用了 (10.18) 给出的 $m$ 的表达式。
+
+\subsubsection*{自协调函数的收敛性分析}
+若 $f$ 自协调，$\widetilde f(z)=f(Fz+\widehat x)$ 也自协调。因此，如果 $f$ 自协调，就有与无约束问题完全相同的复杂度估计：得到精度为 $\epsilon$ 的解所需的迭代次数不超过
+\[\frac{20-8\alpha}{\alpha\beta(1-2\alpha)^2}(f(x^{(0)})-p^\star)+\log_2\log_2(1/\epsilon),\]
+其中 $\alpha$、$\beta$ 为回溯参数，见 (9.56)。
+
+\section{不可行初始点牛顿法}
+第10.2节的牛顿法是一种可行下降法。本节介绍牛顿法的一种推广，它允许初始点及迭代点不可行。
+
+\subsection{不可行点处的牛顿步}
+与牛顿法一样，从等式约束最小化问题的最优性条件出发：
+\[Ax^\star=b,\qquad\nabla f(x^\star)+A^\T\nu^\star=0.\]
+用 $x$ 表示当前点，不假设它可行，但假设 $x\in\dom f$。目标是寻找步 $\Delta x$，使 $x+\Delta x$ 至少近似满足最优性条件，即 $x+\Delta x\approx x^\star$。
+
+% Source PDF page 546 (printed p. 532)
+为此，在最优性条件中用 $x+\Delta x$ 代替 $x^\star$、用 $w$ 代替 $\nu^\star$，并采用梯度的一阶近似
+\[\nabla f(x+\Delta x)\approx\nabla f(x)+\nabla^2f(x)\Delta x,\]
+得到
+\[A(x+\Delta x)=b,\qquad\nabla f(x)+\nabla^2f(x)\Delta x+A^\T w=0.\]
+这是关于 $\Delta x$ 和 $w$ 的一组线性方程：
+\begin{equation}\begin{bmatrix}\nabla^2f(x)&A^\T\\A&0\end{bmatrix}\begin{bmatrix}\Delta x\\w\end{bmatrix}=-\begin{bmatrix}\nabla f(x)\\Ax-b\end{bmatrix}.\tag{10.19}\end{equation}
+它与定义可行点 $x$ 处牛顿步的方程 (10.11) 只有一个区别：右端第二个分块含有 $Ax-b$，即线性等式约束的残差向量。当 $x$ 可行时，残差为零，方程 (10.19) 就化为定义可行点 $x$ 处标准牛顿步的方程 (10.11)。因此，如果 $x$ 可行，(10.19) 定义的步 $\Delta x$ 与上面仅对可行 $x$ 定义的牛顿步一致。正因如此，可以不致混淆地将 (10.19) 定义的 $\Delta x$ 记为 $\Delta x_{\rm nt}$，称为 $x$ 处的牛顿步。
+
+\subsubsection*{作为原始—对偶牛顿步的解释}
+可以用等式约束问题的原始—对偶方法来解释方程 (10.19)。所谓原始—对偶方法，是同时更新原始变量 $x$ 与对偶变量 $\nu$，以近似满足最优性条件的方法。
+
+将最优性条件写为 $r(x^\star,\nu^\star)=0$，其中 $r:\R^n\times\R^p\to\R^n\times\R^p$ 定义为
+\[r(x,\nu)=(r_{\rm dual}(x,\nu),r_{\rm pri}(x,\nu)).\]
+这里
+\[r_{\rm dual}(x,\nu)=\nabla f(x)+A^\T\nu,\qquad r_{\rm pri}(x,\nu)=Ax-b\]
+分别为对偶残差和原始残差。$r$ 在当前估计 $y$ 附近的一阶 Taylor 近似为
+\[r(y+z)\approx\widehat r(y+z)=r(y)+Dr(y)z,\]
+其中 $Dr(y)\in\R^{(n+p)\times(n+p)}$ 是 $r$ 在 $y$ 处的导数，见第A.4.1节。把使 Taylor 近似 $\widehat r(y+z)$ 为零的步 $z$ 定义为原始—对偶牛顿步 $\Delta y_{\rm pd}$，即
+\begin{equation}Dr(y)\Delta y_{\rm pd}=-r(y).\tag{10.20}\end{equation}
+注意，这里 $x$ 和 $\nu$ 都是变量；$\Delta y_{\rm pd}=(\Delta x_{\rm pd},\Delta\nu_{\rm pd})$ 同时给出原始步和对偶步。
+
+% Source PDF page 547 (printed p. 533)
+计算 $r$ 的导数，将 (10.20) 写成
+\begin{equation}\begin{bmatrix}\nabla^2f(x)&A^\T\\A&0\end{bmatrix}\begin{bmatrix}\Delta x_{\rm pd}\\\Delta\nu_{\rm pd}\end{bmatrix}=-\begin{bmatrix}r_{\rm dual}\\r_{\rm pri}\end{bmatrix}=-\begin{bmatrix}\nabla f(x)+A^\T\nu\\Ax-b\end{bmatrix}.\tag{10.21}\end{equation}
+将 $\nu+\Delta\nu_{\rm pd}$ 记为 $\nu^+$，可将其写成
+\begin{equation}\begin{bmatrix}\nabla^2f(x)&A^\T\\A&0\end{bmatrix}\begin{bmatrix}\Delta x_{\rm pd}\\\nu^+\end{bmatrix}=-\begin{bmatrix}\nabla f(x)\\Ax-b\end{bmatrix},\tag{10.22}\end{equation}
+与 (10.19) 完全相同。因此，(10.19)、(10.21)、(10.22) 的解满足
+\[\Delta x_{\rm nt}=\Delta x_{\rm pd},\qquad w=\nu^+=\nu+\Delta\nu_{\rm pd}.\]
+这说明，不可行点的牛顿步与原始—对偶步的原始部分相同；对应对偶向量 $w$，则是更新后的原始—对偶变量 $\nu^+=\nu+\Delta\nu_{\rm pd}$。
+
+(10.21) 与 (10.22) 给出的牛顿步和对偶变量或对偶步的两种表达当然等价，但各揭示牛顿步的不同特征。(10.21) 表明，牛顿步及对应对偶步由一组以原始和对偶残差为右端的方程求出。(10.22) 是最初定义牛顿步的方式，给出牛顿步与更新后的对偶变量，并表明计算原始步或更新后的对偶变量时，不需要当前对偶变量的值。
+
+\subsubsection*{残差范数减小性质}
+不可行点处的牛顿方向未必是 $f$ 的下降方向。由 (10.19)，有
+\[\begin{aligned}
+\left.\frac{d}{dt}f(x+t\Delta x)\right|_{t=0}
+&=\nabla f(x)^\T\Delta x\\
+&=-\Delta x^\T\bigl(\nabla^2f(x)\Delta x+A^\T w\bigr)\\
+&=-\Delta x^\T\nabla^2f(x)\Delta x+(Ax-b)^\T w,
+\end{aligned}\]
+它未必为负，除非 $x$ 可行，即 $Ax=b$。然而，原始—对偶解释表明，残差范数沿牛顿方向减小，即
+\[\left.\frac{d}{dt}\norm{r(y+t\Delta y_{\rm pd})}_2^2\right|_{t=0}=2r(y)^\T Dr(y)\Delta y_{\rm pd}=-2r(y)^\T r(y).\]
+利用平方函数的求导公式，得到
+\begin{equation}\left.\frac{d}{dt}\norm{r(y+t\Delta y_{\rm pd})}_2\right|_{t=0}=-\norm{r(y)}_2.\tag{10.23}\end{equation}
+因此，可以用 $\norm r_2$ 衡量不可行初始点牛顿法的进展，例如用于线搜索。（标准牛顿法至少在达到二次收敛以前，用函数值 $f$ 衡量算法进展。）
+
+% Source PDF page 548 (printed p. 534)
+\subsubsection*{完整步的可行性性质}
+由构造，(10.19) 定义的牛顿步 $\Delta x_{\rm nt}$ 具有性质
+\begin{equation}A(x+\Delta x_{\rm nt})=b.\tag{10.24}\end{equation}
+因此，如果沿牛顿步 $\Delta x_{\rm nt}$ 取步长 $1$，下一次迭代点就可行。一旦 $x$ 可行，牛顿步成为可行方向，此后所有迭代点都可行，与所取步长无关。
+
+更一般地，可以分析阻尼步对等式约束残差 $r_{\rm pri}$ 的影响。取步长 $t\in[0,1]$，下一迭代点为 $x^+=x+t\Delta x_{\rm nt}$，所以其等式约束残差为
+\[r_{\rm pri}^+=A(x+\Delta x_{\rm nt}t)-b=(1-t)(Ax-b)=(1-t)r_{\rm pri},\]
+其中使用了 (10.24)。因此，步长为 $t$ 的阻尼步使残差缩小到 $1-t$ 倍。现在假设 $x^{(i+1)}=x^{(i)}+t^{(i)}\Delta x_{\rm nt}^{(i)}$，$i=0,\ldots,k-1$，其中 $\Delta x_{\rm nt}^{(i)}$ 是点 $x^{(i)}\in\dom f$ 处的牛顿步，$t^{(i)}\in[0,1]$。那么
+\[r^{(k)}=\left(\prod_{i=0}^{k-1}(1-t^{(i)})\right)r^{(0)},\]
+其中 $r^{(i)}=Ax^{(i)}-b$ 是 $x^{(i)}$ 的残差。这个公式表明，每一步原始残差都沿着初始原始残差的方向，并在每步缩小。它还表明，一旦取完整步，之后所有迭代点都原始可行。
+
+\subsection{不可行初始点牛顿法}
+采用 (10.19) 定义的牛顿步 $\Delta x_{\rm nt}$，就能构造牛顿法的一种扩展，其中 $x^{(0)}\in\dom f$，但不必满足 $Ax^{(0)}=b$。同时还采用牛顿步的对偶部分：按 (10.19) 的记号，$\Delta\nu_{\rm nt}=w-\nu$；等价地，按 (10.21) 的记号，$\Delta\nu_{\rm nt}=\Delta\nu_{\rm pd}$。
+
+\begin{origalgorithm}{10.2}
+\emph{不可行初始点牛顿法。}
+
+给定初始点 $x\in\dom f$、$\nu$，容差 $\epsilon>0$，$\alpha\in(0,1/2)$，$\beta\in(0,1)$。
+
+重复：
+\begin{enumerate}
+\item 计算原始和对偶牛顿步 $\Delta x_{\rm nt}$、$\Delta\nu_{\rm nt}$。
+\item 对 $\norm r_2$ 进行回溯线搜索。令 $t:=1$。
+
+当 $\norm{r(x+t\Delta x_{\rm nt},\nu+t\Delta\nu_{\rm nt})}_2>(1-\alpha t)\norm{r(x,\nu)}_2$ 时，令 $t:=\beta t$。
+\item \emph{更新。}$x:=x+t\Delta x_{\rm nt}$，$\nu:=\nu+t\Delta\nu_{\rm nt}$。
+\end{enumerate}
+直到 $Ax=b$ 且 $\norm{r(x,\nu)}_2\le\epsilon$。
+\end{origalgorithm}
+
+% Source PDF page 549 (printed p. 535)
+这个算法与从可行点开始的标准牛顿法很相似，只有几个区别。首先，搜索方向包含依赖原始残差的额外校正项。其次，线搜索使用残差范数而非函数值 $f$。最后，算法在达到原始可行、且对偶残差范数很小时终止。
+
+第2步线搜索值得说明。与基于函数值的线搜索相比，使用残差范数可能增加计算代价，但增幅通常可忽略。此外，线搜索必在有限步内终止，因为 (10.23) 表明，$t$ 足够小时就满足线搜索退出条件。
+
+由 (10.24) 可知，如果某次迭代选择步长 $1$，下一迭代点就可行。此后所有迭代点都可行；因此一旦得到可行迭代点，不可行初始点牛顿法的搜索方向，就与第10.2节可行牛顿法的搜索方向一致。
+
+不可行初始点牛顿法有许多变体。例如，一旦达到可行，就切换到第10.2节的可行牛顿法。也就是说，改用基于 $f$ 的线搜索，并在 $\lambda(x)^2/2\le\epsilon$ 时停止。达到可行之后，不可行初始点方法与标准可行牛顿法只在线搜索回溯条件和退出条件上不同，表现十分相近。
+
+\subsubsection*{用不可行初始点牛顿法简化初始化}
+不可行初始点牛顿法的主要优点，在于其初始化要求。如果 $\dom f=\R^n$，可行牛顿法的初始化只需要求一个 $Ax=b$ 的解。此时使用不可行初始点牛顿法，除方便之外并无特别优势。
+
+若 $\dom f$ 不是整个 $\R^n$，在其中寻找满足 $Ax=b$ 的点本身就可能困难。一个通用方法，是使用第11.4节介绍的第一阶段方法计算这样的点，或验证 $\dom f$ 与 $\{z\mid Az=b\}$ 没有交点；当 $\dom f$ 复杂，且不知道它是否与 $\{z\mid Az=b\}$ 相交时，这可能是最好的方法。但当 $\dom f$ 比较简单，并且已知其中存在满足 $Ax=b$ 的点时，不可行初始点牛顿法提供一种简单替代方案。
+
+一个常见例子是 $\dom f=\R_{++}^n$，如例10.2中的等式约束解析中心问题。为问题
+\begin{equation}\begin{array}{ll}\text{最小化}&-\displaystyle\sum_{i=1}^n\log x_i\\\text{约束条件}&Ax=b\end{array}\tag{10.25}\end{equation}
+初始化牛顿法，需要寻找 $x^{(0)}\succ0$ 且 $Ax=b$，这等价于求解标准形式 LP 的可行性问题。可采用第一阶段方法，也可以使用不可行初始点牛顿法，从任意正初始点出发，例如 $x^{(0)}=\one$。
+
+同一技巧也可用于初始化尚不知道 $\dom f$ 中初始点的无约束问题。例如，考虑等式约束解析中心问题 (10.25) 的对偶。
+
+% Source PDF page 550 (printed p. 536)
+对偶为
+\[\text{最大化}\quad g(\nu)=-b^\T\nu+n+\sum_{i=1}^n\log(A^\T\nu)_i.\]
+要为可行初始点牛顿法初始化该问题，必须找点 $\nu^{(0)}$ 满足 $A^\T\nu^{(0)}\succ0$，即求解一组线性不等式。可以使用第一阶段方法，也可改写问题后采用不可行初始点牛顿法。先将其表示为等式约束问题
+\[\begin{array}{ll}\text{最大化}&-b^\T\nu+n+\displaystyle\sum_{i=1}^n\log y_i\\\text{约束条件}&y=A^\T\nu,\end{array}\]
+其中引入新变量 $y\in\R^n$。现在就可以采用不可行初始点牛顿法，从任意正的 $y^{(0)}$ 和任意 $\nu^{(0)}$ 开始。
+
+对于不知道严格可行初始点是否存在的问题，使用不可行初始点牛顿法初始化的缺点是：没有明确方法检测严格可行点不存在的情况；残差范数只会缓慢收敛到某个正值。相比之下，第一阶段方法能够明确判定这一事实。此外，达到可行之前，不可行初始点牛顿法的收敛也可能缓慢，见第11.4.2节。
+
+\subsection{收敛性分析}
+本节证明：在某些假设成立时，不可行初始点牛顿法收敛到最优点。证明与标准牛顿法或带等式约束的标准牛顿法非常相似。我们证明，一旦残差范数足够小，算法就采用完整步，从而达到可行，随后二次收敛。还证明，在到达二次收敛区域之前，每次迭代都使残差范数至少减少一个固定量。由于残差范数不可能为负，这就说明有限步之内，残差便小到足以保证完整步和二次收敛。
+
+\subsubsection*{假设}
+采用以下假设。
+\begin{itemize}
+\item 下水平集
+\begin{equation}S=\{(x,\nu)\mid x\in\dom f,\ \norm{r(x,\nu)}_2\le\norm{r(x^{(0)},\nu^{(0)})}_2\}\tag{10.26}\end{equation}
+是闭集。若 $f$ 是闭函数，则 $\norm r_2$ 是闭函数，因此任意 $x^{(0)}\in\dom f$、$\nu^{(0)}\in\R^p$ 都满足该条件，见习题10.7。
+\item 在集合 $S$ 上，存在某个 $K$，使
+\begin{equation}\norm{Dr(x,\nu)^{-1}}_2=\left\|\begin{bmatrix}\nabla^2f(x)&A^\T\\A&0\end{bmatrix}^{-1}\right\|_2\le K.\tag{10.27}\end{equation}
+
+% Source PDF page 551 (printed p. 537)
+\item 对 $(x,\nu),(\widetilde x,\widetilde\nu)\in S$，$Dr$ 满足 Lipschitz 条件
+\[\norm{Dr(x,\nu)-Dr(\widetilde x,\widetilde\nu)}_2\le L\norm{(x,\nu)-(\widetilde x,\widetilde\nu)}_2.\]
+这等价于 $\nabla^2f(x)$ 满足 Lipschitz 条件，见习题10.7。
+\end{itemize}
+下面会看到，这些假设蕴含 $\dom f$ 与 $\{z\mid Az=b\}$ 相交，而且存在最优点 $(x^\star,\nu^\star)$。
+
+\subsubsection*{与标准牛顿法的比较}
+上述假设与第10.2.4节（第529页）分析标准牛顿法时的假设非常相似。第二、第三条假设，即 KKT 矩阵逆有界和 Lipschitz 条件，本质相同。不过，不可行初始点牛顿法的下水平集条件 (10.26)，比第10.2.4节的下水平集条件更一般。
+
+例如，考虑等式约束最大熵问题
+\[\begin{array}{ll}\text{最小化}&f(x)=\displaystyle\sum_{i=1}^n x_i\log x_i\\\text{约束条件}&Ax=b,\end{array}\]
+其中 $\dom f=\R_{++}^n$。目标 $f$ 不是闭函数，其下水平集未必闭，因此标准牛顿法的假设可能不成立，至少对某些初始点如此。问题在于，当 $x_i\to0$ 时，负熵函数不趋向无穷大。另一方面，该问题满足不可行初始点牛顿法的下水平集条件 (10.26)，因为当 $x_i\to0$ 时，负熵函数的梯度范数确实趋向无穷大。因此，不可行初始点牛顿法保证能求解等式约束最大熵问题。（我们不知道标准牛顿法是否可能在此问题上失败；这里只指出我们的收敛分析不适用。）注意，如果初始点满足等式约束，标准牛顿法与不可行初始点牛顿法的唯一区别是线搜索，而且只在阻尼阶段不同。
+
+\subsubsection*{一个基本不等式}
+先推导一个基本不等式。令 $y=(x,\nu)\in S$，且 $\norm{r(y)}_2\ne0$，令 $\Delta y_{\rm nt}=(\Delta x_{\rm nt},\Delta\nu_{\rm nt})$ 为 $y$ 处的牛顿步。定义
+\[t_{\max}=\inf\{t>0\mid y+t\Delta y_{\rm nt}\notin S\}.\]
+若对所有 $t\ge0$ 都有 $y+t\Delta y_{\rm nt}\in S$，按惯例定义 $t_{\max}=\infty$。否则，$t_{\max}$ 是使 $\norm{r(y+t\Delta y_{\rm nt})}_2=\norm{r(y^{(0)})}_2$ 成立的最小正 $t$。特别地，$0\le t\le t_{\max}$ 时有 $y+t\Delta y_{\rm nt}\in S$。
+
+将证明，对于 $0\le t\le\min\{1,t_{\max}\}$，有
+\begin{equation}\norm{r(y+t\Delta y_{\rm nt})}_2\le(1-t)\norm{r(y)}_2+(K^2L/2)t^2\norm{r(y)}_2^2.\tag{10.28}\end{equation}
+
+% Source PDF page 552 (printed p. 538)
+有
+\[\begin{aligned}
+r(y+t\Delta y_{\rm nt})
+&=r(y)+\int_0^1 Dr(y+\tau t\Delta y_{\rm nt})t\Delta y_{\rm nt}\,d\tau\\
+&=r(y)+tDr(y)\Delta y_{\rm nt}\\
+&\quad+\int_0^1(Dr(y+\tau t\Delta y_{\rm nt})-Dr(y))t\Delta y_{\rm nt}\,d\tau\\
+&=r(y)+tDr(y)\Delta y_{\rm nt}+e\\
+&=(1-t)r(y)+e,
+\end{aligned}\]
+其中使用了 $Dr(y)\Delta y_{\rm nt}=-r(y)$，并定义
+\[e=\int_0^1(Dr(y+\tau t\Delta y_{\rm nt})-Dr(y))t\Delta y_{\rm nt}\,d\tau.\]
+现在假设 $0\le t\le t_{\max}$，因此对 $0\le\tau\le1$ 有 $y+\tau t\Delta y_{\rm nt}\in S$。可如下估计 $\norm e_2$：
+\[\begin{aligned}
+\norm e_2&\le\norm{t\Delta y_{\rm nt}}_2\int_0^1\norm{Dr(y+\tau t\Delta y_{\rm nt})-Dr(y)}_2\,d\tau\\
+&\le\norm{t\Delta y_{\rm nt}}_2\int_0^1L\norm{\tau t\Delta y_{\rm nt}}_2\,d\tau\\
+&=(L/2)t^2\norm{\Delta y_{\rm nt}}_2^2\\
+&=(L/2)t^2\norm{Dr(y)^{-1}r(y)}_2^2\\
+&\le(K^2L/2)t^2\norm{r(y)}_2^2,
+\end{aligned}\]
+第二行使用 Lipschitz 条件，最后一行使用界 $\norm{Dr(y)^{-1}}_2\le K$。现在可推出 (10.28)：对 $0\le t\le\min\{1,t_{\max}\}$，有
+\[\begin{aligned}
+\norm{r(y+t\Delta y_{\rm nt})}_2&=\norm{(1-t)r(y)+e}_2\\
+&\le(1-t)\norm{r(y)}_2+\norm e_2\\
+&\le(1-t)\norm{r(y)}_2+(K^2L/2)t^2\norm{r(y)}_2^2.
+\end{aligned}\]
+
+\subsubsection*{阻尼牛顿阶段}
+首先证明，若 $\norm{r(y)}_2>1/(K^2L)$，不可行初始点牛顿法的一次迭代，至少使 $\norm r_2$ 减少某个最小量。
+
+基本不等式 (10.28) 的右侧是 $t$ 的二次函数，在 $t=0$ 与其最小化点
+\[\overline t=\frac1{K^2L\norm{r(y)}_2}<1\]
+之间单调递减。必有 $t_{\max}>\overline t$，否则将推出 $\norm{r(y+t_{\max}\Delta y_{\rm nt})}_2<\norm{r(y)}_2$，这不成立。因此基本不等式在 $t=\overline t$ 处成立，故
+\[\begin{aligned}
+\norm{r(y+\overline t\Delta y_{\rm nt})}_2&\le\norm{r(y)}_2-1/(2K^2L)\\
+&\le\norm{r(y)}_2-\alpha/(K^2L)\\
+&=(1-\alpha\overline t)\norm{r(y)}_2.
+\end{aligned}\]
+
+% Source PDF page 553 (printed p. 539)
+这表明步长 $\overline t$ 满足线搜索退出条件。因此，回溯算法选取的步长 $t$ 满足 $t\ge\beta\overline t$。由 $t\ge\beta\overline t$，结合回溯线搜索退出条件，有
+\[\begin{aligned}
+\norm{r(y+t\Delta y_{\rm nt})}_2&\le(1-\alpha t)\norm{r(y)}_2\\
+&\le(1-\alpha\beta\overline t)\norm{r(y)}_2\\
+&=\left(1-\frac{\alpha\beta}{K^2L\norm{r(y)}_2}\right)\norm{r(y)}_2\\
+&=\norm{r(y)}_2-\frac{\alpha\beta}{K^2L}.
+\end{aligned}\]
+因此，只要 $\norm{r(y)}_2>1/(K^2L)$，每次迭代使 $\norm r_2$ 至少减少 $\alpha\beta/(K^2L)$。由此可知，最多经过
+\[\frac{\norm{r(y^{(0)})}_2K^2L}{\alpha\beta}\]
+次迭代，就会达到 $\norm{r(y^{(k)})}_2\le1/(K^2L)$。
+
+\subsubsection*{二次收敛阶段}
+现在假设 $\norm{r(y)}_2\le1/(K^2L)$。基本不等式给出
+\begin{equation}\norm{r(y+t\Delta y_{\rm nt})}_2\le(1-t+(1/2)t^2)\norm{r(y)}_2\tag{10.29}\end{equation}
+对 $0\le t\le\min\{1,t_{\max}\}$ 成立。必有 $t_{\max}>1$，否则由 (10.29) 推得 $\norm{r(y+t_{\max}\Delta y_{\rm nt})}_2<\norm{r(y)}_2$，与 $t_{\max}$ 的定义矛盾。因此，(10.29) 在 $t=1$ 时成立，即
+\[\norm{r(y+\Delta y_{\rm nt})}_2\le(1/2)\norm{r(y)}_2\le(1-\alpha)\norm{r(y)}_2.\]
+这表明 $t=1$ 满足回溯线搜索退出准则，因此采用完整步。此后所有迭代都有 $\norm{r(y)}_2\le1/(K^2L)$，所以后续每一步也都取完整步。
+
+将 $t=1$ 时的 (10.28) 写为
+\[\frac{K^2L\norm{r(y^+)}_2}{2}\le\left(\frac{K^2L\norm{r(y)}_2}{2}\right)^2,\]
+其中 $y^+=y+\Delta y_{\rm nt}$。因此，若 $r(y^{+k})$ 表示满足 $\norm{r(y)}_2\le1/(K^2L)$ 的某次迭代之后 $k$ 步的残差，则
+\[\frac{K^2L\norm{r(y^{+k})}_2}{2}\le\left(\frac{K^2L\norm{r(y)}_2}{2}\right)^{2^k}\le\left(\frac12\right)^{2^k},\]
+即 $\norm{r(y)}_2$ 二次收敛到零。
+
+为证明迭代点序列收敛，将证明它是 Cauchy 序列。假设迭代点 $y$ 满足 $\norm{r(y)}_2\le1/(K^2L)$，用 $y^{+k}$ 表示它之后的第 $k$ 个迭代点。
+
+% Source PDF page 554 (printed p. 540)
+这些点位于二次收敛区域，步长为 $1$，所以
+\[\begin{aligned}
+\norm{y^{+k}-y}_2&\le\norm{y^{+k}-y^{+(k-1)}}_2+\cdots+\norm{y^+-y}_2\\
+&=\norm{Dr(y^{+(k-1)})^{-1}r(y^{+(k-1)})}_2+\cdots+\norm{Dr(y)^{-1}r(y)}_2\\
+&\le K\bigl(\norm{r(y^{+(k-1)})}_2+\cdots+\norm{r(y)}_2\bigr)\\
+&\le K\norm{r(y)}_2\sum_{i=0}^{k-1}\left(\frac{K^2L\norm{r(y)}_2}{2}\right)^{2^i-1}\\
+&\le K\norm{r(y)}_2\sum_{i=0}^{k-1}\left(\frac12\right)^{2^i-1}\\
+&\le2K\norm{r(y)}_2,
+\end{aligned}\]
+第三行使用了所有迭代点上均有 $\norm{Dr^{-1}}_2\le K$ 的假设。由于 $\norm{r(y^{(k)})}_2$ 收敛到零，$y^{(k)}$ 是 Cauchy 序列，因而收敛。由 $r$ 的连续性，极限点 $y^\star$ 满足 $r(y^\star)=0$。这就证明了本节开头的断言：所作假设蕴含最优点 $(x^\star,\nu^\star)$ 存在。
+
+\subsection{凸凹博弈}
+不可行初始点牛顿法的收敛证明表明，它可用于比等式约束凸优化问题更广的一类问题。假设 $r:\R^n\to\R^n$ 可微，其导数在 $S$ 上满足 Lipschitz 条件，且 $\norm{Dr(x)^{-1}}_2$ 在 $S$ 上有界，其中
+\[S=\{x\in\dom r\mid\norm{r(x)}_2\le\norm{r(x^{(0)})}_2\}\]
+为闭集。那么，从 $x^{(0)}$ 出发的不可行初始点牛顿法，收敛到 $S$ 中的一个 $r(x)=0$ 的解。在不可行初始点牛顿法中，它用于 $r$ 是等式约束凸优化问题残差的特例。但它也适用于其他几个有意义的情形，其中一个是求解凸凹博弈。（其他相关博弈的讨论见第5.4.3节和习题5.25。）
+
+$\R^p\times\R^q$ 上的无约束双人零和博弈，由收益函数 $f:\R^{p+q}\to\R$ 定义。含义是：参与者1选择值或行动 $u\in\R^p$，参与者2选择值或行动 $v\in\R^q$；根据这些选择，参与者1向参与者2支付 $f(u,v)$。参与者1希望最小化这笔支付，参与者2则希望最大化它。
+
+如果参与者1先选 $u$，而参与者2知道这一选择，那么参与者2会选择使 $f(u,v)$ 最大的 $v$，所获支付为 $\sup_v f(u,v)$，假定上确界可取得。如果参与者1预期参与者2会这样做，就应选择使 $\sup_v f(u,v)$ 最小的 $u$。最后，参与者1向参与者2的支付为
+\begin{equation}\inf_u\sup_v f(u,v).\tag{10.30}\end{equation}

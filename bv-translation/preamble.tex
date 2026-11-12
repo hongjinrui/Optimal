@@ -1,0 +1,55 @@
+\IfFontExistsTF{Noto Serif CJK SC}{
+  \setCJKmainfont{Noto Serif CJK SC}[BoldFont={Noto Serif CJK SC Bold},AutoFakeSlant=0.15]
+  \setCJKsansfont{Noto Sans CJK SC}
+  \setCJKmonofont{Noto Sans Mono CJK SC}
+}{
+  \setCJKmainfont{FandolSong-Regular.otf}[BoldFont=FandolSong-Bold.otf,ItalicFont=FandolKai-Regular.otf]
+  \setCJKsansfont{FandolHei-Regular.otf}[BoldFont=FandolHei-Bold.otf]
+  \setCJKmonofont{FandolFang-Regular.otf}
+}
+\usepackage[a4paper,margin=25mm,headheight=15pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,bm,mathtools}
+\usepackage{graphicx,booktabs,longtable,array,tabularx,multirow}
+\usepackage{enumitem,xcolor,caption,float}
+\usepackage[unicode,hypertexnames=false,colorlinks=true,linkcolor=blue!45!black,citecolor=green!35!black,urlcolor=blue!55!black]{hyperref}
+\usepackage{bookmark,fancyhdr}
+\setlist{topsep=5pt,leftmargin=2em}
+\setcounter{tocdepth}{1}
+\setlength{\parskip}{3pt}
+\setlength{\emergencystretch}{2em}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Prob}{\mathbb P}
+\newcommand{\T}{\mathsf T}
+\newcommand{\HH}{\mathsf H}
+\newcommand{\I}{\mathbf I}
+\newcommand{\one}{\mathbf 1}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert}
+\newcommand{\abs}[1]{\left\lvert #1\right\rvert}
+\newcommand{\inner}[2]{\left\langle #1,#2\right\rangle}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\cl}{cl}
+\DeclareMathOperator{\relint}{relint}
+\DeclareMathOperator{\conv}{conv}
+\DeclareMathOperator{\aff}{aff}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\vol}{vol}
+\DeclareMathOperator{\epi}{epi}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\newenvironment{origexample}[1]{\par\medskip\noindent\textbf{例 #1}\quad\ignorespaces}{\par\medskip}
+\newenvironment{origalgorithm}[1]{\par\medskip\noindent\textbf{算法 #1}\quad\ignorespaces}{\par\medskip}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small 凸优化}
+\fancyhead[R]{\small\nouppercase{\leftmark}}
+\fancyfoot[C]{\thepage}
+\ctexset{chapter={format=\huge\bfseries,beforeskip=8pt,afterskip=22pt},section={format=\Large\bfseries}}
+\numberwithin{equation}{chapter}
+\graphicspath{{figures/}}
+\hypersetup{pdftitle={凸优化：中文译稿},pdfauthor={Stephen Boyd; Lieven Vandenberghe}}

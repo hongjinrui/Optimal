@@ -13,3 +13,5 @@ latex/main.pdf
 venv/
 __pycache__/
 *.pyc
+# Translated book build products
+bv-translation/main.pdf

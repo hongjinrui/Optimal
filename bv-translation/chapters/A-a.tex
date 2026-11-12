@@ -1,0 +1,252 @@
+% Source PDF page 647 (printed p. 633)
+本附录简要回顾数学分析与线性代数中的一些基本概念。这里的介绍并不全面，主要是为了说明本书使用的记号。
+
+\section{范数}
+\subsection{内积、欧几里得范数与夹角}
+实 $n$ 维向量集合 $\R^n$ 上的标准内积为
+\[
+ \langle x,y\rangle=x^Ty=\sum_{i=1}^n x_iy_i,\qquad x,y\in\R^n.
+\]
+本书用 $x^Ty$ 而不用 $\langle x,y\rangle$ 表示内积。向量 $x\in\R^n$ 的\emph{欧几里得范数}，或 $\ell_2$ 范数，定义为
+\begin{equation}
+ \norm{x}_2=(x^Tx)^{1/2}=(x_1^2+\cdots+x_n^2)^{1/2}.\tag{A.1}
+\end{equation}
+柯西--施瓦茨不等式说明，对于任意 $x,y\in\R^n$，有 $\abs{x^Ty}\leq\norm{x}_2\norm{y}_2$。非零向量 $x,y\in\R^n$ 的（无符号）夹角定义为
+\[
+ \angle(x,y)=\cos^{-1}\left(\frac{x^Ty}{\norm{x}_2\norm{y}_2}\right),
+\]
+其中取 $\cos^{-1}(u)\in[0,\pi]$。若 $x^Ty=0$，则称 $x$ 与 $y$ 正交。
+
+实 $m\times n$ 矩阵集合 $\R^{m\times n}$ 上的标准内积为
+\[
+ \langle X,Y\rangle=\tr(X^TY)=\sum_{i=1}^m\sum_{j=1}^n X_{ij}Y_{ij},\qquad X,Y\in\R^{m\times n}.
+\]
+这里 $\tr$ 表示矩阵的迹，即对角元素之和。我们用 $\tr(X^TY)$ 而不用 $\langle X,Y\rangle$ 表示内积。注意，
+% Source PDF page 648 (printed p. 634)
+两个矩阵的内积，等于把矩阵元素按某种次序（例如按行）排列成的两个 $\R^{mn}$ 中向量的内积。
+
+矩阵 $X\in\R^{m\times n}$ 的 \emph{Frobenius 范数}为
+\begin{equation}
+ \norm{X}_F=\bigl(\tr(X^TX)\bigr)^{1/2}
+ =\left(\sum_{i=1}^m\sum_{j=1}^n X_{ij}^2\right)^{1/2}.\tag{A.2}
+\end{equation}
+Frobenius 范数就是把矩阵元素排列成向量后得到的欧几里得范数。（矩阵的 $\ell_2$ 范数是另一个范数，见第A.1.5节。）
+
+对称 $n\times n$ 矩阵集合 $\mathbf S^n$ 上的标准内积为
+\[
+ \langle X,Y\rangle=\tr(XY)=\sum_{i=1}^n\sum_{j=1}^n X_{ij}Y_{ij}
+ =\sum_{i=1}^n X_{ii}Y_{ii}+2\sum_{i<j}X_{ij}Y_{ij}.
+\]
+
+\subsection{范数、距离与单位球}
+定义域为 $\dom f=\R^n$ 的函数 $f:\R^n\to\R$，若满足以下条件，就称为\emph{范数}：
+\begin{itemize}
+\item $f$ 非负：对所有 $x\in\R^n$，有 $f(x)\geq0$；
+\item $f$ 具有正定性：只有 $x=0$ 时，才有 $f(x)=0$；
+\item $f$ 齐次：对所有 $x\in\R^n$ 和 $t\in\R$，有 $f(tx)=\abs t f(x)$；
+\item $f$ 满足三角不等式：对所有 $x,y\in\R^n$，有 $f(x+y)\leq f(x)+f(y)$。
+\end{itemize}
+我们使用记号 $f(x)=\norm{x}$，以表示范数是 $\R$ 上绝对值的推广。指定某个范数时，写作 $\norm{x}_{\mathrm{symb}}$，下标用于提示所指的范数。
+
+范数度量向量 $x$ 的长度。两个向量 $x,y$ 之间的距离，可以用它们之差的长度来度量，即
+\[
+ \dist(x,y)=\norm{x-y}.
+\]
+我们称 $\dist(x,y)$ 为范数 $\norm{\cdot}$ 下 $x$ 与 $y$ 之间的距离。
+
+所有范数不超过一的向量组成的集合
+\[
+ B=\{x\in\R^n\mid\norm{x}\leq1\}
+\]
+称为范数 $\norm{\cdot}$ 的\emph{单位球}。单位球具有以下性质：
+\begin{itemize}
+\item $B$ 关于原点对称，即 $x\in B$ 当且仅当 $-x\in B$；
+\item $B$ 是凸集；
+\item $B$ 闭、有界，且内部非空。
+\end{itemize}
+反过来，若集合 $C\subseteq\R^n$ 满足这三个条件，则它是某个范数的单位球，该范数为
+\[
+ \norm{x}=\bigl(\sup\{t\geq0\mid tx\in C\}\bigr)^{-1}.
+\]
+
+% Source PDF page 649 (printed p. 635)
+\subsection{例子}
+最简单的范数是 $\R$ 上的绝对值。另一个简单例子是前面式(A.1)定义的 $\R^n$ 上的欧几里得范数或 $\ell_2$ 范数。$\R^n$ 上另外两个常用范数是\emph{绝对值和范数}，即 $\ell_1$ 范数，
+\[
+ \norm{x}_1=\abs{x_1}+\cdots+\abs{x_n},
+\]
+以及 \emph{Chebyshev 范数}，即 $\ell_\infty$ 范数，
+\[
+ \norm{x}_\infty=\max\{\abs{x_1},\ldots,\abs{x_n}\}.
+\]
+这三个范数属于同一个范数族，其参数通常用常数 $p\geq1$ 表示：$\ell_p$ 范数定义为
+\[
+ \norm{x}_p=(\abs{x_1}^p+\cdots+\abs{x_n}^p)^{1/p}.
+\]
+$p=1$ 时得到 $\ell_1$ 范数，$p=2$ 时得到欧几里得范数。容易证明，对于任意 $x\in\R^n$，
+\[
+ \lim_{p\to\infty}\norm{x}_p=\max\{\abs{x_1},\ldots,\abs{x_n}\},
+\]
+因此，$\ell_\infty$ 范数也以极限的形式属于这个范数族。
+
+另一个重要的范数族是\emph{二次范数}。对于 $P\in\mathbf S_{++}^n$，定义 $P$ 二次范数为
+\[
+ \norm{x}_P=(x^TPx)^{1/2}=\norm{P^{1/2}x}_2.
+\]
+二次范数的单位球是椭球；反过来，如果一个范数的单位球是椭球，则该范数是二次范数。
+
+$\R^{m\times n}$ 上常用的范数，包括式(A.2)定义的 Frobenius 范数、绝对值和范数
+\[
+ \norm{X}_{\mathrm{sav}}=\sum_{i=1}^m\sum_{j=1}^n\abs{X_{ij}},
+\]
+以及最大绝对值范数
+\[
+ \norm{X}_{\mathrm{mav}}=\max\{\abs{X_{ij}}\mid i=1,\ldots,m,\ j=1,\ldots,n\}.
+\]
+第A.1.5节还会介绍其他几个重要的矩阵范数。
+
+\subsection{范数的等价性}
+设 $\norm{\cdot}_a$ 和 $\norm{\cdot}_b$ 是 $\R^n$ 上的两个范数。数学分析的一个基本结论是，存在正常数 $\alpha,\beta$，使所有 $x\in\R^n$ 都满足
+\[
+ \alpha\norm{x}_a\leq\norm{x}_b\leq\beta\norm{x}_a.
+\]
+% Source PDF page 650 (printed p. 636)
+这意味着这两个范数\emph{等价}，即它们给出相同的开集、相同的收敛序列，等等（见第A.2节）。（因此，任意有限维向量空间上的所有范数都等价；在无限维向量空间上，这一结论未必成立。）利用凸分析，可以给出一个更具体的结论：对于 $\R^n$ 上的任意范数 $\norm{\cdot}$，都存在二次范数 $\norm{\cdot}_P$，使所有 $x$ 都满足
+\[
+ \norm{x}_P\leq\norm{x}\leq\sqrt n\norm{x}_P.
+\]
+换句话说，$\R^n$ 上的任意范数，都可以用一个二次范数在 $\sqrt n$ 的因子范围内一致逼近。（见第8.4.1节。）
+
+\subsection{算子范数}
+设 $\norm{\cdot}_a$ 和 $\norm{\cdot}_b$ 分别为 $\R^m$ 和 $\R^n$ 上的范数。定义矩阵 $X\in\R^{m\times n}$ 由这两个范数诱导的\emph{算子范数}为
+\[
+ \norm{X}_{a,b}=\sup\{\norm{Xu}_a\mid\norm{u}_b\leq1\}.
+\]
+（可以证明，这确实定义了 $\R^{m\times n}$ 上的一个范数。）
+
+若 $\norm{\cdot}_a$ 和 $\norm{\cdot}_b$ 都是欧几里得范数，则 $X$ 的算子范数等于它的最大奇异值，记为 $\norm{X}_2$：
+\[
+ \norm{X}_2=\sigma_{\max}(X)=\bigl(\lambda_{\max}(X^TX)\bigr)^{1/2}.
+\]
+当 $X\in\R^{m\times1}$ 时，它与 $\R^m$ 上的欧几里得范数一致，因而记号没有冲突。这个范数也称为 $X$ 的\emph{谱范数}或 $\ell_2$ 范数。
+
+再举一个例子。$\R^m$ 和 $\R^n$ 上的 $\ell_\infty$ 范数诱导的范数记为 $\norm{X}_\infty$，它是\emph{最大行和范数}：
+\[
+ \norm{X}_\infty=\sup\{\norm{Xu}_\infty\mid\norm{u}_\infty\leq1\}
+ =\max_{i=1,\ldots,m}\sum_{j=1}^n\abs{X_{ij}}.
+\]
+由 $\R^m$ 和 $\R^n$ 上的 $\ell_1$ 范数诱导的范数，记为 $\norm{X}_1$，它是\emph{最大列和范数}：
+\[
+ \norm{X}_1=\max_{j=1,\ldots,n}\sum_{i=1}^m\abs{X_{ij}}.
+\]
+
+\subsection{对偶范数}
+设 $\norm{\cdot}$ 是 $\R^n$ 上的范数。它对应的\emph{对偶范数}记为 $\norm{\cdot}_*$，定义为
+\[
+ \norm{z}_*=\sup\{z^Tx\mid\norm{x}\leq1\}.
+\]
+（可以证明它是一个范数。）把 $z^T$ 看作 $1\times n$ 矩阵，并在 $\R^n$ 上取范数 $\norm{\cdot}$，在 $\R$ 上取绝对值，就可以把对偶范数解释为 $z^T$ 的算子范数：
+\[
+ \norm{z}_*=\sup\{\abs{z^Tx}\mid\norm{x}\leq1\}.
+\]
+% Source PDF page 651 (printed p. 637)
+由对偶范数的定义，有
+\[
+ z^Tx\leq\norm{x}\norm{z}_*,
+\]
+对所有 $x,z$ 都成立。这个不等式在以下意义下是紧的：对于任意 $x$，都存在一个 $z$ 使不等式取等号；类似地，对于任意 $z$，也存在一个 $x$ 使其取等号。对偶范数的对偶就是原范数，即对所有 $x$ 有 $\norm{x}_{**}=\norm{x}$。（在无限维向量空间中，这未必成立。）
+
+欧几里得范数的对偶仍是欧几里得范数，因为
+\[
+ \sup\{z^Tx\mid\norm{x}_2\leq1\}=\norm{z}_2.
+\]
+这一结论由柯西--施瓦茨不等式得到；当 $z\neq0$ 时，在 $\norm{x}_2\leq1$ 下使 $z^Tx$ 最大的点是 $z/\norm{z}_2$。
+
+$\ell_\infty$ 范数的对偶是 $\ell_1$ 范数：
+\[
+ \sup\{z^Tx\mid\norm{x}_\infty\leq1\}=\sum_{i=1}^n\abs{z_i}=\norm{z}_1,
+\]
+而 $\ell_1$ 范数的对偶是 $\ell_\infty$ 范数。更一般地，$\ell_p$ 范数的对偶是 $\ell_q$ 范数，其中 $1/p+1/q=1$，即 $q=p/(p-1)$。
+
+再考虑 $\R^{m\times n}$ 上的 $\ell_2$ 范数，即谱范数。它的对偶范数为
+\[
+ \norm{Z}_{2*}=\sup\{\tr(Z^TX)\mid\norm{X}_2\leq1\},
+\]
+其结果是奇异值之和，
+\[
+ \norm{Z}_{2*}=\sigma_1(Z)+\cdots+\sigma_r(Z)=\tr(Z^TZ)^{1/2},
+\]
+其中 $r=\rank Z$。这个范数有时称为\emph{核范数}。
+
+\section{数学分析}
+\subsection{开集与闭集}
+对于 $x\in C\subseteq\R^n$，若存在 $\epsilon>0$ 使
+\[
+ \{y\mid\norm{y-x}_2\leq\epsilon\}\subseteq C,
+\]
+即存在一个以 $x$ 为中心、完全包含在 $C$ 中的球，则称 $x$ 为 $C$ 的\emph{内点}。$C$ 的所有内点组成的集合称为 $C$ 的\emph{内部}，记作 $\operatorname{int}C$。（由于 $\R^n$ 上的所有范数都与欧几里得范数等价，因此所有范数给出的内点集合相同。）若 $\operatorname{int}C=C$，即 $C$ 中每一点都是内点，则称 $C$ 为\emph{开集}。若 $C\subseteq\R^n$ 的补集 $\R^n\setminus C=\{x\in\R^n\mid x\notin C\}$ 是开集，则称 $C$ 为\emph{闭集}。
+
+% Source PDF page 652 (printed p. 638)
+集合 $C$ 的\emph{闭包}定义为
+\[
+ \cl C=\R^n\setminus\operatorname{int}(\R^n\setminus C),
+\]
+即 $C$ 的补集的内部的补集。点 $x$ 属于 $C$ 的闭包，当且仅当对每个 $\epsilon>0$，都存在 $y\in C$ 使 $\norm{x-y}_2\leq\epsilon$。
+
+也可以用收敛序列与极限点描述闭集和闭包。集合 $C$ 为闭集，当且仅当它包含 $C$ 中每一个收敛序列的极限点。换句话说，若 $x_1,x_2,\ldots$ 收敛到 $x$，且 $x_i\in C$，则 $x\in C$。$C$ 的闭包，就是 $C$ 中所有收敛序列的极限点组成的集合。
+
+集合 $C$ 的\emph{边界}定义为
+\[
+ \operatorname{bd}C=\cl C\setminus\operatorname{int}C.
+\]
+边界点 $x$（即 $x\in\operatorname{bd}C$）具有以下性质：对所有 $\epsilon>0$，都存在 $y\in C$ 和 $z\notin C$ 使
+\[
+ \norm{y-x}_2\leq\epsilon,\qquad\norm{z-x}_2\leq\epsilon,
+\]
+即在任意靠近 $x$ 的地方，既有属于 $C$ 的点，也有不属于 $C$ 的点。开集和闭集也可以用边界来刻画：$C$ 为闭集，当且仅当它包含自己的边界，即 $\operatorname{bd}C\subseteq C$；$C$ 为开集，当且仅当它不包含任何边界点，即 $C\cap\operatorname{bd}C=\varnothing$。
+
+\subsection{上确界与下确界}
+设 $C\subseteq\R$。若对每个 $x\in C$ 都有 $x\leq a$，则称数 $a$ 是 $C$ 的一个\emph{上界}。集合 $C$ 的所有上界组成的集合，或者为空（此时称 $C$ 无上界），或者为整个 $\R$（仅当 $C=\varnothing$ 时），或者为闭的无穷区间 $[b,\infty)$。数 $b$ 称为集合 $C$ 的\emph{最小上界}或\emph{上确界}，记作 $\sup C$。我们约定 $\sup\varnothing=-\infty$；若 $C$ 无上界，则 $\sup C=\infty$。若 $\sup C\in C$，则称 $C$ 的上确界被\emph{取到}或\emph{达到}。
+
+当 $C$ 是有限集时，$\sup C$ 就是其元素中的最大值。一些作者在上确界能够取到时，用 $\max C$ 表示上确界；本书沿用通常的数学约定，仅在集合 $C$ 有限时使用 $\max C$。
+
+\emph{下界}和\emph{下确界}的定义类似。若对每个 $x\in C\subseteq\R$ 都有 $a\leq x$，则称 $a$ 是 $C$ 的一个下界。集合 $C\subseteq\R$ 的下确界（或\emph{最大下界}）定义为 $\inf C=-\sup(-C)$。当 $C$ 有限时，下确界就是其中最小的元素。我们约定 $\inf\varnothing=\infty$；若 $C$ 无下界，即没有任何下界，则 $\inf C=-\infty$。
+
+% Source PDF page 653 (printed p. 639)
+\section{函数}
+\subsection{函数记号}
+本书的函数记号基本采用标准用法，只有一处例外。写
+\[
+ f:A\to B
+\]
+时，我们的意思是，$f$ 是定义在集合 $\dom f\subseteq A$ 上、取值于集合 $B$ 的函数；特别地，$\dom f$ 可以是 $A$ 的真子集。因此，$f:\R^n\to\R^m$ 表示 $f$ 把某些 $n$ 维向量映射成 $m$ 维向量，并不表示对每个 $x\in\R^n$ 都定义了 $f(x)$。这个约定与计算机语言中的函数声明类似：指定函数输入和输出参数的数据类型，是在规定函数的语法，并不保证每一个具有指定数据类型的输入参数都有效。
+
+例如，考虑函数 $f:\mathbf S^n\to\R$，
+\begin{equation}
+ f(X)=\log\det X,\tag{A.3}
+\end{equation}
+其定义域为 $\dom f=\mathbf S_{++}^n$。记号 $f:\mathbf S^n\to\R$ 规定了 $f$ 的语法：它接受一个对称 $n\times n$ 矩阵，并返回一个实数。$\dom f=\mathbf S_{++}^n$ 则规定了哪些对称矩阵是有效的输入参数，即仅限正定矩阵。式(A.3)说明，对于 $X\in\dom f$，$f(X)$ 的值是什么。
+
+\subsection{连续性}
+若对每个 $\epsilon>0$，都存在 $\delta$ 使
+\[
+ y\in\dom f,\quad\norm{y-x}_2\leq\delta
+ \quad\Longrightarrow\quad\norm{f(y)-f(x)}_2\leq\epsilon,
+\]
+则称函数 $f:\R^n\to\R^m$ 在点 $x\in\dom f$ 处\emph{连续}。
+
+连续性可以用极限来描述：若 $\dom f$ 中的序列 $x_1,x_2,\ldots$ 收敛到一点 $x\in\dom f$，则序列 $f(x_1),f(x_2),\ldots$ 收敛到 $f(x)$，即
+\[
+ \lim_{i\to\infty}f(x_i)=f\left(\lim_{i\to\infty}x_i\right).
+\]
+若函数 $f$ 在其定义域中的每一点都连续，则称 $f$ 连续。
+
+\subsection{闭函数}
+若对于每个 $\alpha\in\R$，下水平集
+\[
+ \{x\in\dom f\mid f(x)\leq\alpha\}
+\]
+都是闭集，则称函数 $f:\R^n\to\R$ 为\emph{闭函数}。这等价于 $f$ 的上图
+\[
+ \epi f=\{(x,t)\in\R^{n+1}\mid x\in\dom f,\ f(x)\leq t\}
+\]

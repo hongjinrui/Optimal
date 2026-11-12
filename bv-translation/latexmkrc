@@ -1,0 +1,4 @@
+$pdf_mode = 5;
+$xelatex = 'xelatex -interaction=nonstopmode -halt-on-error %O %S';
+$max_repeat = 5;
+$xdvipdfmx = 'xdvipdfmx -V 7 %O -o %D %S';

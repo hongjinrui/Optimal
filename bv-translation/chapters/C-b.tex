@@ -1,0 +1,269 @@
+% Source PDF page 682 (printed p. 668)
+分解—求解法也可以用于计算逆矩阵 $A^{-1}$：对 $i=1,\ldots,n$ 求解 $Ax=e_i$，即计算 $A^{-1}I$。这需要一次分解与 $n$ 次求解，因此代价为 $f+ns$。
+
+\section{LU、Cholesky 与 \texorpdfstring{$LDL^T$}{LDLT} 分解}
+\subsection{LU分解}
+每个非奇异矩阵 $A\in\R^{n\times n}$ 都可以分解为
+\[
+ A=PLU,
+\]
+其中 $P\in\R^{n\times n}$ 是置换矩阵，$L\in\R^{n\times n}$ 为单位下三角矩阵，$U\in\R^{n\times n}$ 为非奇异上三角矩阵。这称为 $A$ 的 \emph{LU 分解}。也可以写成 $P^TA=LU$，其中 $P^TA$ 是将 $A$ 的各行重新排列后得到的矩阵。计算 LU 分解的标准算法称为\emph{部分选主元的高斯消去法}，或\emph{行选主元的高斯消去法}。若不利用 $A$ 的任何结构，计算代价为 $(2/3)n^3$ 次浮点运算；我们先讨论这种情况。
+
+\subsubsection*{用LU分解求解线性方程组}
+LU 分解结合分解—求解法，是求解一般线性方程组 $Ax=b$ 的标准方法。
+
+\begin{origalgorithm}{C.1}
+\textbf{用LU分解求解线性方程组。}
+
+给定线性方程组 $Ax=b$，其中 $A$ 非奇异。
+\begin{enumerate}
+\item \textbf{LU分解。} 将 $A$ 分解为 $A=PLU$，需要 $(2/3)n^3$ 次浮点运算。
+\item \textbf{置换。} 求解 $Pz_1=b$，需要零次浮点运算。
+\item \textbf{前代。} 求解 $Lz_2=z_1$，需要 $n^2$ 次浮点运算。
+\item \textbf{回代。} 求解 $Ux=z_2$，需要 $n^2$ 次浮点运算。
+\end{enumerate}
+\end{origalgorithm}
+
+总代价为 $(2/3)n^3+2n^2$；若只保留最高阶项，则为 $(2/3)n^3$ 次浮点运算。
+
+若需要求解多个具有不同右端向量的线性方程组，即 $Ax_i=b_i$，$i=1,\ldots,m$，代价为
+\[
+ (2/3)n^3+2mn^2,
+\]
+因为只需分解 $A$ 一次，再进行 $m$ 组前代与回代。例如，对于同一系数矩阵和两个不同的右端向量，求解两个方程组的代价，基本上与求解一个相同。逆矩阵 $A^{-1}$ 可以通过求解 $Ax_i=e_i$ 得到，其中 $x_i$ 是 $A^{-1}$ 的第 $i$ 列，$e_i$ 为第 $i$ 个单位向量。它需要 $(8/3)n^3$，即约 $3n^3$ 次浮点运算。
+
+若 $A$ 具有某些结构，例如为带状或稀疏矩阵，则计算 LU 分解的代价可少于 $(2/3)n^3$，相应的前代和回代也能更高效地进行。
+
+% Source PDF page 683 (printed p. 669)
+\subsubsection*{带状矩阵的LU分解}
+设 $A\in\R^{n\times n}$ 为\emph{带状矩阵}，即当 $\abs{i-j}>k$ 时 $a_{ij}=0$，其中 $k<n-1$ 称为 $A$ 的\emph{带宽}。我们关心 $k\ll n$ 的情形，即带宽远小于矩阵的大小。这时，$A$ 的 LU 分解大约需要 $4nk^2$ 次浮点运算。得到的上三角矩阵 $U$ 的带宽至多为 $2k$，下三角矩阵 $L$ 每列至多有 $k+1$ 个非零元素，因此前代和回代需要约 $6nk$ 次浮点运算。所以，若 $A$ 为带状矩阵，求解 $Ax=b$ 大约需要 $4nk^2$ 次浮点运算。
+
+\subsubsection*{稀疏矩阵的LU分解}
+当 $A$ 稀疏时，LU 分解通常同时包含行置换与列置换，即
+\[
+ A=P_1LUP_2,
+\]
+其中 $P_1,P_2$ 为置换矩阵，$L$ 为下三角矩阵，$U$ 为上三角矩阵。若因子 $L,U$ 稀疏，前代和回代就可以高效进行，从而得到高效求解 $Ax=b$ 的方法。$L,U$ 的稀疏性取决于置换 $P_1,P_2$；选择这些置换的一个目的，就是得到比较稀疏的因子。
+
+计算稀疏 LU 分解的代价，以较复杂的方式取决于 $A$ 的大小、非零元素个数、稀疏模式以及采用的具体算法，但往往远小于稠密 LU 分解的代价。许多情况下，当 $n$ 很大时，代价近似随 $n$ 线性增长。这意味着，当 $A$ 稀疏时，可以非常高效地求解 $Ax=b$，其计算量常常近似为 $n$ 阶。
+
+\subsection{Cholesky分解}
+若 $A\in\R^{n\times n}$ 对称正定，则可以分解为
+\[
+ A=LL^T,
+\]
+其中 $L$ 为非奇异下三角矩阵，对角元素为正。这称为 $A$ 的 \emph{Cholesky 分解}，可以看作满足 $L=U^T$ 的对称 LU 分解。矩阵 $L$ 由 $A$ 唯一确定，称为 $A$ 的 \emph{Cholesky 因子}。稠密矩阵的 Cholesky 分解，即不利用任何结构时，需要 $(1/3)n^3$ 次浮点运算，是 LU 分解代价的一半。
+
+\subsubsection*{用Cholesky分解求解正定方程组}
+当 $A$ 对称正定时，可以用 Cholesky 分解求解 $Ax=b$。
+
+% Source PDF page 684 (printed p. 670)
+\begin{origalgorithm}{C.2}
+\textbf{用Cholesky分解求解线性方程组。}
+
+给定线性方程组 $Ax=b$，其中 $A\in\mathbf S_{++}^n$。
+\begin{enumerate}
+\item \textbf{Cholesky分解。} 将 $A$ 分解为 $A=LL^T$，需要 $(1/3)n^3$ 次浮点运算。
+\item \textbf{前代。} 求解 $Lz_1=b$，需要 $n^2$ 次浮点运算。
+\item \textbf{回代。} 求解 $L^Tx=z_1$，需要 $n^2$ 次浮点运算。
+\end{enumerate}
+\end{origalgorithm}
+总代价为 $(1/3)n^3+2n^2$，即约 $(1/3)n^3$ 次浮点运算。
+
+对于带状矩阵和稀疏矩阵的 Cholesky 分解，有专门的算法，其复杂度远低于 $(1/3)n^3$。
+
+\subsubsection*{带状矩阵的Cholesky分解}
+若 $A$ 对称正定，且为带宽 $k$ 的带状矩阵，则它的 Cholesky 因子 $L$ 也为带宽 $k$ 的带状矩阵，计算 $L$ 需要 $nk^2$ 次浮点运算，相应求解步骤的代价为 $4nk$ 次。
+
+\subsubsection*{稀疏矩阵的Cholesky分解}
+若 $A$ 对称正定且稀疏，通常将其分解为
+\[
+ A=PLL^TP^T,
+\]
+其中 $P$ 为置换矩阵，$L$ 为对角元素为正的下三角矩阵。也可以写成 $P^TAP=LL^T$，即 $LL^T$ 是 $P^TAP$ 的 Cholesky 分解。可以把这理解为：先将变量与方程重新排序，再对经置换后的矩阵作标准 Cholesky 分解。由于对于任何置换矩阵 $P$，$P^TAP$ 都正定，所以可以任意选择置换矩阵；每一种选择，都唯一对应一个 Cholesky 因子 $L$。然而，$P$ 的选择会大幅影响因子 $L$ 的稀疏性，从而大幅影响求解 $Ax=b$ 的效率。实际中使用各种启发式方法，选择一个能产生稀疏因子 $L$ 的置换 $P$。
+
+\begin{origexample}{C.1}
+\textbf{箭头稀疏模式的Cholesky分解。} 考虑如下形式的稀疏矩阵
+\[
+ A=\begin{bmatrix}1&u^T\\u&D\end{bmatrix},
+\]
+其中 $D\in\R^{n\times n}$ 为正对角矩阵，$u\in\R^n$。可以证明，若 $u^TD^{-1}u<1$，则 $A$ 正定。$A$ 的 Cholesky 分解为
+\begin{equation}
+ \begin{bmatrix}1&u^T\\u&D\end{bmatrix}
+ =\begin{bmatrix}1&0\\u&L\end{bmatrix}
+ \begin{bmatrix}1&u^T\\0&L^T\end{bmatrix},\tag{C.2}
+\end{equation}
+其中 $L$ 为下三角矩阵，$LL^T=D-uu^T$。对于一般的 $u$，矩阵 $D-uu^T$ 稠密，所以可以预期 $L$ 也稠密。虽然 $A$ 非常稀疏，大多数行只有两个非零元素，但它的 Cholesky 因子却几乎完全稠密。
+
+% Source PDF page 685 (printed p. 671)
+另一方面，若把 $A$ 的第一行和第一列移到最后，重新排序后的矩阵具有如下 Cholesky 分解：
+\[
+ \begin{bmatrix}D&u\\u^T&1\end{bmatrix}
+ =\begin{bmatrix}D^{1/2}&0\\u^TD^{-1/2}&\sqrt{1-u^TD^{-1}u}\end{bmatrix}
+ \begin{bmatrix}D^{1/2}&D^{-1/2}u\\0&\sqrt{1-u^TD^{-1}u}\end{bmatrix}.
+\]
+此时，Cholesky 因子的第 $(1,1)$ 个分块是对角矩阵，因此因子非常稀疏。
+
+这个例子说明，重新排序会显著影响 Cholesky 因子的稀疏性。本例的最佳置换很明显，好的排序启发式方法都会选择这种次序，把稠密的行和列移到最后。对于更复杂的稀疏模式，要找出使 $L$ 中零元素最多的最佳排序，可能非常困难，但各种启发式方法可以给出良好的次优置换。
+\end{origexample}
+
+在稀疏 Cholesky 分解中，排序置换 $P$ 通常只根据 $A$ 的稀疏模式确定，而不依赖非零元素的具体数值。选定 $P$ 后，也可以在不知道 $A$ 的非零元素数值的情况下，确定 $L$ 的稀疏模式。这两个步骤合称 $A$ 的\emph{符号分解}，是稀疏 Cholesky 分解的第一步。相比之下，稀疏 LU 分解的置换矩阵除取决于稀疏模式外，还依赖 $A$ 的具体数值。
+
+符号分解之后进行\emph{数值分解}，即计算 $L$ 的非零元素。稀疏 Cholesky 软件包通常为符号分解和数值分解分别提供例程。这在许多应用中很有用，因为符号分解的代价不小，往往与数值分解相当。例如，假设需要求解 $m$ 个线性方程组
+\[
+ A_1x=b_1,\qquad A_2x=b_2,\qquad\ldots,\qquad A_mx=b_m,
+\]
+其中 $A_i$ 都对称正定，数值不同但稀疏模式相同。设一次符号分解代价为 $f_{\mathrm{symb}}$，一次数值分解代价为 $f_{\mathrm{num}}$，求解步骤代价为 $s$。则求解这 $m$ 个方程组需要
+\[
+ f_{\mathrm{symb}}+m(f_{\mathrm{num}}+s)
+\]
+次浮点运算，因为这 $m$ 个方程组只需共同进行一次符号分解。若每个方程组都单独作一次符号分解，flop 数就会变成 $m(f_{\mathrm{symb}}+f_{\mathrm{num}}+s)$。
+
+\subsection{\texorpdfstring{$LDL^T$}{LDLT}分解}
+每个非奇异对称矩阵 $A$ 都可以分解为
+\[
+ A=PLDL^TP^T,
+\]
+% Source PDF page 686 (printed p. 672)
+其中 $P$ 为置换矩阵，$L$ 为对角元素为正的下三角矩阵，$D$ 为分块对角矩阵，其对角块是非奇异的 $1\times1$ 或 $2\times2$ 矩阵。这称为 $A$ 的 \emph{$LDL^T$ 分解}。Cholesky 分解可看作 $P=I$、$D=I$ 时的 $LDL^T$ 分解。不利用 $A$ 的任何结构时，计算 $LDL^T$ 分解需要 $(1/3)n^3$ 次浮点运算。
+
+\begin{origalgorithm}{C.3}
+\textbf{用$LDL^T$分解求解线性方程组。}
+
+给定线性方程组 $Ax=b$，其中 $A\in\mathbf S^n$ 非奇异。
+\begin{enumerate}
+% Source algorithm C.3 prints P rather than P^T at the right end of the factorization.
+\item \textbf{$LDL^T$分解。} 将 $A$ 分解为 $A=PLDL^TP$，需要 $(1/3)n^3$ 次浮点运算。
+\item \textbf{置换。} 求解 $Pz_1=b$，需要零次浮点运算。
+\item \textbf{前代。} 求解 $Lz_2=z_1$，需要 $n^2$ 次浮点运算。
+\item \textbf{分块对角求解。} 求解 $Dz_3=z_2$，所需浮点运算次数为 $n$ 量级。
+\item \textbf{回代。} 求解 $L^Tz_4=z_3$，需要 $n^2$ 次浮点运算。
+\item \textbf{置换。} 求解 $P^Tx=z_4$，需要零次浮点运算。
+\end{enumerate}
+\end{origalgorithm}
+只保留主导项时，总代价为 $(1/3)n^3$ 次浮点运算。
+
+\subsubsection*{带状与稀疏矩阵的$LDL^T$分解}
+与 LU 和 Cholesky 分解一样，稀疏矩阵或带状矩阵的 $LDL^T$ 分解也有专门的方法。这些方法与相应的 Cholesky 分解方法类似，只是多了因子 $D$。在稀疏 $LDL^T$ 分解中，置换矩阵 $P$ 不能像稀疏 Cholesky 分解那样仅按 $A$ 的稀疏模式选择，它还依赖 $A$ 中非零元素的具体数值。
+
+\section{分块消去与Schur补}
+\subsection{消去一组变量}
+本节介绍一种求解 $Ax=b$ 的通用方法：先消去一部分变量，再对余下的变量求解一个更小的线性方程组。对于稠密无结构矩阵，这种方法没有优势；但当 $A$ 中与被消去变量对应的子矩阵容易分解，例如为分块对角或带状矩阵时，这种方法就可能比通用方法高效得多。
+
+将变量 $x\in\R^n$ 分成两个分块或子向量，
+\[
+ x=\begin{bmatrix}x_1\\x_2\end{bmatrix},
+\]
+其中 $x_1\in\R^{n_1}$、$x_2\in\R^{n_2}$。将线性方程组 $Ax=b$ 相应地分块为
+\begin{equation}
+ \begin{bmatrix}A_{11}&A_{12}\\A_{21}&A_{22}\end{bmatrix}
+ \begin{bmatrix}x_1\\x_2\end{bmatrix}=\begin{bmatrix}b_1\\b_2\end{bmatrix},\tag{C.3}
+\end{equation}
+% Source PDF page 687 (printed p. 673)
+其中 $A_{11}\in\R^{n_1\times n_1}$、$A_{22}\in\R^{n_2\times n_2}$。假设 $A_{11}$ 可逆，就能按以下方式从方程中消去 $x_1$。由第一个方程，可用 $x_2$ 表示 $x_1$：
+\begin{equation}
+ x_1=A_{11}^{-1}(b_1-A_{12}x_2).\tag{C.4}
+\end{equation}
+代入第二个方程，得到
+\begin{equation}
+ (A_{22}-A_{21}A_{11}^{-1}A_{12})x_2=b_2-A_{21}A_{11}^{-1}b_1.\tag{C.5}
+\end{equation}
+这称为从原方程中消去 $x_1$ 后得到的\emph{约化方程}。约化方程(C.5)与方程(C.4)合起来，等价于原方程组(C.3)。约化方程中的矩阵，称为 $A$ 中第一个分块 $A_{11}$ 的 \emph{Schur 补}：
+\[
+ S=A_{22}-A_{21}A_{11}^{-1}A_{12}
+\]
+（另见第A.5.5节）。Schur 补 $S$ 非奇异，当且仅当 $A$ 非奇异。
+
+方程(C.5)与(C.4)给出了求解原方程组(C.3)的另一种方法：先形成 Schur 补 $S$，再通过求解(C.5)得到 $x_2$，最后按(C.4)计算 $x_1$。可将这一方法概括如下。
+
+\begin{origalgorithm}{C.4}
+\textbf{用分块消去法求解线性方程组。}
+
+给定非奇异线性方程组(C.3)，其中 $A_{11}$ 非奇异。
+\begin{enumerate}
+\item 计算 $A_{11}^{-1}A_{12}$ 与 $A_{11}^{-1}b_1$。
+\item 形成 $S=A_{22}-A_{21}A_{11}^{-1}A_{12}$ 与 $\widetilde b=b_2-A_{21}A_{11}^{-1}b_1$。
+\item 求解 $Sx_2=\widetilde b$，得到 $x_2$。
+\item 求解 $A_{11}x_1=b_1-A_{12}x_2$，得到 $x_1$。
+\end{enumerate}
+\end{origalgorithm}
+
+\paragraph{注C.1\quad 分块分解—求解解释。}
+分块消去可以根据以下分解，用第C.2.2节的分解—求解法解释：
+\[
+ \begin{bmatrix}A_{11}&A_{12}\\A_{21}&A_{22}\end{bmatrix}
+ =\begin{bmatrix}A_{11}&0\\A_{21}&S\end{bmatrix}
+ \begin{bmatrix}I&A_{11}^{-1}A_{12}\\0&I\end{bmatrix}.
+\]
+这可以看作分块 LU 分解。它给出以下求解(C.3)的方法：先通过“分块前代”求解
+\[
+ \begin{bmatrix}A_{11}&0\\A_{21}&S\end{bmatrix}
+ \begin{bmatrix}z_1\\z_2\end{bmatrix}=\begin{bmatrix}b_1\\b_2\end{bmatrix},
+\]
+再通过“分块回代”求解
+\[
+ \begin{bmatrix}I&A_{11}^{-1}A_{12}\\0&I\end{bmatrix}
+ \begin{bmatrix}x_1\\x_2\end{bmatrix}=\begin{bmatrix}z_1\\z_2\end{bmatrix}.
+\]
+% Source PDF page 688 (printed p. 674)
+得到的表达式与分块消去法相同：
+\begin{align*}
+ z_1&=A_{11}^{-1}b_1,\\
+ z_2&=S^{-1}(b_2-A_{21}z_1),\\
+ x_2&=z_2,\\
+ x_1&=z_1-A_{11}^{-1}A_{12}z_2.
+\end{align*}
+事实上，现代的分解—求解法正是基于这样的分块分解与求解步骤，并根据处理器、处理器数量和缓存大小等选择最合适的分块尺寸。
+
+\subsubsection*{分块消去法的复杂度分析}
+为分析通过分块消去求解线性方程组可能带来的优势，统计其 flop 数。用 $f,s$ 分别表示分解 $A_{11}$ 与进行相应求解步骤的代价。为简化分析，暂且把 $A_{12},A_{22},A_{21}$ 视为稠密无结构矩阵。分块消去法求解 $Ax=b$ 的四个步骤，其 flop 数分别为：
+\begin{enumerate}
+\item 计算 $A_{11}^{-1}A_{12}$ 和 $A_{11}^{-1}b_1$，需要分解 $A_{11}$，并进行 $n_2+1$ 次求解，因此代价为 $f+(n_2+1)s$；略去较低阶项 $s$ 后，为 $f+n_2s$。
+\item 形成 Schur 补 $S$，需要计算矩阵乘积 $A_{21}(A_{11}^{-1}A_{12})$，代价为 $2n_2^2n_1$，以及一次 $n_2\times n_2$ 矩阵相减，代价为 $n_2^2$，后者可以略去。形成 $\widetilde b=b_2-A_{21}A_{11}^{-1}b_1$ 的代价，也低于形成 $S$ 的主导代价，因此可以忽略。所以，第二步只计主导项的总代价为 $2n_2^2n_1$。
+\item 为计算 $x_2=S^{-1}\widetilde b$，先分解 $S$ 再求解，代价为 $(2/3)n_2^3$。
+\item 形成 $b_1-A_{12}x_2$ 需要 $2n_1n_2+n_1$ 次浮点运算。计算 $x_1=A_{11}^{-1}(b_1-A_{12}x_2)$ 时，可以利用第一步已得到的 $A_{11}$ 的分解，只需进行代价为 $s$ 的求解步骤。这两项代价都被其他项主导，因此可以忽略。
+\end{enumerate}
+总计需要
+\begin{equation}
+ f+n_2s+2n_2^2n_1+(2/3)n_2^3\tag{C.6}
+\end{equation}
+次浮点运算。
+
+\subsubsection*{消去无结构矩阵}
+先考虑完全不利用 $A_{11}$ 结构的情况。对 $A_{11}$ 作标准 LU 分解，$f=(2/3)n_1^3$；然后通过一次前代与一次回代求解，$s=2n_1^2$。分块消去法求解方程组的 flop 数为
+\[
+ (2/3)n_1^3+n_2(2n_1^2)+2n_2^2n_1+(2/3)n_2^3
+ =(2/3)(n_1+n_2)^3,
+\]
+% Source PDF page 689 (printed p. 675)
+这与直接对更大的方程组使用标准 LU 分解完全相同。也就是说，不利用 $A_{11}$ 的结构时，分块消去法没有优势。
+
+另一方面，当 $A_{11}$ 的结构允许我们比标准方法更高效地进行分解与求解时，分块消去法就可能更高效。
+
+\subsubsection*{消去对角矩阵}
+若 $A_{11}$ 为对角矩阵，则无需分解，求解步骤只需 $n_1$ 次浮点运算，因此 $f=0$、$s=n_1$。代入(C.6)，只保留最高阶项，得到
+\[
+ 2n_2^2n_1+(2/3)n_2^3
+\]
+次浮点运算，远小于标准方法的 $(2/3)(n_1+n_2)^3$。特别地，标准方法的 flop 数随 $n_1$ 三次增长，而分块消去法只随 $n_1$ 线性增长。
+
+\subsubsection*{消去带状矩阵}
+若 $A_{11}$ 为带宽 $k$ 的带状矩阵，则分解大约需要 $f=4k^2n_1$ 次浮点运算，求解大约需要 $s=6kn_1$ 次。分块消去法求解 $Ax=b$ 的总复杂度为
+\[
+ 4k^2n_1+6n_2kn_1+2n_2^2n_1+(2/3)n_2^3.
+\]
+假设 $k$ 远小于 $n_1,n_2$，就可以简化为 $2n_2^2n_1+(2/3)n_2^3$，与 $A_{11}$ 为对角矩阵时相同。特别地，复杂度随 $n_1$ 线性增长，而标准方法随 $n_1$ 三次增长。
+
+$A_{11}$ 为带状矩阵的矩阵，有时称为\emph{箭头矩阵}，因为当 $n_1\gg n_2$ 时，稀疏模式看起来像一支指向右下方的箭头。对于具有箭头结构的线性方程组，分块消去法可以远比标准方法高效。
+
+\subsubsection*{消去分块对角矩阵}
+设 $A_{11}$ 为分块对角矩阵，各个方形对角块的大小为 $m_1,\ldots,m_k$，其中 $n_1=m_1+\cdots+m_k$。可以分别对每个分块作分解，也可以对每个分块分别进行求解步骤。对它们使用标准方法，得到
+\[
+ f=(2/3)m_1^3+\cdots+(2/3)m_k^3,\qquad s=2m_1^2+\cdots+2m_k^2,
+\]
+因此分块消去法的总复杂度为
+\[
+ (2/3)\sum_{i=1}^k m_i^3+2n_2\sum_{i=1}^k m_i^2
+ +2n_2^2\sum_{i=1}^k m_i+(2/3)n_2^3.
+\]
+若分块尺寸远小于 $n_1$，且 $n_1\gg n_2$，分块消去节省的计算量就非常可观。

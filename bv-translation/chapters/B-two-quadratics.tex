@@ -1,0 +1,276 @@
+\chapter{涉及两个二次函数的问题}
+% Source PDF page 667 (printed p. 653)
+本附录讨论一些涉及两个二次函数的优化问题，这两个函数未必凸。对于这些问题，即使它们非凸，仍有若干很强的结论成立。
+
+\section{单约束二次优化}
+考虑只有一个约束的问题
+\begin{equation}
+\begin{array}{ll}
+\text{最小化} & x^T A_0x+2b_0^Tx+c_0\\
+\text{约束条件} & x^TA_1x+2b_1^Tx+c_1\leq0,
+\end{array}\tag{B.1}
+\end{equation}
+变量为 $x\in\R^n$，问题参数为 $A_i\in\mathbf S^n$、$b_i\in\R^n$、$c_i\in\R$。我们不假设 $A_i\succeq0$，因此问题(B.1)不是凸优化问题。它的拉格朗日函数为
+\[
+ L(x,\lambda)=x^T(A_0+\lambda A_1)x+2(b_0+\lambda b_1)^Tx+c_0+\lambda c_1,
+\]
+对偶函数为
+\begin{align*}
+ g(\lambda)&=\inf_x L(x,\lambda)\\
+ &=\begin{cases}
+ c_0+\lambda c_1-(b_0+\lambda b_1)^T(A_0+\lambda A_1)^\dagger(b_0+\lambda b_1),
+ &\begin{array}{l} A_0+\lambda A_1\succeq0,\\ b_0+\lambda b_1\in\mathcal R(A_0+\lambda A_1),\end{array}\\
+ -\infty,&\text{其他情况}
+ \end{cases}
+\end{align*}
+（见第A.5.4节）。利用 Schur 补，对偶问题可以表示为
+\begin{equation}
+ \begin{array}{ll}
+ \text{最大化}&\gamma\\
+ \text{约束条件}&\lambda\geq0\\[.3em]
+ &\begin{bmatrix}A_0+\lambda A_1&b_0+\lambda b_1\\(b_0+\lambda b_1)^T&c_0+\lambda c_1-\gamma\end{bmatrix}\succeq0,
+ \end{array}\tag{B.2}
+\end{equation}
+% Source PDF page 668 (printed p. 654)
+这是一个包含两个变量 $\gamma,\lambda\in\R$ 的半正定规划。
+
+第一个结论是，只要满足 Slater 约束资格条件，即存在某个 $x$ 使 $x^TA_1x+2b_1^Tx+c_1<0$，问题(B.1)及其拉格朗日对偶问题(B.2)之间就成立强对偶。换句话说，若(B.1)严格可行，则(B.1)与(B.2)的最优值相等。（证明见第B.4节。）
+
+\subsection*{松弛解释}
+半正定规划(B.2)的对偶为
+\begin{equation}
+ \begin{array}{ll}
+ \text{最小化}&\tr(A_0X)+2b_0^Tx+c_0\\
+ \text{约束条件}&\tr(A_1X)+2b_1^Tx+c_1\leq0\\[.3em]
+ &\begin{bmatrix}X&x\\x^T&1\end{bmatrix}\succeq0,
+ \end{array}\tag{B.3}
+\end{equation}
+这是以 $X\in\mathbf S^n$、$x\in\R^n$ 为变量的半正定规划。联系原问题(B.1)，可以对这个对偶半正定规划作出一个有意思的解释。
+
+首先，(B.1)等价于
+\begin{equation}
+ \begin{array}{ll}
+ \text{最小化}&\tr(A_0X)+2b_0^Tx+c_0\\
+ \text{约束条件}&\tr(A_1X)+2b_1^Tx+c_1\leq0\\
+ &X=xx^T.
+ \end{array}\tag{B.4}
+\end{equation}
+在这个表述中，我们把二次项 $x^TA_ix$ 写成 $\tr(A_ixx^T)$，再引入新变量 $X=xx^T$。问题(B.4)有一个线性目标函数、一个线性不等式约束以及一个非线性等式约束 $X=xx^T$。下一步是把等式约束替换为不等式 $X\succeq xx^T$：
+% The uploaded source omits the factors 2 in both linear terms of (B.5).
+% These source formulas are retained; see SOURCE-ISSUES.txt.
+\begin{equation}
+ \begin{array}{ll}
+ \text{最小化}&\tr(A_0X)+b_0^Tx+c_0\\
+ \text{约束条件}&\tr(A_1X)+b_1^Tx+c_1\leq0\\
+ &X\succeq xx^T.
+ \end{array}\tag{B.5}
+\end{equation}
+这个问题称为(B.4)的\emph{松弛}，因为我们把其中一个约束换成了更宽松的约束。最后，利用 Schur 补，可以把(B.5)中的矩阵不等式写成线性矩阵不等式，从而得到(B.3)。
+
+把(B.3)解释为(B.1)的松弛，可以立即得出几个有意思的事实。首先，(B.3)的最优值显然小于或等于(B.1)的最优值，因为我们在更大的集合上最小化同一个目标函数。其次，如果(B.3)的最优解满足 $X=xx^T$，那么 $x$ 必定是(B.1)的最优解。
+
+把前面的结论——若(B.1)严格可行，则(B.1)与(B.2)之间成立强对偶——与两个对偶半正定规划(B.2)、(B.3)之间的强对偶结合起来，可以得出：只要(B.1)严格可行，原非凸二次问题(B.1)与半正定规划松弛(B.3)之间也成立强对偶。
+
+% Source PDF page 669 (printed p. 655)
+\section{S过程}
+下一个结论是关于两个非凸二次不等式的择一定理。设 $A_1,A_2\in\mathbf S^n$、$b_1,b_2\in\R^n$、$c_1,c_2\in\R$，并假定存在 $\hat x$ 使
+\[
+ \hat x^TA_2\hat x+2b_2^T\hat x+c_2<0.
+\]
+则存在 $x\in\R^n$ 满足
+\begin{equation}
+ x^TA_1x+2b_1^Tx+c_1<0,\qquad
+ x^TA_2x+2b_2^Tx+c_2\leq0,\tag{B.6}
+\end{equation}
+当且仅当不存在 $\lambda$ 使
+\begin{equation}
+ \lambda\geq0,\qquad
+ \begin{bmatrix}A_1&b_1\\b_1^T&c_1\end{bmatrix}
+ +\lambda\begin{bmatrix}A_2&b_2\\b_2^T&c_2\end{bmatrix}\succeq0.\tag{B.7}
+\end{equation}
+换句话说，(B.6)与(B.7)互为强择一系统。
+
+不难证明，这个结论与第B.1节的结论等价，证明见第B.4节。这里指出，这两个不等式系统显然互为弱择一系统，因为(B.6)与(B.7)同时成立会导致矛盾：
+\begin{align*}
+ 0&\leq
+ \begin{bmatrix}x\\1\end{bmatrix}^{\!T}
+ \left(\begin{bmatrix}A_1&b_1\\b_1^T&c_1\end{bmatrix}
+ +\lambda\begin{bmatrix}A_2&b_2\\b_2^T&c_2\end{bmatrix}\right)
+ \begin{bmatrix}x\\1\end{bmatrix}\\
+ &=x^TA_1x+2b_1^Tx+c_1+\lambda(x^TA_2x+2b_2^Tx+c_2)\\
+ &<0.
+\end{align*}
+
+这个择一定理有时称为\emph{S过程}，通常表述为：对于 $F_i\in\mathbf S^n$、$g_i\in\R^n$、$h_i\in\R$，蕴含关系
+\[
+ x^TF_1x+2g_1^Tx+h_1\leq0
+ \quad\Longrightarrow\quad
+ x^TF_2x+2g_2^Tx+h_2\leq0
+\]
+成立，当且仅当存在 $\lambda$ 满足
+\[
+ \lambda\geq0,\qquad
+ \begin{bmatrix}F_2&g_2\\g_2^T&h_2\end{bmatrix}
+ \preceq\lambda\begin{bmatrix}F_1&g_1\\g_1^T&h_1\end{bmatrix},
+\]
+其中假设存在一点 $\hat x$ 使 $\hat x^TF_1\hat x+2g_1^T\hat x+h_1<0$。（充分性显然成立。）
+
+\begin{origexample}{B.1}
+\textbf{椭球包含关系。} 具有非空内部的椭球 $\mathcal E\subseteq\R^n$ 可以表示为一个二次函数的下水平集，
+\[
+ \mathcal E=\{x\mid x^TFx+2g^Tx+h\leq0\},
+\]
+其中 $F\in\mathbf S_{++}^n$，且 $h-g^TF^{-1}g<0$。设 $\widetilde{\mathcal E}$ 是另一个具有类似表示的椭球，
+\[
+ \widetilde{\mathcal E}=\{x\mid x^T\widetilde F x+2\widetilde g^Tx+\widetilde h\leq0\},
+\]
+其中 $\widetilde F\in\mathbf S_{++}^n$，$\widetilde h-\widetilde g^T\widetilde F^{-1}\widetilde g<0$。由S过程可知，$\mathcal E\subseteq\widetilde{\mathcal E}$ 当且仅当存在 $\lambda>0$ 使
+\[
+ \begin{bmatrix}\widetilde F&\widetilde g\\\widetilde g^T&\widetilde h\end{bmatrix}
+ \preceq\lambda\begin{bmatrix}F&g\\g^T&h\end{bmatrix}.
+\]
+\end{origexample}
+
+% Source PDF page 670 (printed p. 656)
+\section{两个对称矩阵的值域}
+下面的结论是第B.1节强对偶结论与第B.2节S过程的证明基础。若 $A,B\in\mathbf S^n$，则对于任意 $X\in\mathbf S_+^n$，都存在 $x\in\R^n$ 使
+\begin{equation}
+ x^TAx=\tr(AX),\qquad x^TBx=\tr(BX).\tag{B.8}
+\end{equation}
+
+\paragraph{注B.1\quad 几何解释。}
+这个结论可以通过集合
+\[
+ W(A,B)=\{(x^TAx,x^TBx)\mid x\in\R^n\}
+\]
+作出一个有意思的解释。它是 $\R^2$ 中的一个锥，由集合
+\[
+ F(A,B)=\{(x^TAx,x^TBx)\mid\norm{x}_2=1\}
+\]
+生成，后者称为矩阵对 $(A,B)$ 的二维值域。从几何上看，$W(A,B)$ 是秩一半正定矩阵集合在线性变换 $f:\mathbf S^n\to\R^2$ 下的像，其中
+\[
+ f(X)=(\tr(AX),\tr(BX)).
+\]
+对于每个 $X\in\mathbf S_+^n$ 都存在满足(B.8)的 $x$，这一结论意味着
+\[
+ W(A,B)=f(\mathbf S_+^n).
+\]
+换句话说，$W(A,B)$ 是凸锥。
+
+证明是构造性的，采用对 $X$ 的秩作归纳的方法。假定对于所有满足 $1\leq\rank X\leq k$ 的 $X\in\mathbf S_+^n$，其中 $k\geq2$，都存在 $x$ 使(B.8)成立。则当 $\rank X=k+1$ 时，结论也成立，理由如下。秩为 $k+1$ 的矩阵 $X\in\mathbf S_+^n$ 可以写成 $X=yy^T+Z$，其中 $y\neq0$，$Z\in\mathbf S_+^n$ 且 $\rank Z=k$。根据假设，存在 $z$ 使 $\tr(AZ)=z^TAz$、$\tr(BZ)=z^TBz$。因此
+\[
+ \tr(AX)=\tr\bigl(A(yy^T+zz^T)\bigr),\qquad
+ \tr(BX)=\tr\bigl(B(yy^T+zz^T)\bigr).
+\]
+$yy^T+zz^T$ 的秩为一或二，故根据假设，存在 $x$ 使(B.8)成立。
+
+因此，只需证明 $\rank X\leq2$ 时的结论。$\rank X=0$ 和 $\rank X=1$ 的情况无需证明。当 $\rank X=2$ 时，可以分解 $X=VV^T$，其中 $V\in\R^{n\times2}$ 的两列 $v_1,v_2$ 线性无关。不失一般性，可以假设 $V^TAV$ 是对角矩阵。（若它不是对角矩阵，则用 $VP$ 代替 $V$，其中 $V^TAV=P\diag(\lambda)P^T$ 是 $V^TAV$ 的特征值分解。）将 $V^TAV$ 和 $V^TBV$ 写成
+\[
+ V^TAV=\begin{bmatrix}\lambda_1&0\\0&\lambda_2\end{bmatrix},\qquad
+ V^TBV=\begin{bmatrix}\sigma_1&\gamma\\\gamma&\sigma_2\end{bmatrix},
+\]
+并定义
+\[
+ w=\begin{bmatrix}\tr(AX)\\\tr(BX)\end{bmatrix}
+ =\begin{bmatrix}\lambda_1+\lambda_2\\\sigma_1+\sigma_2\end{bmatrix}.
+\]
+% Source PDF page 671 (printed p. 657)
+我们需要证明，对某个 $x$，有 $w=(x^TAx,x^TBx)$。
+
+分两种情况。首先，假设 $(0,\gamma)$ 是向量 $(\lambda_1,\sigma_1)$ 和 $(\lambda_2,\sigma_2)$ 的线性组合：
+\[
+ 0=z_1\lambda_1+z_2\lambda_2,\qquad
+ \gamma=z_1\sigma_1+z_2\sigma_2,
+\]
+其中 $z_1,z_2$ 为某两个实数。这时取 $x=\alpha v_1+\beta v_2$，$\alpha,\beta$ 由以下两个二元二次方程确定：
+\begin{equation}
+ \alpha^2+2\alpha\beta z_1=1,\qquad
+ \beta^2+2\alpha\beta z_2=1.\tag{B.9}
+\end{equation}
+这样就能得到所需结论，因为
+\begin{align*}
+ &\begin{bmatrix}
+ (\alpha v_1+\beta v_2)^TA(\alpha v_1+\beta v_2)\\
+ (\alpha v_1+\beta v_2)^TB(\alpha v_1+\beta v_2)
+ \end{bmatrix}\\
+ &\quad=\alpha^2\begin{bmatrix}\lambda_1\\\sigma_1\end{bmatrix}
+ +2\alpha\beta\begin{bmatrix}0\\\gamma\end{bmatrix}
+ +\beta^2\begin{bmatrix}\lambda_2\\\sigma_2\end{bmatrix}\\
+ &\quad=(\alpha^2+2\alpha\beta z_1)\begin{bmatrix}\lambda_1\\\sigma_1\end{bmatrix}
+ +(\beta^2+2\alpha\beta z_2)\begin{bmatrix}\lambda_2\\\sigma_2\end{bmatrix}\\
+ &\quad=\begin{bmatrix}\lambda_1+\lambda_2\\\sigma_1+\sigma_2\end{bmatrix}.
+\end{align*}
+
+还需证明方程(B.9)有解。首先，$\alpha,\beta$ 都必须非零，因此这两个方程可以等价地写成
+\[
+ \alpha^2\bigl(1+2(\beta/\alpha)z_1\bigr)=1,\qquad
+ (\beta/\alpha)^2+2(\beta/\alpha)(z_2-z_1)=1.
+\]
+方程 $t^2+2t(z_2-z_1)=1$ 有一个正根和一个负根。这两个根中至少有一个（与 $z_1$ 同号的那个根）满足 $1+2tz_1>0$，因此可取
+\[
+ \alpha=\frac{\pm1}{\sqrt{1+2tz_1}},\qquad\beta=t\alpha.
+\]
+由此得到两组满足(B.9)的解 $(\alpha,\beta)$。（若 $t^2+2t(z_2-z_1)=1$ 的两个根都满足 $1+2tz_1>0$，则得到四组解。）
+
+接着，假设 $(0,\gamma)$ 不是 $(\lambda_1,\sigma_1)$ 和 $(\lambda_2,\sigma_2)$ 的线性组合。这尤其意味着 $(\lambda_1,\sigma_1)$ 和 $(\lambda_2,\sigma_2)$ 线性相关。因此，它们的和 $w=(\lambda_1+\lambda_2,\sigma_1+\sigma_2)$ 是 $(\lambda_1,\sigma_1)$ 或 $(\lambda_2,\sigma_2)$ 的非负倍数，也可能同时是两者的非负倍数。若存在 $\alpha$ 使 $w=\alpha^2(\lambda_1,\sigma_1)$，则可取 $x=\alpha v_1$；若存在 $\beta$ 使 $w=\beta^2(\lambda_2,\sigma_2)$，则可取 $x=\beta v_2$。
+
+\section{强对偶结论的证明}
+首先证明第B.2节给出的S过程。$\hat x$ 严格可行这一假设意味着矩阵
+\[
+ \begin{bmatrix}A_2&b_2\\b_2^T&c_2\end{bmatrix}
+\]
+% Source PDF page 672 (printed p. 658)
+至少有一个负特征值。因此
+\[
+ \tau\geq0,\qquad
+ \tau\begin{bmatrix}A_2&b_2\\b_2^T&c_2\end{bmatrix}\succeq0
+ \quad\Longrightarrow\quad\tau=0.
+\]
+可以应用例5.14中关于非严格线性矩阵不等式的择一定理。该定理说明，(B.7)不可行，当且仅当以下系统可行：
+\[
+ X\succeq0,\qquad
+ \tr\left(X\begin{bmatrix}A_1&b_1\\b_1^T&c_1\end{bmatrix}\right)<0,\qquad
+ \tr\left(X\begin{bmatrix}A_2&b_2\\b_2^T&c_2\end{bmatrix}\right)\leq0.
+\]
+由第B.3节，这又等价于以下系统可行：
+\begin{gather*}
+ \begin{bmatrix}v\\w\end{bmatrix}^{\!T}
+ \begin{bmatrix}A_1&b_1\\b_1^T&c_1\end{bmatrix}
+ \begin{bmatrix}v\\w\end{bmatrix}<0,\\
+ \begin{bmatrix}v\\w\end{bmatrix}^{\!T}
+ \begin{bmatrix}A_2&b_2\\b_2^T&c_2\end{bmatrix}
+ \begin{bmatrix}v\\w\end{bmatrix}\leq0.
+\end{gather*}
+若 $w\neq0$，则 $x=v/w$ 是(B.6)的可行解。若 $w=0$，则有 $v^TA_1v<0$、$v^TA_2v\leq0$，于是 $x=\hat x+tv$ 满足
+\begin{align*}
+ x^TA_1x+2b_1^Tx+c_1
+ &=\hat x^TA_1\hat x+2b_1^T\hat x+c_1+t^2v^TA_1v\\
+ &\quad+2t(A_1\hat x+b_1)^Tv,\\
+ x^TA_2x+2b_2^Tx+c_2
+ &=\hat x^TA_2\hat x+2b_2^T\hat x+c_2+t^2v^TA_2v\\
+ &\quad+2t(A_2\hat x+b_2)^Tv\\
+ &<2t(A_2\hat x+b_2)^Tv.
+\end{align*}
+也就是说，根据 $(A_2\hat x+b_2)^Tv$ 的符号，令 $t\to+\infty$ 或 $t\to-\infty$，$x$ 就成为可行解。
+
+最后证明第B.1节的结论，即当(B.1)严格可行时，(B.1)与(B.2)的最优值相等。为此，注意当
+% The uploaded source omits the factors 2 in this implication.
+\[
+ x^TA_1x+b_1^Tx+c_1\leq0
+ \quad\Longrightarrow\quad
+ x^TA_0x+b_0^Tx+c_0\geq\gamma
+\]
+成立时，$\gamma$ 是(B.1)最优值的一个下界。由S过程，上述蕴含关系成立，当且仅当存在 $\lambda\geq0$ 使
+\[
+ \begin{bmatrix}A_0&b_0\\b_0^T&c_0-\gamma\end{bmatrix}
+ +\lambda\begin{bmatrix}A_1&b_1\\b_1^T&c_1\end{bmatrix}\succeq0,
+\]
+即 $\gamma,\lambda$ 是(B.2)的可行解。
+
+% Source PDF page 673 (printed p. 659)
+\section*{文献说明}
+\addcontentsline{toc}{section}{文献说明}
+本附录中的结论，在不同学科中有不同的名称。S过程这一术语来自控制领域；综述及相关文献见 Boyd、El Ghaoui、Feron 和 Balakrishnan [BEFB94，第23、33页]。在线性代数中，S过程的变体出现在一对对称矩阵的同时对角化问题中，例如 Calabi [Cal64] 和 Uhlig [Uhl79]。关于信赖域方法的非线性规划文献研究了强对偶结论的一些特殊情形（Stern 和 Wolkowicz [SW95]，Nocedal 和 Wright [NW99，第78页]）。
+
+Brickman [Bri61] 证明，对于 $A,B\in\mathbf S^n$，当 $n>2$ 时，这对矩阵的值域（即注B.1中定义的集合 $F(A,B)$）是凸集；并且，对于任意 $n$，集合 $W(A,B)$ 都是凸锥。第B.3节的证明以 Hestenes [Hes68] 为基础。更多相关结果与文献见 Horn 和 Johnson [HJ91，第1.8节]，以及 Ben-Tal 和 Nemirovski [BTN01，第4.10.5节]。
+% Source PDF page 674 (printed p. 660) is blank.

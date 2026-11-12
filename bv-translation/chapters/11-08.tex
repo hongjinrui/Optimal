@@ -1,0 +1,211 @@
+% Source PDF page 629 (printed p. 615), section 11.8 begins here.
+\section{实现}
+障碍法的主要计算工作，是计算中心化问题的牛顿步，即求解如下形式的线性方程组：
+\begin{equation}
+\begin{bmatrix}H&A^\T\\A&0\end{bmatrix}
+\begin{bmatrix}\Delta x_{\mathrm{nt}}\\\nu_{\mathrm{nt}}\end{bmatrix}
+=-\begin{bmatrix}g\\0\end{bmatrix},\tag{11.60}
+\end{equation}
+其中
+\[
+H=t\nabla^2 f_0(x)+\sum_{i=1}^m\frac1{f_i(x)^2}\nabla f_i(x)\nabla f_i(x)^\T
++\sum_{i=1}^m\frac1{-f_i(x)}\nabla^2 f_i(x),
+\]
+% Source PDF page 630 (printed p. 616)
+\[
+g=t\nabla f_0(x)+\sum_{i=1}^m\frac1{-f_i(x)}\nabla f_i(x).
+\]
+原始—对偶方法的牛顿方程具有完全相同的结构，所以本节的讨论也适用于原始—对偶方法。
+
+(11.60) 的系数矩阵具有 KKT 结构，因此第9.7节和第10.4节的全部讨论都适用。特别地，可以用消元求解，并利用稀疏性、对角加低秩等结构。下面给出几个常见例子，利用 KKT 方程的特殊结构更有效地计算牛顿步。
+
+\subsubsection*{稀疏问题}
+如果原问题稀疏，即目标函数与每个约束函数各自只依赖少量变量，则目标函数和约束函数的梯度、Hessian 矩阵都稀疏，系数矩阵 $A$ 也稀疏。只要 $m$ 不太大，矩阵 $H$ 很可能也稀疏，因此可以用稀疏矩阵方法计算牛顿步。即便 KKT 矩阵中有少数较稠密的行和列，这种方法也很可能效果不错；例如，少数等式约束涉及大量变量时，就会出现这种情况。
+
+\subsubsection*{可分目标与少量线性不等式约束}
+假设目标函数可分，而且线性等式与不等式约束相对较少。此时 $\nabla^2 f_0(x)$ 为对角矩阵，$\nabla^2 f_i(x)$ 各项为零，因此 $H$ 是对角加低秩矩阵。由于 $H$ 容易求逆，可以高效求解 KKT 方程。只要 $\nabla^2 f_0(x)$ 容易求逆，例如它是带状、稀疏或分块对角矩阵，就可以使用同样的方法。
+
+\subsection{标准形式线性规划}
+首先讨论标准形式 LP 的障碍法实现：
+\[
+\begin{aligned}\text{最小化}\quad&c^\T x\\\text{约束为}\quad&Ax=b,\qquad x\succeq0,\end{aligned}
+\]
+其中 $A\in\R^{m\times n}$。中心化问题
+\[
+\begin{aligned}\text{最小化}\quad&tc^\T x-\sum_{i=1}^n\log x_i\\\text{约束为}\quad&Ax=b\end{aligned}
+\]
+的牛顿方程为
+\[
+\begin{bmatrix}\diag(x)^{-2}&A^\T\\A&0\end{bmatrix}
+\begin{bmatrix}\Delta x_{\mathrm{nt}}\\\nu_{\mathrm{nt}}\end{bmatrix}
+=\begin{bmatrix}-tc+\diag(x)^{-1}\one\\0\end{bmatrix}.
+\]
+
+% Source PDF page 631 (printed p. 617)
+通常通过分块消去 $\Delta x_{\mathrm{nt}}$ 来求解。由第一个方程，
+\begin{align*}
+\Delta x_{\mathrm{nt}}&=\diag(x)^2(-tc+\diag(x)^{-1}\one-A^\T\nu_{\mathrm{nt}})\\
+&=-t\diag(x)^2c+x-\diag(x)^2A^\T\nu_{\mathrm{nt}}.
+\end{align*}
+代入第二个方程，得到
+\[
+A\diag(x)^2A^\T\nu_{\mathrm{nt}}=-tA\diag(x)^2c+b.
+\]
+由于假设 $\rank A=m$，系数矩阵为正定矩阵。此外，若 $A$ 稀疏，则 $A\diag(x)^2A^\T$ 通常也稀疏，可以使用稀疏 Cholesky 分解。
+
+\subsection{\texorpdfstring{$\ell_1$}{ℓ₁} 范数逼近}
+考虑 $\ell_1$ 范数逼近问题
+\[
+\text{最小化}\quad\norm{Ax-b}_1,
+\]
+其中 $A\in\R^{m\times n}$。假设 $m,n$ 很大，$A$ 具有稀疏性等结构，讨论其实现，并与相应最小二乘问题
+\[
+\text{最小化}\quad\norm{Ax-b}_2^2
+\]
+的成本比较。
+
+首先引入辅助变量 $y\in\R^m$，将 $\ell_1$ 范数逼近问题写成 LP：
+\[
+\begin{aligned}
+\text{最小化}\quad&\one^\T y\\
+\text{约束为}\quad&\begin{bmatrix}A&-\I\\-A&-\I\end{bmatrix}\begin{bmatrix}x\\y\end{bmatrix}
+\preceq\begin{bmatrix}b\\-b\end{bmatrix}.
+\end{aligned}
+\]
+中心化问题的牛顿方程为
+\[
+\begin{bmatrix}A^\T&-A^\T\\-\I&-\I\end{bmatrix}
+\begin{bmatrix}D_1&0\\0&D_2\end{bmatrix}
+\begin{bmatrix}A&-\I\\-A&-\I\end{bmatrix}
+\begin{bmatrix}\Delta x_{\mathrm{nt}}\\\Delta y_{\mathrm{nt}}\end{bmatrix}
+=-\begin{bmatrix}A^\T g_1\\g_2\end{bmatrix},
+\]
+其中
+\[
+D_1=\diag(b-Ax+y)^{-2},\qquad D_2=\diag(-b+Ax+y)^{-2},
+\]
+而
+\begin{align*}
+g_1&=\diag(b-Ax+y)^{-1}\one-\diag(-b+Ax+y)^{-1}\one,\\
+g_2&=t\one-\diag(b-Ax+y)^{-1}\one-\diag(-b+Ax+y)^{-1}\one.
+\end{align*}
+将左端乘开，可以化简为
+\[
+\begin{bmatrix}A^\T(D_1+D_2)A&-A^\T(D_1-D_2)\\-(D_1-D_2)A&D_1+D_2\end{bmatrix}
+\begin{bmatrix}\Delta x_{\mathrm{nt}}\\\Delta y_{\mathrm{nt}}\end{bmatrix}
+=-\begin{bmatrix}A^\T g_1\\g_2\end{bmatrix}.
+\]
+
+% Source PDF page 632 (printed p. 618)
+分块消去 $\Delta y_{\mathrm{nt}}$，约化为
+\begin{equation}
+A^\T DA\Delta x_{\mathrm{nt}}=-A^\T g,\tag{11.61}
+\end{equation}
+其中
+\[
+D=4D_1D_2(D_1+D_2)^{-1}=2\bigl(\diag(y)^2+\diag(b-Ax)^2\bigr)^{-1},
+\]
+且
+\[
+g=g_1+(D_1-D_2)(D_1+D_2)^{-1}g_2.
+\]
+求出 $\Delta x_{\mathrm{nt}}$ 后，由
+\[
+\Delta y_{\mathrm{nt}}=(D_1+D_2)^{-1}\bigl(-g_2+(D_1-D_2)A\Delta x_{\mathrm{nt}}\bigr)
+\]
+得到 $\Delta y_{\mathrm{nt}}$。
+
+有意思的是，(11.61) 正是加权最小二乘问题
+\[
+\text{最小化}\quad\norm{D^{1/2}(A\Delta x+D^{-1}g)}_2
+\]
+的正规方程。换言之，求解 $\ell_1$ 范数逼近问题的成本，就是求解少量加权最小二乘问题的成本，矩阵 $A$ 相同，但权重逐次迭代变化。若 $A$ 的结构允许快速求解最小二乘问题，例如可利用稀疏性，那么也能快速求解 (11.61)。
+
+\subsection{不等式形式的半定规划}
+考虑 SDP
+\[
+\begin{aligned}\text{最小化}\quad&c^\T x\\\text{约束为}\quad&\sum_{i=1}^n x_iF_i+G\preceq0,\end{aligned}
+\]
+变量为 $x\in\R^n$，参数为 $F_1,\ldots,F_n,G\in\mathbf S^p$。采用对数行列式障碍函数，相应中心化问题为
+\[
+\text{最小化}\quad tc^\T x-\log\det\left(-\sum_{i=1}^n x_iF_i-G\right).
+\]
+牛顿步 $\Delta x_{\mathrm{nt}}$ 由 $H\Delta x_{\mathrm{nt}}=-g$ 求得，其中 Hessian 矩阵与梯度为
+\begin{align*}
+H_{ij}&=\tr(S^{-1}F_iS^{-1}F_j),\quad i,j=1,\ldots,n,\\
+g_i&=tc_i+\tr(S^{-1}F_i),\quad i=1,\ldots,n,
+\end{align*}
+这里 $S=-\sum_{i=1}^n x_iF_i-G$。一种标准做法是先形成 $H$ 与 $g$，再用 Cholesky 分解求解牛顿方程。
+
+先考察无结构情形，即假设所有矩阵都稠密，并且只记录浮点运算次数关于维数 $n,p$ 的阶数。首先形成 $S$，成本为 $np^2$ 阶。然后对 $S$ 作 Cholesky 分解，再对 $F_i$ 各列回代，计算每个 $S^{-1}F_i$；也可以先形成 $S^{-1}$ 再乘 $F_i$。每个 $i$ 的成本为 $p^3$ 阶，因此总成本为 $np^3$ 阶。最后，
+% Source PDF page 633 (printed p. 619)
+将 $H_{ij}$ 作为矩阵 $S^{-1}F_i$ 与 $S^{-1}F_j$ 的内积计算，成本为 $p^2$ 阶。共有 $n(n+1)/2$ 对，总成本为 $n^2p^2$ 阶。求出牛顿方向的成本为 $n^3$ 阶。因此，主导阶数为 $\max\{np^3,n^2p^2,n^3\}$。
+
+一般不能利用矩阵 $F_i,G$ 的稀疏性，因为即使 $F_i,G$ 稀疏，$H$ 也通常稠密。一个例外是 $F_i,G$ 具有相同的分块对角结构，此时上述全部运算都可以逐块完成。
+
+不过，通常可以利用 $F_i,G$ 共有的稀疏性，更高效地形成稠密 Hessian 矩阵 $H$。若能找到一种排列，使 $S$ 的 Cholesky 因子相当稀疏，就能高效计算 $S^{-1}F_i$，从而以高得多的效率形成 $H_{ij}$。
+
+一个经常出现的有意思例子，是带矩阵不等式
+\[
+\diag(x)\preceq B
+\]
+的 SDP。此时 $F_i=E_{ii}$，其中 $E_{ii}$ 是 $(i,i)$ 元为 $1$、其余元素均为零的矩阵。$H$ 可以非常高效地求出：
+\[
+H_{ij}=(S^{-1})_{ij}^2,
+\]
+其中 $S=B-\diag(x)$。因此形成 $H$ 的成本就是形成 $S^{-1}$ 的成本，至多为 $n^3$ 阶，即不利用任何其他结构时的成本。
+
+\subsection{网络速率优化}
+考虑第10.4.3节（第550页）最优网络流问题的一个变体，有时称为\emph{网络速率优化问题}。网络表示为有向图，有 $L$ 条弧或链路。货物或信息分组在网络中沿链路传输。网络支持 $n$ 条流，其非负速率 $x_1,\ldots,x_n$ 是优化变量。每条流从源节点沿固定或预先指定的路径，即路由，到达目的节点。一条链路可以同时承载多条流，其总流量是经过它的各流速率之和。每条链路具有正容量，表示它能处理的最大总流量。
+
+用流—链路关联矩阵 $A\in\R^{L\times n}$ 表示这些容量限制，定义
+\[
+A_{ij}=\begin{cases}1,&\text{流 $j$ 经过链路 $i$},\\0,&\text{否则}.\end{cases}
+\]
+链路 $i$ 的总流量为 $(Ax)_i$，因此链路容量约束可写为 $Ax\preceq c$，其中 $c_i$ 是链路 $i$ 的容量。通常每条路径只经过全部链路中的很少一部分，因此 $A$ 稀疏。
+
+在网络速率问题中，路径固定，并编码在作为参数的矩阵 $A$ 中；变量为流速率 $x_i$。目标
+% Source PDF page 634 (printed p. 620)
+是选择流速率，使可分效用函数
+\[
+U(x)=U_1(x_1)+\cdots+U_n(x_n)
+\]
+最大。假设每个 $U_i$，因而 $U$，都为凹且非减函数。可以将 $U_i(x_i)$ 看作以速率 $x_i$ 支持第 $i$ 条流获得的收入，$U(x)$ 则是全部流带来的总收入。网络速率优化问题为
+\begin{equation}\begin{aligned}
+\text{最大化}\quad&U(x)\\\text{约束为}\quad&Ax\preceq c,\qquad x\succeq0,
+\end{aligned}\tag{11.62}\end{equation}
+它是凸优化问题。
+
+用障碍法求解。每步都必须用牛顿法最小化如下形式的函数：
+\[
+-tU(x)-\sum_{i=1}^L\log(c-Ax)_i-\sum_{j=1}^n\log x_j.
+\]
+牛顿步 $\Delta x_{\mathrm{nt}}$ 由线性方程
+\[
+(D_0+A^\T D_1A+D_2)\Delta x_{\mathrm{nt}}=-g
+\]
+求得，其中
+\begin{align*}
+D_0&=-t\diag(U_1''(x),\ldots,U_n''(x)),\\
+D_1&=\diag(1/(c-Ax)_1^2,\ldots,1/(c-Ax)_L^2),\\
+D_2&=\diag(1/x_1^2,\ldots,1/x_n^2)
+\end{align*}
+为对角矩阵，且 $g\in\R^n$。这个 $n\times n$ 系数矩阵的稀疏结构可以精确刻画：
+\[
+(D_0+A^\T D_1A+D_2)_{ij}\ne0
+\]
+当且仅当流 $i$ 与流 $j$ 共用一条链路。如果路径较短，而且每条链路只经过较少路径，则该矩阵稀疏，可以使用稀疏 Cholesky 分解。如果有少数较稠密的行列，仍可以高效求解牛顿系统。少数流与许多其他流相交时会出现这种情况，例如少数流路径较长时。
+
+也可以利用矩阵求逆引理，通过求解系数矩阵为 $L\times L$ 的方程组计算牛顿步，其形式为
+\[
+\bigl(D_1^{-1}+A(D_0+D_2)^{-1}A^\T\bigr)y=-A(D_0+D_2)^{-1}g,
+\]
+然后计算
+\[
+\Delta x_{\mathrm{nt}}=-(D_0+D_2)^{-1}(g+A^\T y).
+\]
+这里也可精确描述稀疏模式：
+\[
+\bigl(D_1^{-1}+A(D_0+D_2)^{-1}A^\T\bigr)_{ij}\ne0
+\]
+当且仅当存在一条路径同时经过链路 $i$ 和链路 $j$。若大多数路径较短，该矩阵稀疏。若存在少数瓶颈，即少数链路承载了许多流，则该矩阵稀疏，但有少数稠密行列。

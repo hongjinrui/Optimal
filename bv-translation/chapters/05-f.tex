@@ -1,0 +1,332 @@
+% Source PDF page 279 (printed p. 265)
+与标量不等式问题一样，对偶函数给出原始问题（5.91）最优值 $p^\star$ 的下界。对于标量不等式，要求 $\lambda_i\ge0$；这里对偶变量的非负要求改为
+\[
+\lambda_i\succeq_{K_i^*}0,\quad i=1,\ldots,m,
+\]
+其中 $K_i^*$ 是 $K_i$ 的对偶锥。换言之，对应于不等式的拉格朗日乘子必须\emph{对偶非负}。
+
+弱对偶可直接由对偶锥定义得到。若 $\lambda_i\succeq_{K_i^*}0$、$f_i(\widetilde x)\preceq_{K_i}0$，则 $\lambda_i^\T f_i(\widetilde x)\le0$。因此，对任意原始可行点 $\widetilde x$ 和任意 $\lambda_i\succeq_{K_i^*}0$，有
+\[
+f_0(\widetilde x)+\sum_{i=1}^m\lambda_i^\T f_i(\widetilde x)
++\sum_{i=1}^p\nu_i h_i(\widetilde x)\le f_0(\widetilde x).
+\]
+对 $\widetilde x$ 取下确界，得到 $g(\lambda,\nu)\le p^\star$。
+
+拉格朗日对偶优化问题为
+\begin{equation}
+\begin{array}{ll}\text{最大化}&g(\lambda,\nu)\\
+\text{约束为}&\lambda_i\succeq_{K_i^*}0,\quad i=1,\ldots,m.\end{array}\tag{5.92}
+\end{equation}
+无论原始问题（5.91）是否凸，总有弱对偶 $d^\star\le p^\star$，其中 $d^\star$ 表示对偶问题（5.92）的最优值。
+
+\subsubsection*{Slater条件与强对偶}
+如预期，当原始问题凸且满足适当约束资格时，强对偶（$d^\star=p^\star$）成立。例如，对于问题
+\[
+\begin{array}{ll}\text{最小化}&f_0(x)\\
+\text{约束为}&f_i(x)\preceq_{K_i}0,\quad i=1,\ldots,m\\
+&Ax=b,\end{array}
+\]
+其中 $f_0$ 凸、$f_i$ 为 $K_i$-凸函数，Slater条件的推广版本是：存在 $x\in\relint D$，满足 $Ax=b$ 且 $f_i(x)\prec_{K_i}0$，$i=1,\ldots,m$。该条件蕴含强对偶（以及对偶最优值能够达到）。
+
+\begin{origexample}{5.11}
+\emph{半正定规划的拉格朗日对偶。}考虑不等式形式的半正定规划
+\begin{equation}
+\begin{array}{ll}\text{最小化}&c^\T x\\
+\text{约束为}&x_1F_1+\cdots+x_nF_n+G\preceq0,\end{array}\tag{5.93}
+\end{equation}
+其中 $F_1,\ldots,F_n,G\in\mathbf S^k$。（这里 $f_1$ 仿射，$K_1$ 是半正定锥 $\mathbf S_+^k$。）
+
+对该约束引入对偶变量或乘子 $Z\in\mathbf S^k$，则拉格朗日函数为
+\[
+\begin{aligned}
+L(x,Z)&=c^\T x+\tr\bigl((x_1F_1+\cdots+x_nF_n+G)Z\bigr)\\
+&=x_1(c_1+\tr(F_1Z))+\cdots+x_n(c_n+\tr(F_nZ))+\tr(GZ),
+\end{aligned}
+\]
+
+% Source PDF page 280 (printed p. 266)
+它关于 $x$ 仿射。对偶函数为
+\[
+g(Z)=\inf_xL(x,Z)=
+\begin{cases}
+\tr(GZ)&\tr(F_iZ)+c_i=0,\quad i=1,\ldots,n,\\
+-\infty&\text{其他情形}.
+\end{cases}
+\]
+因此对偶问题可写为
+\[
+\begin{array}{ll}\text{最大化}&\tr(GZ)\\
+\text{约束为}&\tr(F_iZ)+c_i=0,\quad i=1,\ldots,n\\
+&Z\succeq0.\end{array}
+\]
+（这里利用了 $\mathbf S_+^k$ 自对偶，即 $(\mathbf S_+^k)^*=\mathbf S_+^k$；见§2.6。）
+
+若半正定规划（5.93）严格可行，即存在 $x$ 使
+\[
+x_1F_1+\cdots+x_nF_n+G\prec0,
+\]
+则强对偶成立。
+\end{origexample}
+
+\begin{origexample}{5.12}
+\emph{标准形式锥规划的拉格朗日对偶。}考虑锥规划
+\[
+\begin{array}{ll}\text{最小化}&c^\T x\\
+\text{约束为}&Ax=b\\&x\succeq_K0,\end{array}
+\]
+其中 $A\in\R^{m\times n}$、$b\in\R^m$，$K\subseteq\R^n$ 为正常锥。对等式约束引入乘子 $\nu\in\R^m$，对非负约束引入乘子 $\lambda\in\R^n$。拉格朗日函数为
+\[
+L(x,\lambda,\nu)=c^\T x-\lambda^\T x+\nu^\T(Ax-b),
+\]
+故对偶函数为
+\[
+g(\lambda,\nu)=\inf_xL(x,\lambda,\nu)
+=\begin{cases}
+-b^\T\nu&A^\T\nu-\lambda+c=0,\\
+-\infty&\text{其他情形}.
+\end{cases}
+\]
+对偶问题可写为
+\[
+\begin{array}{ll}\text{最大化}&-b^\T\nu\\
+\text{约束为}&A^\T\nu+c=\lambda\\&\lambda\succeq_{K^*}0.\end{array}
+\]
+消去 $\lambda$，并定义 $y=-\nu$，可简化为
+\[
+\begin{array}{ll}\text{最大化}&b^\T y\\
+\text{约束为}&A^\T y\preceq_{K^*}c,\end{array}
+\]
+这是涉及对偶广义不等式的不等式形式锥规划。若Slater条件成立，即存在 $x\succ_K0$ 使 $Ax=b$，则强对偶成立。
+\end{origexample}
+
+\subsection{最优性条件}
+§5.5的最优性条件容易推广到含广义不等式的问题。先推导互补松弛条件。
+
+% Source PDF page 281 (printed p. 267)
+\subsubsection*{互补松弛}
+假设原始和对偶最优值相等，且在最优点 $x^\star,\lambda^\star,\nu^\star$ 达到。如§5.5.2，互补松弛条件可直接由 $f_0(x^\star)=g(\lambda^\star,\nu^\star)$ 及 $g$ 的定义得到。有
+\[
+\begin{aligned}
+f_0(x^\star)&=g(\lambda^\star,\nu^\star)\\
+&\le f_0(x^\star)+\sum_{i=1}^m(\lambda_i^\star)^\T f_i(x^\star)
++\sum_{i=1}^p\nu_i^\star h_i(x^\star)\\
+&\le f_0(x^\star).
+\end{aligned}
+\]
+因此，$x^\star$ 最小化 $L(x,\lambda^\star,\nu^\star)$，且第二行两个和都为零。第二个和为零（因为 $x^\star$ 满足等式约束），故 $\sum_{i=1}^m(\lambda_i^\star)^\T f_i(x^\star)=0$。和式中的每项非正，所以
+\begin{equation}
+(\lambda_i^\star)^\T f_i(x^\star)=0,\quad i=1,\ldots,m,\tag{5.94}
+\end{equation}
+这推广了互补松弛条件（5.48）。由（5.94）可知
+\[
+\lambda_i^\star\succ_{K_i^*}0\ \Longrightarrow\ f_i(x^\star)=0,\qquad
+f_i(x^\star)\prec_{K_i}0\ \Longrightarrow\ \lambda_i^\star=0.
+\]
+不过，与标量不等式问题不同，即使 $\lambda_i^\star\ne0$ 且 $f_i(x^\star)\ne0$，也可能满足（5.94）。
+
+\subsubsection*{KKT条件}
+现在再假设 $f_i,h_i$ 可微，把§5.5.3的KKT条件推广到广义不等式问题。由于 $x^\star$ 最小化 $L(x,\lambda^\star,\nu^\star)$，它关于 $x$ 的梯度在 $x^\star$ 处为零：
+\[
+\nabla f_0(x^\star)+\sum_{i=1}^m Df_i(x^\star)^\T\lambda_i^\star
++\sum_{i=1}^p\nu_i^\star\nabla h_i(x^\star)=0,
+\]
+其中 $Df_i(x^\star)\in\R^{k_i\times n}$ 是 $f_i$ 在 $x^\star$ 处的导数（见§A.4.1）。因此，若强对偶成立，任意原始最优 $x^\star$、任意对偶最优 $(\lambda^\star,\nu^\star)$ 必须满足最优性条件（或KKT条件）
+\begin{equation}
+\begin{gathered}
+f_i(x^\star)\preceq_{K_i}0,\quad i=1,\ldots,m,\\
+h_i(x^\star)=0,\quad i=1,\ldots,p,\\
+\lambda_i^\star\succeq_{K_i^*}0,\quad i=1,\ldots,m,\\
+(\lambda_i^\star)^\T f_i(x^\star)=0,\quad i=1,\ldots,m,\\
+\nabla f_0(x^\star)+\sum_{i=1}^m Df_i(x^\star)^\T\lambda_i^\star
++\sum_{i=1}^p\nu_i^\star\nabla h_i(x^\star)=0.
+\end{gathered}\tag{5.95}
+\end{equation}
+若原始问题凸，反之亦成立，即（5.95）是 $x^\star,(\lambda^\star,\nu^\star)$ 最优的充分条件。
+
+% Source PDF page 282 (printed p. 268)
+\subsection{扰动与灵敏度分析}
+§5.6的结果可推广到含广义不等式的问题。考虑相应扰动版本
+\[
+\begin{array}{ll}\text{最小化}&f_0(x)\\
+\text{约束为}&f_i(x)\preceq_{K_i}u_i,\quad i=1,\ldots,m\\
+&h_i(x)=v_i,\quad i=1,\ldots,p,\end{array}
+\]
+其中 $u_i\in\R^{k_i}$、$v\in\R^p$。定义 $p^\star(u,v)$ 为扰动问题最优值。与标量不等式情形一样，当原问题凸时，$p^\star$ 是凸函数。
+
+设 $(\lambda^\star,\nu^\star)$ 是原未扰动问题的对偶最优解，并假设对偶间隙为零。那么对所有 $u,v$，
+\[
+p^\star(u,v)\ge p^\star-\sum_{i=1}^m(\lambda_i^\star)^\T u_i-(\nu^\star)^\T v,
+\]
+对应于全局灵敏度不等式（5.57）。局部灵敏度结果也成立：若 $p^\star(u,v)$ 在 $u=0,v=0$ 处可微，则最优对偶变量 $\lambda_i^\star$ 满足
+\[
+\lambda_i^\star=-\nabla_{u_i}p^\star(0,0),
+\]
+对应于（5.58）。
+
+\begin{origexample}{5.13}
+\emph{不等式形式半正定规划。}如例5.11，考虑不等式形式的半正定规划。原始问题为
+\[
+\begin{array}{ll}\text{最小化}&c^\T x\\
+\text{约束为}&F(x)=x_1F_1+\cdots+x_nF_n+G\preceq0,\end{array}
+\]
+变量为 $x\in\R^n$（且 $F_1,\ldots,F_n,G\in\mathbf S^k$）。对偶问题为
+\[
+\begin{array}{ll}\text{最大化}&\tr(GZ)\\
+\text{约束为}&\tr(F_iZ)+c_i=0,\quad i=1,\ldots,n\\
+&Z\succeq0,\end{array}
+\]
+变量为 $Z\in\mathbf S^k$。
+
+设 $x^\star,Z^\star$ 分别原始最优和对偶最优，且对偶间隙为零。互补松弛为 $\tr(F(x^\star)Z^\star)=0$。由于 $F(x^\star)\preceq0$、$Z^\star\succeq0$，可知 $F(x^\star)Z^\star=0$。因此互补松弛可表示为
+\[
+\mathcal R(F(x^\star))\perp\mathcal R(Z^\star),
+\]
+即原始矩阵和对偶矩阵的值域正交。
+
+设 $p^\star(U)$ 表示扰动半正定规划
+\[
+\begin{array}{ll}\text{最小化}&c^\T x\\
+\text{约束为}&F(x)=x_1F_1+\cdots+x_nF_n+G\preceq U\end{array}
+\]
+的最优值。
+
+% Source PDF page 283 (printed p. 269)
+那么对所有 $U$，$p^\star(U)\ge p^\star-\tr(Z^\star U)$。若 $p^\star(U)$ 在 $U=0$ 处可微，则
+\[
+\nabla p^\star(0)=-Z^\star.
+\]
+这意味着，当 $U$ 很小时，扰动半正定规划的最优值非常接近下界 $p^\star-\tr(Z^\star U)$。
+\end{origexample}
+
+\subsection{择一定理}
+可以为广义不等式和等式系统
+\begin{equation}
+f_i(x)\preceq_{K_i}0,\quad i=1,\ldots,m,\qquad
+h_i(x)=0,\quad i=1,\ldots,p,\tag{5.96}
+\end{equation}
+推导择一定理，其中 $K_i\subseteq\R^{k_i}$ 为正常锥。还考虑严格不等式系统
+\begin{equation}
+f_i(x)\prec_{K_i}0,\quad i=1,\ldots,m,\qquad
+h_i(x)=0,\quad i=1,\ldots,p.\tag{5.97}
+\end{equation}
+假设 $D=\bigcap_{i=0}^m\dom f_i\cap\bigcap_{i=1}^p\dom h_i$ 非空。
+
+\subsubsection*{弱择一关系}
+对系统（5.96）和（5.97）引入对偶函数
+\[
+g(\lambda,\nu)=\inf_{x\in D}\left(\sum_{i=1}^m\lambda_i^\T f_i(x)+\sum_{i=1}^p\nu_i h_i(x)\right),
+\]
+其中 $\lambda=(\lambda_1,\ldots,\lambda_m)$、$\lambda_i\in\R^{k_i}$，$\nu\in\R^p$。类似于（5.76），我们断言
+\begin{equation}
+\lambda_i\succeq_{K_i^*}0,\quad i=1,\ldots,m,\qquad
+g(\lambda,\nu)>0\tag{5.98}
+\end{equation}
+与系统（5.96）具有弱择一关系。为验证，设存在 $x$ 满足（5.96），$(\lambda,\nu)$ 满足（5.98），则产生矛盾：
+\[
+\begin{split}
+0<g(\lambda,\nu)
+&\le\lambda_1^\T f_1(x)+\cdots+\lambda_m^\T f_m(x)\\
+&\quad+\nu_1h_1(x)+\cdots+\nu_ph_p(x)\le0.
+\end{split}
+\]
+因此，（5.96）与（5.98）至少一个不可行，即二者具有弱择一关系。
+
+类似地，可证明（5.97）与系统
+\[
+\lambda_i\succeq_{K_i^*}0,\quad i=1,\ldots,m,\qquad
+\lambda\ne0,\qquad g(\lambda,\nu)\ge0
+\]
+具有弱择一关系。
+
+\subsubsection*{强择一关系}
+现在假设 $f_i$ 为 $K_i$-凸函数，$h_i$ 仿射。先考虑严格不等式系统
+\begin{equation}
+f_i(x)\prec_{K_i}0,\quad i=1,\ldots,m,\qquad Ax=b,\tag{5.99}
+\end{equation}
+
+% Source PDF page 284 (printed p. 270)
+及其另一系统
+\begin{equation}
+\lambda_i\succeq_{K_i^*}0,\quad i=1,\ldots,m,\qquad
+\lambda\ne0,\qquad g(\lambda,\nu)\ge0.\tag{5.100}
+\end{equation}
+已知（5.99）与（5.100）具有弱择一关系。如果以下约束资格成立，二者还具有强择一关系：存在 $\widetilde x\in\relint D$，满足 $A\widetilde x=b$。为证明这一点，选择一组向量 $e_i\succ_{K_i}0$，考虑问题
+\begin{equation}
+\begin{array}{ll}\text{最小化}&s\\
+\text{约束为}&f_i(x)\preceq_{K_i}s e_i,\quad i=1,\ldots,m\\
+&Ax=b,\end{array}\tag{5.101}
+\end{equation}
+变量为 $x$ 和 $s\in\R$。Slater条件成立，因为只要 $\widetilde s$ 足够大，$(\widetilde x,\widetilde s)$ 就满足严格不等式 $f_i(\widetilde x)\prec_{K_i}\widetilde s e_i$。
+
+（5.101）的对偶为
+\begin{equation}
+\begin{array}{ll}\text{最大化}&g(\lambda,\nu)\\
+\text{约束为}&\lambda_i\succeq_{K_i^*}0,\quad i=1,\ldots,m\\
+&\sum_{i=1}^m e_i^\T\lambda_i=1,\end{array}\tag{5.102}
+\end{equation}
+变量为 $\lambda=(\lambda_1,\ldots,\lambda_m)$ 和 $\nu$。
+
+设系统（5.99）不可行，则（5.101）的最优值非负。由于满足Slater条件，强对偶成立且对偶最优值能够达到。因此存在 $(\widetilde\lambda,\widetilde\nu)$，满足（5.102）的约束且 $g(\widetilde\lambda,\widetilde\nu)\ge0$，即系统（5.100）有解。
+
+如标量不等式情形所述，仅仅存在 $x\in\relint D$ 使 $Ax=b$，不足以保证非严格不等式系统
+\[
+f_i(x)\preceq_{K_i}0,\quad i=1,\ldots,m,\qquad Ax=b
+\]
+及其另一系统
+\[
+\lambda_i\succeq_{K_i^*}0,\quad i=1,\ldots,m,\qquad g(\lambda,\nu)>0
+\]
+具有强择一关系。还需要附加条件，例如（5.101）的最优值能够达到。
+
+\begin{origexample}{5.14}
+\emph{线性矩阵不等式的可行性。}以下系统具有强择一关系：
+\[
+F(x)=x_1F_1+\cdots+x_nF_n+G\prec0,
+\]
+其中 $F_i,G\in\mathbf S^k$，以及
+\[
+Z\succeq0,\quad Z\ne0,\quad\tr(GZ)\ge0,\quad
+\tr(F_iZ)=0,\quad i=1,\ldots,n,
+\]
+其中 $Z\in\mathbf S^k$。在一般结论中取 $K$ 为半正定锥 $\mathbf S_+^k$，并取
+\[
+g(Z)=\inf_x\tr(F(x)Z)
+=\begin{cases}
+\tr(GZ)&\tr(F_iZ)=0,\quad i=1,\ldots,n,\\
+-\infty&\text{其他情形},
+\end{cases}
+\]
+即可得到这一结果。
+
+% Source PDF page 285 (printed p. 271)
+非严格不等式的情形稍复杂，需要对矩阵 $F_i$ 增加假设，才有强择一关系。一个这样的条件是
+\[
+\sum_{i=1}^n v_iF_i\succeq0\ \Longrightarrow\
+\sum_{i=1}^n v_iF_i=0.
+\]
+若该条件成立，以下两个系统具有强择一关系：
+\[
+F(x)=x_1F_1+\cdots+x_nF_n+G\preceq0
+\]
+与
+\[
+Z\succeq0,\quad\tr(GZ)>0,\quad
+\tr(F_iZ)=0,\quad i=1,\ldots,n
+\]
+（见习题5.44）。
+\end{origexample}
+
+% Source PDF page 286 (printed p. 272)
+\section*{文献说明}
+\addcontentsline{toc}{section}{文献说明}
+Luenberger [Lue69, 第8章]、Rockafellar [Roc70, 第VI部分]、Whittle [Whi71]、Hiriart-Urruty与Lemaréchal [HUL93]，以及Bertsekas、Nedić与Ozdaglar [Ber03] 都详细讨论拉格朗日对偶。这一名称来自Lagrange求解等式约束优化问题的乘子法；见Courant与Hilbert [CH53, 第IV章]。
+
+§5.2.5中矩阵博弈的最大—最小结果早于线性规划对偶。von Neuman与Morgenstern [vNM53, 第153页] 通过择一定理证明了它。第227页线性规划的强对偶结果来自von Neumann [vN63] 及Gale、Kuhn、Tucker [GKT51]。非凸二次问题（5.32）的强对偶是非线性优化信赖域方法文献中的基本结果（Nocedal与Wright [NW99, 第78页]）。它也与控制理论的S-过程有关，附录§B.1讨论了这一方法。将§5.3.2强对偶的证明推广到放宽Slater条件（5.27），见Rockafellar [Roc70, 第277页]。
+
+保证鞍点性质（5.47）的条件见Rockafellar [Roc70, 第VII部分] 以及Bertsekas、Nedić、Ozdaglar [Ber03, 第2章]；另见习题5.25。
+
+KKT条件以Karush、Kuhn和Tucker命名。Karush未发表的1939年硕士论文概要见Kuhn [Kuh76]；Kuhn与Tucker的工作见[KT51]。John [Joh85] 也推导过相关最优性条件。例5.2的注水算法在信息论与通信中有应用（Cover与Thomas [CT91, 第252页]）。
+
+Farkas引理由Farkas [Far02] 发表。它是线性不等式和等式系统最知名的择一定理，但还有许多变体；见Mangasarian [Man94, §2.4]。Farkas引理在资产定价中的应用（例5.10），见Bertsimas与Tsitsiklis [BT97, 第167页] 和Ross [Ros99]。
+
+将拉格朗日对偶推广到广义不等式问题的结果见Isii [Isi64]、Luenberger [Lue69, 第8章]、Berman [Ber73] 和Rockafellar [Roc89, 第47页]。在锥规划背景下的讨论见Nesterov与Nemirovski [NN94, §4.2]，以及Ben-Tal与Nemirovski [BTN01, 第2讲]。Ben-Israel [BI69]、Berman与Ben-Israel [BBI71]、Craven与Kohila [CK77] 研究了广义不等式的择一定理。Bellman与Fan [BF63]、Wolkowicz [Wol81] 和Lasserre [Las95] 给出了Farkas引理到线性矩阵不等式的推广。

@@ -1,0 +1,367 @@
+% Source PDF page 211 (printed p. 197)
+\item 在椭球上最小化线性函数。
+\[
+\begin{array}{ll}\text{最小化}&c^\T x\\\text{约束为}&(x-x_c)^\T A(x-x_c)\le1,\end{array}
+\]
+其中 $A\in\mathbf S_{++}^n,c\ne0$。
+\item 在以原点为中心的椭球上最小化二次型。
+\[
+\begin{array}{ll}\text{最小化}&x^\T Bx\\\text{约束为}&x^\T Ax\le1,\end{array}
+\]
+其中 $A\in\mathbf S_{++}^n,B\in\mathbf S_+^n$。也考虑 $B\notin\mathbf S_+^n$ 的非凸推广，见§B.1。
+\end{enumerate}
+
+\paragraph{4.22}考虑QCQP
+\[
+\begin{array}{ll}\text{最小化}&(1/2)x^\T Px+q^\T x+r\\\text{约束为}&x^\T x\le1,\end{array}
+\]
+其中 $P\in\mathbf S_{++}^n$。证明 $x^\star=-(P+\lambda I)^{-1}q$，其中 $\lambda=\max\{0,\bar\lambda\}$，$\bar\lambda$ 是非线性方程
+\[
+q^\T(P+\lambda I)^{-2}q=1
+\]
+的最大解。
+
+\paragraph{4.23}\textbf{用QCQP求 $\ell_4$ 范数逼近。}将 $\ell_4$ 范数逼近问题
+\[
+\text{最小化}\quad\norm{Ax-b}_4=\left(\sum_{i=1}^m(a_i^\T x-b_i)^4\right)^{1/4}
+\]
+表述为QCQP。矩阵 $A\in\R^{m\times n}$（各行为 $a_i^\T$）和向量 $b\in\R^m$ 给定。
+
+\paragraph{4.24}\textbf{复数 $\ell_1,\ell_2,\ell_\infty$ 范数逼近。}考虑问题
+\[
+\text{最小化}\quad\norm{Ax-b}_p,
+\]
+其中 $A\in\C^{m\times n},b\in\C^m$，变量为 $x\in\C^n$。复数 $\ell_p$ 范数定义为
+\[
+\norm{y}_p=\left(\sum_{i=1}^m|y_i|^p\right)^{1/p},\quad p\ge1,
+\]
+并定义 $\norm{y}_\infty=\max_{i=1,\ldots,m}|y_i|$。对 $p=1,2,\infty$，将复数 $\ell_p$ 范数逼近问题表示为具有实变量和实数据的QCQP或SOCP。
+
+\paragraph{4.25}\textbf{两组椭球的线性分离。}给定 $K+L$ 个椭球
+\[
+\mathcal E_i=\{P_iu+q_i\mid\norm{u}_2\le1\},\quad i=1,\ldots,K+L,
+\]
+其中 $P_i\in\mathbf S^n$。我们希望寻找超平面，将 $\mathcal E_1,\ldots,\mathcal E_K$ 与 $\mathcal E_{K+1},\ldots,\mathcal E_{K+L}$ 严格分离，即求 $a\in\R^n,b\in\R$，使
+\[
+\begin{aligned}
+a^\T x+b&>0,&&x\in\mathcal E_1\cup\cdots\cup\mathcal E_K,\\
+a^\T x+b&<0,&&x\in\mathcal E_{K+1}\cup\cdots\cup\mathcal E_{K+L},
+\end{aligned}
+\]
+或证明这样的超平面不存在。将其表示为SOCP可行性问题。
+
+\paragraph{4.26}\textbf{将双曲约束写为SOC约束。}验证 $x\in\R^n,y,z\in\R$ 满足
+\[
+x^\T x\le yz,\qquad y\ge0,\quad z\ge0
+\]
+当且仅当
+\[
+\left\|\begin{bmatrix}2x\\y-z\end{bmatrix}\right\|_2\le y+z,\qquad y\ge0,\quad z\ge0.
+\]
+利用这一事实，将以下问题写成SOCP。
+
+% Source PDF page 212 (printed p. 198)
+\begin{enumerate}[label=(\alph*)]
+\item 最大化调和平均。
+\[
+\text{最大化}\quad\left(\sum_{i=1}^m\frac1{a_i^\T x-b_i}\right)^{-1},
+\]
+定义域为 $\{x\mid Ax\succ b\}$，其中 $a_i^\T$ 是 $A$ 的第 $i$ 行。
+\item 最大化几何平均。
+\[
+\text{最大化}\quad\left(\prod_{i=1}^m(a_i^\T x-b_i)\right)^{1/m},
+\]
+定义域为 $\{x\mid Ax\succeq b\}$，其中 $a_i^\T$ 是 $A$ 的第 $i$ 行。
+\end{enumerate}
+
+\paragraph{4.27}\textbf{通过SOCP最小化矩阵分式。}将以下问题表示为SOCP：
+\[
+\begin{array}{ll}\text{最小化}&(Ax+b)^\T(I+B\diag(x)B^\T)^{-1}(Ax+b)\\\text{约束为}&x\succeq0,\end{array}
+\]
+其中 $A\in\R^{m\times n},b\in\R^m,B\in\R^{m\times n}$，变量为 $x\in\R^n$。
+
+提示：先证明问题等价于
+\[
+\begin{array}{ll}\text{最小化}&v^\T v+w^\T\diag(x)^{-1}w\\\text{约束为}&v+Bw=Ax+b,\\&x\succeq0,\end{array}
+\]
+变量为 $v\in\R^m,w,x\in\R^n$。（若 $x_i=0$，则 $w_i=0$ 时将 $w_i^2/x_i$ 解释为零，否则解释为 $\infty$。）然后使用习题4.26的结果。
+
+\paragraph{4.28}\textbf{鲁棒二次规划。}§4.4.2将鲁棒线性规划作为二阶锥规划的应用。本题考虑凸二次规划
+\[
+\begin{array}{ll}\text{最小化}&(1/2)x^\T Px+q^\T x+r\\\text{约束为}&Ax\preceq b\end{array}
+\]
+的类似鲁棒变体。为简单起见，假设只有矩阵 $P$ 有误差，其余参数 $q,r,A,b$ 精确已知。鲁棒二次规划定义为
+\[
+\begin{array}{ll}\text{最小化}&\sup_{P\in\mathcal E}((1/2)x^\T Px+q^\T x+r)\\\text{约束为}&Ax\preceq b,\end{array}
+\]
+其中 $\mathcal E$ 是所有可能矩阵 $P$ 的集合。
+
+对以下各个 $\mathcal E$，将鲁棒QP表示为凸问题，尽量具体。如果能写成标准形式，例如QP、QCQP、SOCP、SDP，请指出。
+\begin{enumerate}[label=(\alph*)]
+\item 有限矩阵集：$\mathcal E=\{P_1,\ldots,P_K\}$，其中 $P_i\in\mathbf S_+^n$（$i=1,\ldots,K$）。
+\item 由标称值 $P_0\in\mathbf S_+^n$ 及偏差 $P-P_0$ 的特征值界给出的集合：
+\[
+\mathcal E=\{P\in\mathbf S^n\mid-\gamma I\preceq P-P_0\preceq\gamma I\},
+\]
+其中 $\gamma\in\R,P_0\in\mathbf S_+^n$。
+\item 矩阵椭球：
+\[
+\mathcal E=\left\{P_0+\sum_{i=1}^K P_iu_i\ \middle|\ \norm{u}_2\le1\right\}.
+\]
+可假设 $P_i\in\mathbf S_+^n$（$i=0,\ldots,K$）。
+\end{enumerate}
+
+% Source PDF page 213 (printed p. 199)
+\paragraph{4.29}\textbf{最大化满足线性不等式的概率。}设 $c$ 是 $\R^n$ 中的正态随机变量，均值为 $\bar c$，协方差矩阵为 $R$。考虑问题
+\[
+\begin{array}{ll}\text{最大化}&\Prob(c^\T x\ge\alpha)\\\text{约束为}&Fx\preceq g,\quad Ax=b.\end{array}
+\]
+假设存在可行点 $\widetilde x$ 使 $\bar c^\T\widetilde x\ge\alpha$，证明此问题等价于凸或拟凸优化问题。若凸，将其表述为QP、QCQP或SOCP；若拟凸，说明如何通过求解一系列QP、QCQP或SOCP可行性问题求解。
+
+\subsection*{几何规划}
+\paragraph{4.30}温度为 $T$ 的热流体流过一根长度固定、圆形截面半径为 $r$ 的管道，$T$ 为高于环境温度的度数。管道外包裹厚度 $w\ll r$ 的绝热层，以减少经管壁散热。设计变量为 $T,r,w$。
+
+热损失近似正比于 $Tr/w$，所以固定寿命期内散热引起的能源成本为 $\alpha_1Tr/w$。管壁厚度固定，管道成本近似正比于材料总量，即 $\alpha_2r$。绝热层成本也近似正比于绝热材料总量，即 $\alpha_3rw$，这里利用 $w\ll r$。总成本为这三项之和。
+
+沿管道的热流完全来自流体流动，流速固定，故热流为 $\alpha_4Tr^2$。常数 $\alpha_i$ 均为正，变量 $T,r,w$ 也为正。
+
+问题是在总成本上界 $C_{\max}$ 及约束
+\[
+T_{\min}\le T\le T_{\max},\quad r_{\min}\le r\le r_{\max},\quad
+w_{\min}\le w\le w_{\max},\quad w\le0.1r
+\]
+下，最大化沿管道的总热流。将此问题表示为几何规划。
+
+\paragraph{4.31}\textbf{最优梁设计的递推表述。}证明GP（4.46）等价于GP
+\[
+\begin{array}{ll}
+\text{最小化}&\displaystyle\sum_{i=1}^N w_ih_i\\
+\text{约束为}&w_i/w_{\max}\le1,\quad w_{\min}/w_i\le1,\quad i=1,\ldots,N,\\
+&h_i/h_{\max}\le1,\quad h_{\min}/h_i\le1,\quad i=1,\ldots,N,\\
+&h_i/(w_iS_{\max})\le1,\quad S_{\min}w_i/h_i\le1,\quad i=1,\ldots,N,\\
+&6iF/(\sigma_{\max}w_ih_i^2)\le1,\quad i=1,\ldots,N,\\
+&(2i-1)d_i/v_i+v_{i+1}/v_i\le1,\quad i=1,\ldots,N,\\
+&(i-1/3)d_i/y_i+v_{i+1}/y_i+y_{i+1}/y_i\le1,\quad i=1,\ldots,N,\\
+&y_1/y_{\max}\le1,\\
+&Ew_ih_i^3d_i/(6F)=1,\quad i=1,\ldots,N.
+\end{array}
+\]
+变量为 $w_i,h_i,v_i,d_i,y_i$（$i=1,\ldots,N$）。
+
+\paragraph{4.32}\textbf{用单项式逼近函数。}设函数 $f:\R^n\to\R$ 在 $x_0\succ0$ 处可微，且 $f(x_0)>0$。如何寻找单项式函数 $\widehat f:\R^n\to\R$，使 $f(x_0)=\widehat f(x_0)$，且 $x$ 接近 $x_0$ 时 $\widehat f(x)$ 非常接近 $f(x)$？
+
+\paragraph{4.33}将下列问题表示为凸优化问题。
+\begin{enumerate}[label=(\alph*)]
+\item 最小化 $\max\{p(x),q(x)\}$，其中 $p,q$ 为正项式。
+\item 最小化 $\exp(p(x))+\exp(q(x))$，其中 $p,q$ 为正项式。
+\item 在 $r(x)>q(x)$ 下最小化 $p(x)/(r(x)-q(x))$，其中 $p,q$ 为正项式，$r$ 为单项式。
+\end{enumerate}
+
+% Source PDF page 214 (printed p. 200)
+\paragraph{4.34}\textbf{Perron--Frobenius特征值的对数凸性。}设 $A\in\R^{n\times n}$ 逐元素为正，即 $A_{ij}>0$。（本题结果对不可约非负矩阵也成立。）用 $\lambda_{\mathrm{pf}}(A)$ 表示其Perron--Frobenius特征值，即模最大的特征值，见第165页的定义和例子。证明 $\log\lambda_{\mathrm{pf}}(A)$ 是各个 $\log A_{ij}$ 的凸函数。例如，这意味着
+\[
+\lambda_{\mathrm{pf}}(C)\le(\lambda_{\mathrm{pf}}(A)\lambda_{\mathrm{pf}}(B))^{1/2},
+\]
+其中 $C_{ij}=(A_{ij}B_{ij})^{1/2}$，$A,B$ 均逐元素为正。
+
+提示：使用（4.47）给出的Perron--Frobenius特征值刻画，或使用
+\[
+\log\lambda_{\mathrm{pf}}(A)=\lim_{k\to\infty}(1/k)\log(\one^\T A^k\one).
+\]
+
+\paragraph{4.35}\textbf{符号式规划与几何规划。}符号式是正变量 $x_1,\ldots,x_n$ 的单项式的线性组合。符号式比正项式更一般，正项式就是全部系数为正的符号式。符号式规划为
+\[
+\begin{array}{ll}\text{最小化}&f_0(x)\\\text{约束为}&f_i(x)\le0,\quad i=1,\ldots,m,\\&h_i(x)=0,\quad i=1,\ldots,p,\end{array}
+\]
+其中 $f_0,\ldots,f_m,h_1,\ldots,h_p$ 均为符号式。一般而言，符号式规划非常难求解。
+
+某些符号式规划可以转为GP，因而高效求解。说明如何转换以下形式的问题：
+\begin{itemize}
+\item 目标符号式 $f_0$ 是正项式，即各项系数全部为正；
+\item 每个不等式约束符号式 $f_1,\ldots,f_m$ 恰有一个负系数项：$f_i=p_i-q_i$，其中 $p_i$ 为正项式，$q_i$ 为单项式；
+\item 每个等式约束符号式 $h_1,\ldots,h_p$ 恰有一个正系数项和一个负系数项：$h_i=r_i-s_i$，其中 $r_i,s_i$ 为单项式。
+\end{itemize}
+
+\paragraph{4.36}说明如何将一般GP改写为等价GP，使其中每个正项式（包括目标和约束中的）至多包含两个单项式项。提示：将每个单项式之和，写为每个仅含两项的若干和的和。
+
+\paragraph{4.37}\textbf{广义正项式与几何规划。}设 $x_1,\ldots,x_n$ 为正变量，函数 $f_i:\R^n\to\R$（$i=1,\ldots,k$）是 $x_1,\ldots,x_n$ 的正项式。若 $\phi:\R^k\to\R$ 是非负系数多项式，则复合函数
+\begin{equation}
+h(x)=\phi(f_1(x),\ldots,f_k(x))\tag{4.69}
+\end{equation}
+是正项式，因为正项式对乘法、加法和非负数乘封闭。例如，设 $f_1,f_2$ 为正项式，考虑非负系数多项式 $\phi(z_1,z_2)=3z_1^2z_2+2z_1+3z_2^3$，则 $h=3f_1^2f_2+2f_1+f_2^3$ 是正项式。
+
+本题推广这一思想，允许 $\phi$ 为正项式，即可有分数指数。具体地，假设 $\phi:\R^k\to\R$ 为全部指数非负的正项式，此时称（4.69）定义的函数 $h$ 为广义正项式。例如，设 $f_1,f_2$ 为正项式，考虑非负指数正项式 $\phi(z_1,z_2)=2z_1^{0.3}z_2^{1.2}+z_1z_2^{0.5}+2$，则函数
+\[
+h(x)=2f_1(x)^{0.3}f_2(x)^{1.2}+f_1(x)f_2(x)^{0.5}+2
+\]
+
+% Source PDF page 215 (printed p. 201)
+为广义正项式。不过，除非 $f_1,f_2$ 为单项式或常数，否则它不是正项式。
+
+广义几何规划（GGP）是以下形式的优化问题：
+\begin{equation}
+\begin{array}{ll}\text{最小化}&h_0(x)\\\text{约束为}&h_i(x)\le1,\quad i=1,\ldots,m,\\&g_i(x)=1,\quad i=1,\ldots,p,\end{array}\tag{4.70}
+\end{equation}
+其中 $g_1,\ldots,g_p$ 为单项式，$h_0,\ldots,h_m$ 为广义正项式。
+
+说明如何将此GGP表示为等价GP。解释引入的任何新变量，并说明GP如何与GGP（4.70）等价。
+
+\subsection*{半正定规划与锥形式问题}
+\paragraph{4.38}\textbf{单变量LMI与SDP。}矩阵对 $(A,B)$ 的广义特征值定义为多项式 $\det(\lambda B-A)$ 的根，其中 $A,B\in\mathbf S^n$，见§A.5.3。假设 $B$ 非奇异，且 $A,B$ 可通过合同变换同时对角化，即存在非奇异矩阵 $R\in\R^{n\times n}$，使
+\[
+R^\T AR=\diag(a),\qquad R^\T BR=\diag(b),
+\]
+其中 $a,b\in\R^n$。（此条件成立的一个充分条件是，存在 $t_1,t_2$ 使 $t_1A+t_2B\succ0$。）
+\begin{enumerate}[label=(\alph*)]
+\item 证明 $(A,B)$ 的广义特征值为实数，且 $\lambda_i=a_i/b_i$（$i=1,\ldots,n$）。
+\item 用 $a,b$ 表示变量为 $t\in\R$ 的SDP的解：
+\[
+\begin{array}{ll}\text{最小化}&ct\\\text{约束为}&tB\preceq A.\end{array}
+\]
+\end{enumerate}
+
+\paragraph{4.39}\textbf{SDP与合同变换。}考虑SDP
+\[
+\begin{array}{ll}\text{最小化}&c^\T x\\\text{约束为}&x_1F_1+x_2F_2+\cdots+x_nF_n+G\preceq0,\end{array}
+\]
+其中 $F_i,G\in\mathbf S^k,c\in\R^n$。
+\begin{enumerate}[label=(\alph*)]
+\item 设 $R\in\R^{k\times k}$ 非奇异，证明此SDP等价于
+\[
+\begin{array}{ll}\text{最小化}&c^\T x\\\text{约束为}&x_1\widetilde F_1+x_2\widetilde F_2+\cdots+x_n\widetilde F_n+\widetilde G\preceq0,\end{array}
+\]
+其中 $\widetilde F_i=R^\T F_iR$、$\widetilde G=R^\T GR$。
+\item 假设存在非奇异 $R$ 使 $\widetilde F_i,\widetilde G$ 都为对角矩阵，证明SDP等价于LP。
+\item 假设存在非奇异 $R$，使
+\[
+\widetilde F_i=\begin{bmatrix}\alpha_iI&a_i\\a_i^\T&\alpha_i\end{bmatrix},\quad i=1,\ldots,n,\qquad
+\widetilde G=\begin{bmatrix}\beta I&b\\b^\T&\beta\end{bmatrix},
+\]
+其中 $\alpha_i,\beta\in\R,a_i,b\in\R^{k-1}$。证明SDP等价于仅有一个二阶锥约束的SOCP。
+\end{enumerate}
+
+% Source PDF page 216 (printed p. 202)
+\paragraph{4.40}\textbf{将LP、QP、QCQP与SOCP写为SDP。}将下列问题表示为SDP。
+\begin{enumerate}[label=(\alph*)]
+\item LP（4.27）。
+\item QP（4.34）、QCQP（4.35）及SOCP（4.36）。提示：设 $A\in\mathbf S_{++}^r,C\in\mathbf S^s,B\in\R^{r\times s}$，则
+\[
+\begin{bmatrix}A&B\\B^\T&C\end{bmatrix}\succeq0
+\quad\Longleftrightarrow\quad C-B^\T A^{-1}B\succeq0.
+\]
+包括奇异 $A$ 情形的更完整表述及证明，见§A.5.5。
+\item 矩阵分式优化问题
+\[
+\text{最小化}\quad(Ax+b)^\T F(x)^{-1}(Ax+b),
+\]
+其中 $A\in\R^{m\times n},b\in\R^m$，
+\[
+F(x)=F_0+x_1F_1+\cdots+x_nF_n,
+\]
+$F_i\in\mathbf S^m$，目标定义域为 $\{x\mid F(x)\succ0\}$。可假设问题可行，即至少存在一个 $x$ 使 $F(x)\succ0$。
+\end{enumerate}
+
+\paragraph{4.41}\textbf{共正矩阵和 $P_0$ 矩阵的LMI检验。}若对所有 $x\succeq0$ 有 $x^\T Ax\ge0$，则称矩阵 $A\in\mathbf S^n$ 共正，见习题2.35。若对所有 $x$ 有 $\max_{i=1,\ldots,n}x_i(Ax)_i\ge0$，则称矩阵 $A\in\R^{n\times n}$ 为 $P_0$ 矩阵。一般而言，检验矩阵是否共正或为 $P_0$ 矩阵非常困难。不过，存在可用半正定规划验证的有用充分条件。
+\begin{enumerate}[label=(\alph*)]
+\item 证明：若 $A$ 可分解为半正定矩阵与逐元素非负矩阵之和，
+\begin{equation}
+A=B+C,\qquad B\succeq0,\qquad C_{ij}\ge0,\quad i,j=1,\ldots,n,\tag{4.71}
+\end{equation}
+则 $A$ 共正。将寻找满足（4.71）的 $B,C$ 的问题表示为SDP可行性问题。
+\item 证明：若存在正对角矩阵 $D$，使
+\begin{equation}
+DA+A^\T D\succeq0,\tag{4.72}
+\end{equation}
+则 $A$ 为 $P_0$ 矩阵。将寻找满足（4.72）的 $D$ 的问题表示为SDP可行性问题。
+\end{enumerate}
+
+\paragraph{4.42}\textbf{复数LMI与SDP。}复数LMI形如
+\[
+x_1F_1+\cdots+x_nF_n+G\preceq0,
+\]
+其中 $F_1,\ldots,F_n,G$ 是复数 $n\times n$ Hermitian矩阵，即 $F_i^\HH=F_i,G^\HH=G$，$x\in\R^n$ 为实变量。复数SDP是在复数LMI约束下，最小化 $x$ 的实线性函数的问题。
+
+利用
+\[
+X\succeq0\quad\Longleftrightarrow\quad
+\begin{bmatrix}\operatorname{Re}X&-\operatorname{Im}X\\\operatorname{Im}X&\operatorname{Re}X\end{bmatrix}\succeq0,
+\]
+可以将复数LMI、SDP变为实LMI、SDP。其中 $\operatorname{Re}X\in\R^{n\times n}$ 为复Hermitian矩阵 $X$ 的实部，$\operatorname{Im}X\in\R^{n\times n}$ 为虚部。
+
+验证此结果，并说明如何将复数SDP表述为实SDP。
+
+% Source PDF page 217 (printed p. 203)
+\paragraph{4.43}\textbf{通过SDP优化特征值。}设 $A:\R^n\to\mathbf S^m$ 仿射，即
+\[
+A(x)=A_0+x_1A_1+\cdots+x_nA_n,
+\]
+其中 $A_i\in\mathbf S^m$。以 $\lambda_1(x)\ge\lambda_2(x)\ge\cdots\ge\lambda_m(x)$ 表示 $A(x)$ 的特征值。说明如何将以下问题表述为SDP。
+\begin{enumerate}[label=(\alph*)]
+\item 最小化最大特征值 $\lambda_1(x)$。
+\item 最小化特征值跨度 $\lambda_1(x)-\lambda_m(x)$。
+\item 在 $A(x)\succ0$ 下最小化 $A(x)$ 的条件数。条件数定义为 $\kappa(A(x))=\lambda_1(x)/\lambda_m(x)$，定义域为 $\{x\mid A(x)\succ0\}$。可假设至少存在一个 $x$ 使 $A(x)\succ0$。
+
+提示：需要在
+\[
+0\prec\gamma I\preceq A(x)\preceq\lambda I
+\]
+下最小化 $\lambda/\gamma$。作变量变换 $y=x/\gamma,t=\lambda/\gamma,s=1/\gamma$。
+\item 最小化特征值绝对值之和 $|\lambda_1(x)|+\cdots+|\lambda_m(x)|$。提示：将 $A(x)$ 表示为 $A^+-A^-$，其中 $A^+\succeq0,A^-\succeq0$。
+\end{enumerate}
+
+\paragraph{4.44}\textbf{多项式优化。}将以下问题表述为SDP。寻找多项式 $p:\R\to\R$，
+\[
+p(t)=x_1+x_2t+\cdots+x_{2k+1}t^{2k},
+\]
+使它在 $m$ 个给定点 $t_i$ 处满足给定界 $l_i\le p(t_i)\le u_i$，并且在全部满足这些界的多项式中，具有最大的最小值：
+\[
+\begin{array}{ll}\text{最大化}&\inf_t p(t)\\\text{约束为}&l_i\le p(t_i)\le u_i,\quad i=1,\ldots,m.\end{array}
+\]
+变量为 $x\in\R^{2k+1}$。
+
+提示：使用习题2.37(b)推导的非负多项式LMI刻画。
+
+\paragraph{4.45}[Nes00, Par00] \textbf{通过LMI表示平方和。}考虑次数为 $2k$ 的多项式 $p:\R^n\to\R$。若对所有 $x\in\R^n$ 有 $p(x)\ge0$，就称它半正定（PSD）。除 $n=1$ 或 $k=1$ 等特殊情形外，判定给定多项式是否半正定极其困难，更不用说以 $p$ 的系数为变量、以 $p$ 半正定为约束求解优化问题了。
+
+一个著名的充分条件是，存在次数不超过 $k$ 的多项式 $q_i$，使
+\[
+p(x)=\sum_{i=1}^r q_i(x)^2.
+\]
+具有这种平方和形式的多项式称为SOS多项式。
+
+多项式 $p$ 为SOS的条件，作为对其系数的约束，实际上等价于LMI。因此，各种带SOS约束的优化问题可以表述为SDP。本题研究这些思想。
+\begin{enumerate}[label=(\alph*)]
+\item 令 $f_1,\ldots,f_s$ 为次数不超过 $k$ 的全部单项式。这里使用标准意义的单项式，即 $x_1^{m_1}\cdots x_n^{m_n}$，其中 $m_i\in\Z_+$，而非几何规划意义下的单项式。证明：若 $p$ 可表示为半正定二次型 $p=f^\T Vf$，其中 $V\in\mathbf S_+^s$，则 $p$ 为SOS。反过来，证明若 $p$ 为SOS，则存在 $V\in\mathbf S_+^s$，使 $p=f^\T Vf$，即它可表示为单项式的半正定二次型。
+% Source PDF page 218 (printed p. 204)
+\item 证明条件 $p=f^\T Vf$ 是关联 $p$ 的系数与矩阵 $V$ 的一组线性等式约束。结合(a)，这说明 $p$ 为SOS等价于关联 $V$ 与 $p$ 的系数的线性等式组，以及矩阵不等式 $V\succeq0$。
+\item 对二元四次多项式 $p$，显式写出SOS的LMI条件。
+\end{enumerate}
+
+\paragraph{4.46}\textbf{多维矩。}$\R^2$ 上随机变量 $t$ 的矩定义为 $\mu_{ij}=\E t_1^it_2^j$，其中 $i,j$ 为非负整数。本题推导一组数 $\mu_{ij}$（$0\le i,j\le2k$、$i+j\le2k$）成为 $\R^2$ 上某个分布的矩的必要条件。
+
+设 $p:\R^2\to\R$ 是次数为 $k$、系数为 $c_{ij}$ 的多项式，
+\[
+p(t)=\sum_{i=0}^k\sum_{j=0}^{k-i}c_{ij}t_1^it_2^j,
+\]
+$t$ 是矩为 $\mu_{ij}$ 的随机变量。设 $c\in\R^{(k+1)(k+2)/2}$ 按特定顺序收集系数 $c_{ij}$，$\mu\in\R^{(k+1)(2k+1)}$ 按相同顺序收集矩 $\mu_{ij}$。证明 $\E p(t)^2$ 可表示为关于 $c$ 的二次型
+\[
+\E p(t)^2=c^\T H(\mu)c,
+\]
+其中 $H:\R^{(k+1)(2k+1)}\to\mathbf S^{(k+1)(k+2)/2}$ 是 $\mu$ 的线性函数。由此推出 $\mu$ 必须满足LMI $H(\mu)\succeq0$。
+
+说明：对于 $\R$ 上的随机变量，$H$ 可取为（4.52）的Hankel矩阵。此时，$H(\mu)\succeq0$ 是 $\mu$ 成为某个分布的矩或一列矩的极限的充要条件；而在 $\R^2$ 上，这个LMI仅是必要条件。
+
+\paragraph{4.47}\textbf{最大行列式半正定矩阵补全。}考虑矩阵 $A\in\mathbf S^n$，部分元素给定，其他元素未指定。半正定矩阵补全问题是确定未指定元素的值，使 $A\succeq0$，或判定不存在这种补全。
+\begin{enumerate}[label=(\alph*)]
+\item 说明为何不失一般性可假设 $A$ 的对角元素均已指定。
+\item 说明如何将半正定补全问题表述为SDP可行性问题。
+\item 假设 $A$ 至少有一种正定补全，且对角元素已指定并固定。行列式最大的正定补全称为最大行列式补全。证明它唯一。证明若 $A^\star$ 为最大行列式补全，则 $(A^\star)^{-1}$ 在原矩阵未指定的全部位置上均为零。提示：$f(X)=\log\det X$ 的梯度为 $\nabla f(X)=X^{-1}$，见§A.4.1。
+\item 假设 $A$ 的三对角部分已指定，即给定 $A_{11},\ldots,A_{nn}$ 和 $A_{12},\ldots,A_{n-1,n}$。证明若 $A$ 存在正定补全，则存在一种逆矩阵为三对角矩阵的正定补全。
+\end{enumerate}
+
+\paragraph{4.48}\textbf{广义特征值最小化。}回顾例3.37或§A.5.3，矩阵对 $(A,B)\in\mathbf S^k\times\mathbf S_{++}^k$ 的最大广义特征值为
+\[
+\lambda_{\max}(A,B)=\sup_{u\ne0}\frac{u^\T Au}{u^\T Bu}
+=\max\{\lambda\mid\det(\lambda B-A)=0\}.
+\]
+我们已经看到，若取定义域为 $\mathbf S^k\times\mathbf S_{++}^k$，此函数拟凸。

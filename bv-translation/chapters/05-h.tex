@@ -1,0 +1,376 @@
+% Source PDF page 295 (printed p. 281)
+\begin{enumerate}[label=(\alph*)]
+\item 设 $p^\star$ 有限，$x^\star$ 是最优解。（线性规划最优值若有限，就能达到。）设 $I\subseteq\{1,2,\ldots,m\}$ 为 $x^\star$ 处活跃约束的指标集：
+\[
+a_i^\T x^\star=b_i,\quad i\in I,\qquad
+a_i^\T x^\star<b_i,\quad i\notin I.
+\]
+证明存在 $z\in\R^m$，满足
+\[
+z_i\ge0,\quad i\in I,\qquad z_i=0,\quad i\notin I,\qquad
+\sum_{i\in I}z_i a_i+c=0.
+\]
+证明 $z$ 对偶最优，且目标值为 $c^\T x^\star$。
+
+\emph{提示：}假设不存在这样的 $z$，即
+$-c\notin\{\sum_{i\in I}z_i a_i\mid z_i\ge0\}$。用第49页例2.20的严格分离超平面定理导出矛盾。也可用Farkas引理（见§5.8.3）。
+\item 设 $p^\star=\infty$，且对偶可行。证明 $d^\star=\infty$。\emph{提示：}证明存在非零 $v\in\R^m$，使 $A^\T v=0$、$v\succeq0$、$b^\T v<0$。若对偶可行，它沿 $v$ 方向无界。
+\item 考虑例子
+\[
+\begin{array}{ll}\text{最小化}&x\\
+\text{约束为}&\begin{bmatrix}0\\1\end{bmatrix}x
+\preceq\begin{bmatrix}-1\\1\end{bmatrix}.\end{array}
+\]
+写出对偶线性规划，求解原始和对偶问题。说明 $p^\star=\infty$、$d^\star=-\infty$。
+\end{enumerate}
+
+\paragraph{5.24} \emph{弱最大—最小不等式。}证明不对 $f:\R^n\times\R^m\to\R$、$W\subseteq\R^n$ 或 $Z\subseteq\R^m$ 作任何假设，总有
+\[
+\sup_{z\in Z}\inf_{w\in W}f(w,z)
+\le\inf_{w\in W}\sup_{z\in Z}f(w,z).
+\]
+
+\paragraph{5.25} [BL00, 第95页] \emph{凸—凹函数与鞍点性质。}推导鞍点性质
+\begin{equation}
+\sup_{z\in Z}\inf_{w\in W}f(w,z)
+=\inf_{w\in W}\sup_{z\in Z}f(w,z)\tag{5.112}
+\end{equation}
+成立的条件，其中 $f:\R^n\times\R^m\to\R$，$W\times Z\subseteq\dom f$，且 $W,Z$ 非空。假设对所有 $z\in Z$，函数
+\[
+g_z(w)=\begin{cases}f(w,z)&w\in W,\\
+\infty&\text{其他情形}\end{cases}
+\]
+闭且凸；对所有 $w\in W$，函数
+\[
+h_w(z)=\begin{cases}-f(w,z)&z\in Z,\\
+\infty&\text{其他情形}\end{cases}
+\]
+闭且凸。
+\begin{enumerate}[label=(\alph*)]
+\item （5.112）右端可写成 $p(0)$，其中
+\[
+p(u)=\inf_{w\in W}\sup_{z\in Z}(f(w,z)+u^\T z).
+\]
+证明 $p$ 凸。
+
+% Source PDF page 296 (printed p. 282)
+\item 证明 $p$ 的共轭为
+\[
+p^*(v)=\begin{cases}
+-\inf_{w\in W}f(w,v)&v\in Z,\\
+\infty&\text{其他情形}.
+\end{cases}
+\]
+\item 证明 $p^*$ 的共轭为
+\[
+p^{**}(u)=\sup_{z\in Z}\inf_{w\in W}(f(w,z)+u^\T z).
+\]
+结合(a)，最大—最小等式（5.112）可写为 $p^{**}(0)=p(0)$。
+\item 由习题3.28和3.39(d)，若 $0\in\operatorname{int}\dom p$，则 $p^{**}(0)=p(0)$。由此说明当 $W,Z$ 有界时，该等式成立。
+\item 习题3.28和3.39的另一推论是：若 $0\in\dom p$ 且 $p$ 闭，则 $p^{**}(0)=p(0)$。证明当 $g_z$ 的下水平集有界时，$p$ 闭。
+\end{enumerate}
+
+\subsection*{最优性条件}
+\paragraph{5.26} 考虑二次约束二次规划
+\[
+\begin{array}{ll}\text{最小化}&x_1^2+x_2^2\\
+\text{约束为}&(x_1-1)^2+(x_2-1)^2\le1\\
+&(x_1-1)^2+(x_2+1)^2\le1,\end{array}
+\]
+变量为 $x\in\R^2$。
+\begin{enumerate}[label=(\alph*)]
+\item 画出可行集和目标等值线，求最优点 $x^\star$ 和最优值 $p^\star$。
+\item 给出KKT条件。是否存在能证明 $x^\star$ 最优的拉格朗日乘子 $\lambda_1^\star,\lambda_2^\star$？
+\item 推导并求解拉格朗日对偶问题。强对偶成立吗？
+\end{enumerate}
+
+\paragraph{5.27} \emph{等式约束最小二乘。}考虑问题
+\[
+\begin{array}{ll}\text{最小化}&\norm{Ax-b}_2^2\\
+\text{约束为}&Gx=h,\end{array}
+\]
+其中 $A\in\R^{m\times n}$、$\rank A=n$，$G\in\R^{p\times n}$、$\rank G=p$。
+给出KKT条件，推导原始解 $x^\star$ 和对偶解 $\nu^\star$ 的表达式。
+
+\paragraph{5.28} 不使用任何线性规划代码，证明线性规划
+\[
+\begin{array}{ll}
+\text{最小化}&47x_1+93x_2+17x_3-93x_4\\
+\text{约束为}&
+\begin{bmatrix}
+-1&-6&1&3\\-1&-2&7&1\\0&3&-10&-1\\-6&-11&-2&12\\1&6&-1&-3
+\end{bmatrix}
+\begin{bmatrix}x_1\\x_2\\x_3\\x_4\end{bmatrix}
+\preceq\begin{bmatrix}-3\\5\\-8\\-7\\4\end{bmatrix}
+\end{array}
+\]
+的最优解唯一，且为 $x^\star=(1,1,1,1)$。
+
+\paragraph{5.29} 问题
+\[
+\begin{array}{ll}\text{最小化}&-3x_1^2+x_2^2+2x_3^2+2(x_1+x_2+x_3)\\
+\text{约束为}&x_1^2+x_2^2+x_3^2=1\end{array}
+\]
+是（5.32）的特殊情形，因此尽管非凸，强对偶也成立。推导KKT条件，求满足KKT条件的全部 $x,\nu$。哪一对对应最优解？
+
+% Source PDF page 297 (printed p. 283)
+\paragraph{5.30} 推导问题
+\[
+\begin{array}{ll}\text{最小化}&\tr X-\log\det X\\
+\text{约束为}&Xs=y\end{array}
+\]
+的KKT条件，变量为 $X\in\mathbf S^n$，定义域为 $\mathbf S_{++}^n$。给定 $y\in\R^n,s\in\R^n$，满足 $s^\T y=1$。验证最优解为
+\[
+X^\star=I+yy^\T-\frac1{s^\T s}ss^\T.
+\]
+
+\paragraph{5.31} \emph{KKT条件的支撑超平面解释。}考虑不含等式约束的凸问题
+\[
+\begin{array}{ll}\text{最小化}&f_0(x)\\
+\text{约束为}&f_i(x)\le0,\quad i=1,\ldots,m.\end{array}
+\]
+假设 $x^\star\in\R^n$、$\lambda^\star\in\R^m$ 满足KKT条件
+\[
+\begin{gathered}
+f_i(x^\star)\le0,\quad i=1,\ldots,m,\\
+\lambda_i^\star\ge0,\quad i=1,\ldots,m,\\
+\lambda_i^\star f_i(x^\star)=0,\quad i=1,\ldots,m,\\
+\nabla f_0(x^\star)+\sum_{i=1}^m\lambda_i^\star\nabla f_i(x^\star)=0.
+\end{gathered}
+\]
+证明对所有可行 $x$，
+\[
+\nabla f_0(x^\star)^\T(x-x^\star)\ge0.
+\]
+换言之，KKT条件蕴含§4.2.3的简单最优性准则。
+
+\subsection*{扰动与灵敏度分析}
+\paragraph{5.32} \emph{扰动问题的最优值。}设 $f_0,f_1,\ldots,f_m:\R^n\to\R$ 凸。证明函数
+\[
+p^\star(u,v)=\inf\{f_0(x)\mid\exists x\in D,\ f_i(x)\le u_i,\ i=1,\ldots,m,\ Ax-b=v\}
+\]
+凸。它是扰动问题最优成本关于扰动 $u,v$ 的函数（见§5.6.1）。
+
+\paragraph{5.33} \emph{参数化 $\ell_1$ 范数逼近。}考虑 $\ell_1$ 范数最小化问题
+\[
+\text{最小化}\quad\norm{Ax+b+\epsilon d}_1,
+\]
+变量为 $x\in\R^3$，且
+\[
+A=\begin{bmatrix}
+-2&7&1\\-5&-1&3\\-7&3&-5\\-1&4&-4\\1&5&5\\2&-5&-1
+\end{bmatrix},\quad
+b=\begin{bmatrix}-4\\3\\9\\0\\-11\\5\end{bmatrix},\quad
+d=\begin{bmatrix}-10\\-13\\-27\\-10\\-7\\14\end{bmatrix}.
+\]
+以 $p^\star(\epsilon)$ 表示最优值关于 $\epsilon$ 的函数。
+\begin{enumerate}[label=(\alph*)]
+\item 设 $\epsilon=0$。证明 $x^\star=\one$ 最优。是否还有其他最优点？
+\item 证明 $p^\star(\epsilon)$ 在包含 $\epsilon=0$ 的一个区间上仿射。
+\end{enumerate}
+
+% Source PDF page 298 (printed p. 284)
+\paragraph{5.34} 考虑一对原始和对偶线性规划
+\[
+\begin{array}{ll}\text{最小化}&(c+\epsilon d)^\T x\\
+\text{约束为}&Ax\preceq b+\epsilon f\end{array}
+\]
+和
+\[
+\begin{array}{ll}\text{最大化}&-(b+\epsilon f)^\T z\\
+\text{约束为}&A^\T z+c+\epsilon d=0\\&z\succeq0,\end{array}
+\]
+其中
+\[
+A=\begin{bmatrix}
+-4&12&-2&1\\-17&12&7&11\\1&0&-6&1\\3&3&22&-1\\-11&2&-1&-8
+\end{bmatrix},\quad
+b=\begin{bmatrix}8\\13\\-4\\27\\-18\end{bmatrix},\quad
+f=\begin{bmatrix}6\\15\\-13\\48\\8\end{bmatrix},
+\]
+$c=(49,-34,-50,-5)$、$d=(3,8,21,25)$，$\epsilon$ 是参数。
+\begin{enumerate}[label=(\alph*)]
+\item 构造与 $x^\star$ 目标相同的对偶最优点 $z^\star$，证明当 $\epsilon=0$ 时，$x^\star=(1,1,1,1)$ 最优。还有其他原始或对偶最优解吗？
+\item 在一个包含 $\epsilon=0$ 的区间上，给出最优值 $p^\star(\epsilon)$ 关于 $\epsilon$ 的显式表达式，说明表达式适用的区间。在同一区间上，还给出原始解 $x^\star(\epsilon)$、对偶解 $z^\star(\epsilon)$ 的显式表达式。
+
+\emph{提示：}先假设 $\epsilon=0$ 时在最优点处活跃的原始和对偶约束，在0附近的 $\epsilon$ 对应的最优点处仍活跃，据此计算 $x^\star(\epsilon),z^\star(\epsilon)$。再验证这一假设正确。
+\end{enumerate}
+
+\paragraph{5.35} \emph{几何规划的灵敏度分析。}考虑几何规划
+\[
+\begin{array}{ll}\text{最小化}&f_0(x)\\
+\text{约束为}&f_i(x)\le1,\quad i=1,\ldots,m\\
+&h_i(x)=1,\quad i=1,\ldots,p,\end{array}
+\]
+其中 $f_0,\ldots,f_m$ 为正项式，$h_1,\ldots,h_p$ 为单项式，问题定义域为 $\R_{++}^n$。定义扰动几何规划为
+\[
+\begin{array}{ll}\text{最小化}&f_0(x)\\
+\text{约束为}&f_i(x)\le e^{u_i},\quad i=1,\ldots,m\\
+&h_i(x)=e^{v_i},\quad i=1,\ldots,p,\end{array}
+\]
+用 $p^\star(u,v)$ 表示其最优值。可将 $u_i,v_i$ 理解为约束的相对或比例扰动。例如，$u_1=-0.01$ 对应将第一个不等式约束收紧约1\%。
+
+设 $\lambda^\star,\nu^\star$ 为凸形式几何规划
+\[
+\begin{array}{ll}\text{最小化}&\log f_0(y)\\
+\text{约束为}&\log f_i(y)\le0,\quad i=1,\ldots,m\\
+&\log h_i(y)=0,\quad i=1,\ldots,p\end{array}
+\]
+的最优对偶变量，其中变量 $y_i=\log x_i$。假设 $p^\star(u,v)$ 在 $u=0,v=0$ 处可微，说明 $\lambda^\star,\nu^\star$ 与该点处 $p^\star(u,v)$ 各导数的关系。论证下述说法：“当 $\alpha$ 很小时，将第 $i$ 个约束放宽 $\alpha\%$，目标会改善约 $\alpha\lambda_i^\star\%$。”
+
+% Source PDF page 299 (printed p. 285)
+\subsection*{择一定理}
+\paragraph{5.36} \emph{线性等式的择一关系。}考虑线性方程 $Ax=b$，其中 $A\in\R^{m\times n}$。由线性代数，方程有解，当且仅当 $b\in\mathcal R(A)$，这又等价于 $b\perp\mathcal N(A^\T)$。换言之，$Ax=b$ 有解，当且仅当不存在 $y\in\R^m$，使 $A^\T y=0$ 且 $b^\T y\ne0$。
+
+利用§5.8.2的择一定理推导该结果。
+
+\paragraph{5.37} [BT97] \emph{有限状态Markov链平衡分布的存在性。}设 $P\in\R^{n\times n}$ 满足
+\[
+p_{ij}\ge0,\quad i,j=1,\ldots,n,\qquad P^\T\one=\one,
+\]
+即系数非负且每列之和为1。用Farkas引理证明存在 $y\in\R^n$，使
+\[
+Py=y,\qquad y\succeq0,\qquad\one^\T y=1.
+\]
+（可将 $y$ 理解为具有 $n$ 个状态、转移概率矩阵为 $P$ 的Markov链的平衡分布。）
+
+\paragraph{5.38} [BT97] \emph{期权定价。}将第263页例5.10的结果用于含三种资产的简单问题：一项在所考察投资期间内有固定回报 $r>1$ 的无风险资产（例如债券）、一只股票，以及该股票的一份期权。期权赋予我们在期末按预先确定的价格 $K$ 买入股票的权利。
+
+考虑两种情景。第一种，股票价格从期初 $S$ 涨至期末 $Su$，$u>r$。仅当 $Su>K$ 时行权，获得利润 $Su-K$；否则不行权，利润为零。因此第一种情景中，期权期末价值为 $\max\{0,Su-K\}$。
+
+第二种情景中，股价从 $S$ 降到 $Sd$，$d<1$。期末期权价值为 $\max\{0,Sd-K\}$。
+
+采用例5.10的记号，
+\[
+V=\begin{bmatrix}
+r&uS&\max\{0,Su-K\}\\r&dS&\max\{0,Sd-K\}
+\end{bmatrix},\qquad
+p_1=1,\quad p_2=S,\quad p_3=C,
+\]
+其中 $C$ 是期权价格。
+
+证明给定 $r,S,K,u,d$ 后，无套利条件唯一确定期权价格 $C$。换言之，期权市场是完备的。
+
+\subsection*{广义不等式}
+\paragraph{5.39} \emph{二划分问题的半正定松弛。}考虑第219页描述的二划分问题（5.7）：
+\begin{equation}
+\begin{array}{ll}\text{最小化}&x^\T Wx\\
+\text{约束为}&x_i^2=1,\quad i=1,\ldots,n,\end{array}\tag{5.113}
+\end{equation}
+变量为 $x\in\R^n$。这个非凸问题的拉格朗日对偶为半正定规划
+\begin{equation}
+\begin{array}{ll}\text{最大化}&-\one^\T\nu\\
+\text{约束为}&W+\diag(\nu)\succeq0,\end{array}\tag{5.114}
+\end{equation}
+变量为 $\nu\in\R^n$。该半正定规划的最优值是划分问题（5.113）最优值的下界。本题推导另一个提供二划分最优值下界的半正定规划，并研究两者的联系。
+
+% Source PDF page 300 (printed p. 286)
+\begin{enumerate}[label=(\alph*)]
+\item \emph{二划分问题的矩阵形式。}证明二划分问题可表述为
+\[
+\begin{array}{ll}\text{最小化}&\tr(WX)\\
+\text{约束为}&X\succeq0,\quad\rank X=1\\
+&X_{ii}=1,\quad i=1,\ldots,n,\end{array}
+\]
+变量为 $X\in\mathbf S^n$。\emph{提示：}证明若 $X$ 可行，则 $X=xx^\T$，其中 $x\in\R^n$ 满足 $x_i\in\{-1,1\}$，反之亦然。
+\item \emph{二划分问题的半正定松弛。}由(a)的表述，可构造松弛
+\begin{equation}
+\begin{array}{ll}\text{最小化}&\tr(WX)\\
+\text{约束为}&X\succeq0\\&X_{ii}=1,\quad i=1,\ldots,n,\end{array}\tag{5.115}
+\end{equation}
+变量为 $X\in\mathbf S^n$。这是半正定规划，可高效求解。解释其最优值为何提供二划分问题（5.113）最优值的下界。若该半正定规划的最优点 $X^\star$ 秩为1，能得出什么？
+\item 现在有两个给（5.113）最优值提供下界的半正定规划：(b)所得松弛（5.115），以及（5.114）给出的二划分问题拉格朗日对偶。二者是什么关系？它们的下界有何关系？\emph{提示：}通过对偶联系两个半正定规划。
+\end{enumerate}
+
+\paragraph{5.40} \emph{E最优实验设计。}习题5.10两种最优实验设计问题的一个变体是E最优设计：
+\[
+\begin{array}{ll}\text{最小化}&
+\lambda_{\max}\left(\left(\sum_{i=1}^p x_iv_iv_i^\T\right)^{-1}\right)\\
+\text{约束为}&x\succeq0,\quad\one^\T x=1.\end{array}
+\]
+（另见§7.5。）先将其改写为
+\[
+\begin{array}{ll}\text{最小化}&1/t\\
+\text{约束为}&\sum_{i=1}^p x_iv_iv_i^\T\succeq tI\\
+&x\succeq0,\quad\one^\T x=1,\end{array}
+\]
+变量为 $t\in\R,x\in\R^p$，定义域为 $\R_{++}\times\R^p$，再应用拉格朗日对偶推导对偶问题。尽可能简化。
+
+\paragraph{5.41} \emph{最快混合Markov链问题的对偶。}在第174页遇到半正定规划
+\[
+\begin{array}{ll}\text{最小化}&t\\
+\text{约束为}&-tI\preceq P-(1/n)\one\one^\T\preceq tI\\
+&P\one=\one\\
+&P_{ij}\ge0,\quad i,j=1,\ldots,n\\
+&P_{ij}=0,\quad(i,j)\notin E,\end{array}
+\]
+变量为 $t\in\R,P\in\mathbf S^n$。证明其对偶可写为
+\[
+\begin{array}{ll}\text{最大化}&\one^\T z-(1/n)\one^\T Y\one\\
+\text{约束为}&\norm Y_{2*}\le1\\
+&z_i+z_j\le Y_{ij},\quad(i,j)\in E,\end{array}
+\]
+变量为 $z\in\R^n,Y\in\mathbf S^n$。范数 $\norm{\cdot}_{2*}$ 是 $\mathbf S^n$ 上谱范数的对偶范数：
+$\norm Y_{2*}=\sum_{i=1}^n|\lambda_i(Y)|$，即特征值绝对值之和。（见第637页§A.1.6。）
+
+% Source PDF page 301 (printed p. 287)
+\paragraph{5.42} \emph{不等式形式锥问题的拉格朗日对偶。}求不等式形式锥问题
+\[
+\begin{array}{ll}\text{最小化}&c^\T x\\
+\text{约束为}&Ax\preceq_K b\end{array}
+\]
+的拉格朗日对偶，其中 $A\in\R^{m\times n}$、$b\in\R^m$，$K$ 是 $\R^m$ 中的正常锥。将隐含等式约束显式写出。
+
+\paragraph{5.43} \emph{二阶锥规划的对偶。}证明二阶锥规划
+\[
+\begin{array}{ll}\text{最小化}&f^\T x\\
+\text{约束为}&\norm{A_ix+b_i}_2\le c_i^\T x+d_i,\quad i=1,\ldots,m,\end{array}
+\]
+变量为 $x\in\R^n$，其对偶可写为
+\[
+\begin{array}{ll}\text{最大化}&\sum_{i=1}^m(b_i^\T u_i-d_iv_i)\\
+\text{约束为}&\sum_{i=1}^m(A_i^\T u_i-c_iv_i)+f=0\\
+&\norm{u_i}_2\le v_i,\quad i=1,\ldots,m,\end{array}
+\]
+变量为 $u_i\in\R^{n_i},v_i\in\R$，$i=1,\ldots,m$。问题数据为 $f\in\R^n$、$A_i\in\R^{n_i\times n}$、$b_i\in\R^{n_i}$、$c_i\in\R^n$、$d_i\in\R$，$i=1,\ldots,m$。
+
+用以下两种方法推导：
+\begin{enumerate}[label=(\alph*)]
+\item 引入新变量 $y_i\in\R^{n_i},t_i\in\R$ 及等式 $y_i=A_ix+b_i$、$t_i=c_i^\T x+d_i$，再推导拉格朗日对偶。
+\item 从二阶锥规划的锥形式出发，利用锥对偶。使用二阶锥自对偶这一事实。
+\end{enumerate}
+
+\paragraph{5.44} \emph{非严格线性矩阵不等式的强择一关系。}第270页例5.14提到，系统
+\begin{equation}
+Z\succeq0,\qquad\tr(GZ)>0,\qquad
+\tr(F_iZ)=0,\quad i=1,\ldots,n,\tag{5.116}
+\end{equation}
+与非严格线性矩阵不等式
+\begin{equation}
+F(x)=x_1F_1+\cdots+x_nF_n+G\preceq0\tag{5.117}
+\end{equation}
+具有强择一关系，条件是矩阵 $F_i$ 满足
+\begin{equation}
+\sum_{i=1}^n v_iF_i\succeq0\ \Longrightarrow\
+\sum_{i=1}^n v_iF_i=0.\tag{5.118}
+\end{equation}
+本题证明该结果，并举例说明这两个系统并非总有强择一关系。
+\begin{enumerate}[label=(\alph*)]
+\item 假设（5.118）成立，且辅助半正定规划
+\[
+\begin{array}{ll}\text{最小化}&s\\
+\text{约束为}&F(x)\preceq sI\end{array}
+\]
+的最优值为正。证明最优值能达到。由§5.9.4的讨论，（5.117）和（5.116）具有强择一关系。
+
+\emph{提示：}不失一般性，假设 $F_1,\ldots,F_n$ 线性无关，则（5.118）可替换为 $\sum_{i=1}^n v_iF_i\succeq0\Longrightarrow v=0$，可简化证明。
+\item 取 $n=1$，且
+\[
+G=\begin{bmatrix}0&1\\1&0\end{bmatrix},\qquad
+F_1=\begin{bmatrix}0&0\\0&1\end{bmatrix}.
+\]
+证明（5.117）和（5.116）都不可行。
+\end{enumerate}
+
+% Source PDF page 302 (printed p. 288)
+% This source page is blank.

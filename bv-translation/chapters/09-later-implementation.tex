@@ -1,0 +1,140 @@
+% Source PDF page 522 (printed p. 508)
+\section{实现}
+本节讨论实现无约束最小化算法时遇到的一些问题。数值线性代数的更多细节，见附录C。
+
+\subsection{线搜索中的预计算}
+在线搜索最简单的实现中，对每个 $t$ 求 $f(x+t\Delta x)$，与对任意 $z\in\dom f$ 求 $f(z)$ 的方式相同。但在某些情况下，可以利用需要沿射线 $\{x+t\Delta x\mid t\ge0\}$ 上许多点计算 $f$ 这一事实，在精确线搜索中还需计算其导数，来减少总计算量。这通常需要一些预计算，其代价往往与在任意一点计算 $f$ 的代价同阶；之后，沿该射线计算 $f$ 及其导数就可以更高效。
+
+设 $x\in\dom f$、$\Delta x\in\R^n$，将 $f$ 限制在 $x$ 和 $\Delta x$ 确定的直线或射线上，定义 $\widetilde f(t)=f(x+t\Delta x)$。回溯线搜索需要对若干个、可能很多个 $t$ 值计算 $\widetilde f$；精确线搜索需要在若干 $t$ 值处计算 $\widetilde f$ 以及一阶或更高阶导数。上述简单方法先形成 $z=x+t\Delta x$，再求 $f(z)$，以计算 $\widetilde f(t)$。为计算 $\widetilde f'(t)$，先形成 $z=x+t\Delta x$，再求 $\nabla f(z)$，最后计算 $\widetilde f'(t)=\nabla f(z)^\T\Delta x$。下面用几个有代表性的例子，说明如何更高效地在多个 $t$ 值处计算 $\widetilde f$。
+
+\subsubsection*{与仿射函数复合}
+预计算能够加快线搜索的一种很一般的情形，是目标具有形式 $f(x)=\phi(Ax+b)$，其中 $A\in\R^{p\times n}$，$\phi$ 容易计算，例如是可分函数。用简单方法在 $k$ 个 $t$ 值处计算 $\widetilde f(t)=f(x+t\Delta x)$，需要对每个 $t$ 形成 $A(x+t\Delta x)+b$，共需 $2kpn$ 次浮点运算，然后对每个 $t$ 计算 $\phi(A(x+t\Delta x)+b)$。
+
+更高效的方式是先计算 $Ax+b$ 和 $A\Delta x$，需要 $4pn$ 次浮点运算，再利用
+\[
+ A(x+t\Delta x)+b=(Ax+b)+t(A\Delta x)
+\]
+对每个 $t$ 形成 $A(x+t\Delta x)+b$，需要 $2kp$ 次浮点运算。只保留主导项，总代价为 $4pn+2kp$，而简单方法为 $2kpn$ 次浮点运算。
+
+\subsubsection*{线性矩阵不等式的解析中心}
+下面给出一个更具体、也更完整的例子。考虑计算线性矩阵不等式解析中心的问题 (9.6)，即最小化 $\log\det F(x)^{-1}$，其中 $x\in\R^n$，$F:\R^n\to\mathbf S^p$ 为仿射函数。沿着经过 $x$、方向为 $\Delta x$ 的直线，有
+\[
+ \widetilde f(t)=\log\det(F(x+t\Delta x))^{-1}=-\log\det(A+tB),
+\]
+% Source PDF page 523 (printed p. 509)
+其中
+\[
+ A=F(x),\qquad B=\Delta x_1F_1+\cdots+\Delta x_nF_n\in\mathbf S^p.
+\]
+由于 $A\succ0$，它具有 Cholesky 分解 $A=LL^\T$，其中 $L$ 为非奇异下三角矩阵。因此，$\widetilde f$ 可以写成
+\begin{equation}
+\begin{aligned}
+ \widetilde f(t)&=-\log\det\bigl(L(I+tL^{-1}BL^{-\T})L^\T\bigr)\\
+ &=-\log\det A-\sum_{i=1}^p\log(1+t\lambda_i),
+\end{aligned}\tag{9.59}
+\end{equation}
+其中 $\lambda_1,\ldots,\lambda_p$ 是 $L^{-1}BL^{-\T}$ 的特征值。一旦算出这些特征值，就能利用 (9.59) 右端的公式，对任意 $t$ 用 $4p$ 次简单算术运算求出 $\widetilde f(t)$。利用公式
+\[
+ \widetilde f'(t)=-\sum_{i=1}^p\frac{\lambda_i}{1+t\lambda_i},
+\]
+还可以用 $4p$ 次运算求出 $\widetilde f'(t)$，更高阶导数也类似。
+
+假设线搜索需要在 $k$ 个 $t$ 值处求 $f(x+t\Delta x)$，比较这两种方法。简单方法对每个 $t$ 先形成 $F(x+t\Delta x)$，再以 $-\log\det F(x+t\Delta x)$ 计算 $f(x+t\Delta x)$。例如，可先求 Cholesky 分解 $F(x+t\Delta x)=LL^\T$，再计算
+\[
+ -\log\det F(x+t\Delta x)=-2\sum_{i=1}^p\log L_{ii}.
+\]
+形成 $F(x+t\Delta x)$ 的代价为 $np^2$，Cholesky 分解的代价为 $(1/3)p^3$，因此整个线搜索的总代价为
+\[
+ k\bigl(np^2+(1/3)p^3\bigr)=knp^2+(1/3)kp^3.
+\]
+
+使用前述方法，先形成 $A$，需要 $np^2$，再分解它，需要 $(1/3)p^3$。还要形成 $B$，需要 $np^2$，以及形成 $L^{-1}BL^{-\T}$，需要 $2p^3$。然后计算该矩阵的特征值，大约需要 $(4/3)p^3$ 次浮点运算。这些预计算总共需要 $2np^2+(11/3)p^3$ 次浮点运算。完成预计算后，对每个 $t$ 计算 $\widetilde f(t)$ 的代价为 $4p$ 次。因此，总代价为
+\[
+ 2np^2+(11/3)p^3+4kp.
+\]
+若 $k$ 远小于 $p(2n+(11/3)p)$，这意味着整个线搜索的计算量，与仅计算一次 $f$ 相当。与简单方法相比，节省的计算量依赖于 $k,p,n$ 的取值，最高可达到 $k$ 倍的量级。
+
+\subsection{计算牛顿步}
+本节简要介绍实现牛顿法时遇到的一些问题。在多数情况下，计算牛顿步 $\Delta x_{\mathrm{nt}}$ 的工作量
+% Source PDF page 524 (printed p. 510)
+超过线搜索中的工作量。为计算牛顿步 $\Delta x_{\mathrm{nt}}$，先计算并形成 $x$ 处的 Hessian 矩阵 $H=\nabla^2f(x)$ 和梯度 $g=\nabla f(x)$，再求解线性方程组 $H\Delta x_{\mathrm{nt}}=-g$。这组方程有时称为\emph{牛顿方程组}，因为其解就是牛顿步；也称为\emph{正规方程组}，因为最小二乘问题的求解中也会出现同一类方程，见第9.1.1节。
+
+虽然可以使用通用线性方程组求解器，但利用 $H$ 的对称性和正定性的方法更好。最常见的方法是形成 $H$ 的 Cholesky 分解，即计算满足 $LL^\T=H$ 的下三角矩阵 $L$，见第C.3.2节。然后通过前代求解 $Lw=-g$，得到 $w=-L^{-1}g$；再通过回代求解 $L^\T\Delta x_{\mathrm{nt}}=w$，得到
+\[
+ \Delta x_{\mathrm{nt}}=L^{-\T}w=-L^{-\T}L^{-1}g=-H^{-1}g.
+\]
+牛顿减量可以通过 $\lambda^2=-\Delta x_{\mathrm{nt}}^\T g$ 计算，也可以使用公式
+\[
+ \lambda^2=g^\T H^{-1}g=\norm{L^{-1}g}_2^2=\norm w_2^2.
+\]
+若使用稠密、无结构的 Cholesky 分解，前代与回代的代价被 Cholesky 分解的代价主导，后者为 $(1/3)n^3$ 次浮点运算。因此，计算牛顿步 $\Delta x_{\mathrm{nt}}$ 的总代价为 $F+(1/3)n^3$ 次浮点运算，其中 $F$ 是形成 $H,g$ 的代价。
+
+通过利用 $H$ 的带状或稀疏等特殊结构，往往能更高效地求解牛顿方程组 $H\Delta x_{\mathrm{nt}}=-g$。这里“$H$ 的结构”指对所有 $x$ 都相同的结构。例如，说“$H$ 为三对角矩阵”，是指对每个 $x\in\dom f$，$\nabla^2f(x)$ 都为三对角矩阵。
+
+\subsubsection*{带状结构}
+若 Hessian $H$ 为带宽 $k$ 的带状矩阵，即当 $\abs{i-j}>k$ 时 $H_{ij}=0$，则可以使用带状 Cholesky 分解以及带状前代、回代。此时，计算牛顿步 $\Delta x_{\mathrm{nt}}=-H^{-1}g$ 的代价为 $F+nk^2$ 次浮点运算，假设 $k\ll n$；而稠密分解与代入方法需要 $F+(1/3)n^3$。
+
+Hessian 的带状结构条件，即对所有 $x\in\dom f$ 有
+\[
+ \nabla^2f(x)_{ij}=\frac{\partial^2f(x)}{\partial x_i\partial x_j}=0
+ \qquad\text{当 }\abs{i-j}>k,
+\]
+在目标函数 $f$ 中有一个有意思的解释。大致说来，在目标函数中，每个变量 $x_i$ 只与 $2k+1$ 个变量 $x_j$（$j=i-k,\ldots,i+k$）发生非线性耦合。当 $f$ 具有以下部分可分形式时，就会如此：
+\[
+ f(x)=\psi_1(x_1,\ldots,x_{k+1})+\psi_2(x_2,\ldots,x_{k+2})
+ +\cdots+\psi_{n-k}(x_{n-k},\ldots,x_n),
+\]
+其中 $\psi_i:\R^{k+1}\to\R$。换句话说，$f$ 可以写成若干个分别依赖连续 $k$ 个变量的函数之和。
+
+% Source PDF page 525 (printed p. 511)
+\begin{origexample}{9.9}
+考虑最小化 $f:\R^n\to\R$ 的问题，其中
+\[
+ f(x)=\psi_1(x_1,x_2)+\psi_2(x_2,x_3)+\cdots+\psi_{n-1}(x_{n-1},x_n),
+\]
+各 $\psi_i:\R^2\to\R$ 凸且二次可微。由于这种形式，Hessian $\nabla^2f$ 为三对角矩阵，因为 $\abs{i-j}>1$ 时，$\partial^2f/\partial x_i\partial x_j=0$。反过来，如果一个函数的 Hessian 对所有 $x$ 都是三对角矩阵，那么它就具有这种形式。
+
+利用适用于三对角矩阵的 Cholesky 分解及前代、回代算法，求解这一问题的牛顿方程组只需要 $n$ 量级的浮点运算。若不利用 $f$ 的特殊形式，则需要 $n^3$ 量级的浮点运算。
+\end{origexample}
+
+\subsubsection*{稀疏结构}
+更一般地，可以利用 Hessian $H$ 的稀疏性来求解牛顿方程组。当目标中的每个变量 $x_i$ 仅与少数其他变量非线性耦合时，就会出现这种稀疏结构；等价地，目标函数可以写成若干函数之和，其中每个函数仅依赖少数变量，而且每个变量仅出现在少数几个函数中。
+
+当 $H$ 稀疏时，为求解 $H\Delta x=-g$，使用稀疏 Cholesky 分解，计算置换矩阵 $P$ 和下三角矩阵 $L$，使
+\[
+ H=PLL^\T P^\T.
+\]
+分解代价依赖具体的稀疏模式，但往往远小于 $(1/3)n^3$，在 $n$ 很大时，经验复杂度为 $n$ 量级的情形也并不少见。前代与回代与没有置换的基本方法很相似：通过前代求解 $Lw=-P^\T g$，再通过回代求解 $L^\T v=w$，得到
+\[
+ v=L^{-\T}w=-L^{-\T}L^{-1}P^\T g.
+\]
+牛顿步为 $\Delta x=Pv$。
+
+由于 $H$ 的稀疏模式不随 $x$ 改变，更准确地说，由于我们只利用不随 $x$ 改变的稀疏性，因此每个牛顿步都可以使用同一个置换矩阵 $P$。确定一个好的置换矩阵 $P$ 的步骤称为\emph{符号分解步骤}，整个牛顿过程中只需进行一次。
+
+\subsubsection*{对角加低秩}
+求解牛顿方程组 $H\Delta x_{\mathrm{nt}}=-g$ 时，还可以利用许多其他类型的结构。这里只简要介绍一种，更多细节见附录C。假设 Hessian $H$ 可以表示为对角矩阵加一个低秩矩阵，其秩设为 $p$。当目标函数 $f$ 具有特殊形式
+\begin{equation}
+ f(x)=\sum_{i=1}^n\psi_i(x_i)+\psi_0(Ax+b)\tag{9.60}
+\end{equation}
+% Source PDF page 526 (printed p. 512)
+时，就会如此，其中 $A\in\R^{p\times n}$，$\psi_1,\ldots,\psi_n:\R\to\R$，$\psi_0:\R^p\to\R$。换句话说，$f$ 是一个可分函数，加上一个仅依赖 $x$ 的低维仿射函数的函数。
+
+为求出 (9.60) 的牛顿步 $\Delta x_{\mathrm{nt}}$，需要求解牛顿方程组 $H\Delta x_{\mathrm{nt}}=-g$，其中
+\[
+ H=D+A^\T H_0A.
+\]
+这里 $D=\diag(\psi_1''(x_1),\ldots,\psi_n''(x_n))$ 为对角矩阵，$H_0=\nabla^2\psi_0(Ax+b)$ 是 $\psi_0$ 的 Hessian。不利用这一结构计算牛顿步时，求解牛顿方程组的代价为 $(1/3)n^3$ 次浮点运算。
+
+设 $H_0=L_0L_0^\T$ 是 $H_0$ 的 Cholesky 分解。引入临时变量 $w=L_0^\T A\Delta x_{\mathrm{nt}}\in\R^p$，将牛顿方程组写成
+\[
+ D\Delta x_{\mathrm{nt}}+A^\T L_0w=-g,\qquad
+ w=L_0^\T A\Delta x_{\mathrm{nt}}.
+\]
+将由第一个方程得到的 $\Delta x_{\mathrm{nt}}=-D^{-1}(A^\T L_0w+g)$ 代入第二个方程，得到
+\begin{equation}
+ (I+L_0^\T AD^{-1}A^\T L_0)w=-L_0^\T AD^{-1}g,\tag{9.61}
+\end{equation}
+这是一个包含 $p$ 个线性方程的方程组。
+
+现在按以下步骤计算牛顿步 $\Delta x_{\mathrm{nt}}$。先计算 $H_0$ 的 Cholesky 分解，代价为 $(1/3)p^3$；再形成 (9.61) 左端的稠密正定对称矩阵，代价为 $2p^2n$；然后通过 Cholesky 分解及回代、前代，求解 (9.61) 得到 $w$，代价为 $(1/3)p^3$ 次浮点运算。最后利用 $\Delta x_{\mathrm{nt}}=-D^{-1}(A^\T L_0w+g)$ 计算 $\Delta x_{\mathrm{nt}}$，代价为 $2np$ 次浮点运算。只保留主导项，计算 $\Delta x_{\mathrm{nt}}$ 的总代价为 $2p^2n$ 次浮点运算，当 $p\ll n$ 时，远小于 $(1/3)n^3$。

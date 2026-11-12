@@ -1,0 +1,283 @@
+% Source PDF page 690 (printed p. 676)
+$A_{11}$ 为分块对角矩阵的线性方程组 $Ax=b$，称为\emph{部分可分}，理由如下：若固定子向量 $x_2$，其余方程就解耦成 $k$ 个独立的线性方程组，可以分别求解。子向量 $x_2$ 有时称为\emph{复杂化变量}，因为固定 $x_2$ 后，方程会简单得多。分块消去法求解部分可分线性方程组，可以远比标准方法高效。
+
+\subsubsection*{消去稀疏矩阵}
+若 $A_{11}$ 稀疏，则可以通过稀疏分解与稀疏求解步骤来消去它，因此(C.6)中的 $f,s$ 远小于无结构 $A_{11}$ 的情况。当(C.3)中的 $A_{11}$ 稀疏、其他分块稠密，且 $n_2\ll n_1$ 时，称 $A$ 为\emph{带有少量稠密行和列的稀疏矩阵}。消去稀疏分块 $A_{11}$，就能高效求解这类除少量行和列外都稀疏的方程组。
+
+另一种做法，是直接对整个矩阵 $A$ 使用稀疏分解算法。大多数稀疏求解器都能处理稠密的行和列，并选择产生稀疏因子的置换，使分解与求解都较快。这比分块消去更直接，但往往较慢，特别是还能利用其他分块结构的应用，见例C.4。
+
+\paragraph{注C.2}
+正如注C.1已经提示的，求解带少量稠密行和列的方程组的这两种方法密切相关。若消去法分别采用分解
+\[
+ A_{11}=P_1L_1U_1P_2,\qquad S=P_3L_2U_2,
+\]
+则可以把它解释为先将 $A$ 分解为
+\begin{align*}
+ &\begin{bmatrix}A_{11}&A_{12}\\A_{21}&A_{22}\end{bmatrix}\\
+ &\quad=\begin{bmatrix}P_1&0\\0&P_3\end{bmatrix}
+ \begin{bmatrix}L_1&0\\P_3^TA_{21}P_2^TU_1^{-1}&L_2\end{bmatrix}\\
+ &\qquad\cdot\begin{bmatrix}U_1&L_1^{-1}P_1^TA_{12}\\0&U_2\end{bmatrix}
+ \begin{bmatrix}P_2&0\\0&I\end{bmatrix},
+\end{align*}
+再进行前代与回代。
+
+\subsection{分块消去与结构}
+\subsubsection*{对称性与正定性}
+当 $A$ 对称，或对称正定时，有相应的分块消去变体。$A$ 对称时，$A_{11}$ 与 Schur 补 $S$ 也都对称，所以可以对 $A_{11},S$ 使用对称分解。矩阵乘法等其他运算，也可以利用对称性。总体而言，相比非对称情形，节省的计算量约为一半。
+% Source PDF page 691 (printed p. 677)
+分块消去也可以利用正定性。当 $A$ 对称正定时，$A_{11}$ 与 Schur 补 $S$ 也都正定，因此可以使用 Cholesky 分解。
+
+\subsubsection*{利用其他分块中的结构}
+前面的复杂度分析假设不利用矩阵 $A_{12},A_{21},A_{22}$ 和 Schur 补 $S$ 的任何结构，即将它们都视为稠密矩阵。不过，许多情况下，这些分块的结构可以用于形成 Schur 补、对它作分解及进行求解步骤。这时，分块消去法相对于标准方法，可能节省更多的计算量。
+
+\begin{origexample}{C.2}
+\textbf{分块三角方程组。} 设 $A_{12}=0$，即 $Ax=b$ 具有分块下三角结构：
+\[
+ \begin{bmatrix}A_{11}&0\\A_{21}&A_{22}\end{bmatrix}
+ \begin{bmatrix}x_1\\x_2\end{bmatrix}=\begin{bmatrix}b_1\\b_2\end{bmatrix}.
+\]
+此时 Schur 补就是 $S=A_{22}$，分块消去法化为分块前代：
+\begin{align*}
+ x_1&\coloneqq A_{11}^{-1}b_1,\\
+ x_2&\coloneqq A_{22}^{-1}(b_2-A_{21}x_1).
+\end{align*}
+\end{origexample}
+
+\begin{origexample}{C.3}
+\textbf{分块对角与带状方程组。} 设 $A_{11}$ 为分块对角矩阵，最大的对角块为 $l\times l$，而 $A_{12},A_{21},A_{22}$ 为带状矩阵，带宽为 $k$。这时 $A_{11}^{-1}$ 也为分块对角矩阵，分块大小与 $A_{11}$ 相同。因此，乘积 $A_{11}^{-1}A_{12}$ 也是带状矩阵，带宽为 $k+l$；Schur 补 $S=A_{22}-A_{21}A_{11}^{-1}A_{12}$ 的带宽为 $2k+l$。这意味着，形成 Schur 补 $S$ 可以更高效，对 $S$ 的分解与求解也能高效进行。特别地，当最大分块尺寸 $l$ 和带宽 $k$ 固定时，求解 $Ax=b$ 的 flop 数随 $n$ 线性增长。
+\end{origexample}
+
+\begin{origexample}{C.4}
+\textbf{KKT结构。} 设矩阵 $A$ 具有 KKT 结构，即
+\[
+ A=\begin{bmatrix}A_{11}&A_{12}\\A_{12}^T&0\end{bmatrix},
+\]
+其中 $A_{11}\in\mathbf S_{++}^p$，$A_{12}\in\R^{p\times m}$ 且 $\rank A_{12}=m$。因为 $A_{11}\succ0$，可以使用 Cholesky 分解。Schur 补 $S=-A_{12}^TA_{11}^{-1}A_{12}$ 负定，因此也可以对 $-S$ 作 Cholesky 分解。
+\end{origexample}
+
+% Source PDF page 692 (printed p. 678)
+\subsection{矩阵求逆引理}
+分块消去的思想是消去变量，再求解一个较小的方程组，其系数矩阵为原矩阵关于被消去变量的 Schur 补。这个思想也可以反过来使用：识别出某个矩阵是 Schur 补时，可以引入新变量，建立一个更大的方程组。多数情况下，这样做没有优势，因为最终需要求解的方程组更大；但如果较大的方程组具有可利用的特殊结构，引入变量就可能得到高效方法。最常见的情形，是可以从较大的矩阵中消去另一组变量。
+
+从线性方程组
+\begin{equation}
+ (A+BC)x=b\tag{C.7}
+\end{equation}
+出发，其中 $A\in\R^{n\times n}$ 非奇异，$B\in\R^{n\times p}$、$C\in\R^{p\times n}$。引入新变量 $y=Cx$，将方程改写为
+\[
+ Ax+By=b,\qquad y=Cx,
+\]
+或者矩阵形式
+\begin{equation}
+ \begin{bmatrix}A&B\\C&-I\end{bmatrix}
+ \begin{bmatrix}x\\y\end{bmatrix}=\begin{bmatrix}b\\0\end{bmatrix}.\tag{C.8}
+\end{equation}
+注意，原系数矩阵 $A+BC$ 正是(C.8)中较大矩阵关于 $-I$ 的 Schur 补。如果从(C.8)消去变量 $y$，就得到原方程(C.7)。
+
+有时，求解较大的方程组(C.8)，会比求解原来的较小方程组(C.7)更高效。例如，若 $A,B,C$ 都较稀疏，而矩阵 $A+BC$ 的稀疏程度低得多，就可能如此。
+
+引入新变量 $y$ 以后，可以利用 $x=A^{-1}(b-By)$，从较大的方程组(C.8)中消去原变量 $x$。将其代入第二个方程 $y=Cx$，得到
+\[
+ (I+CA^{-1}B)y=CA^{-1}b,
+\]
+所以
+\[
+ y=(I+CA^{-1}B)^{-1}CA^{-1}b.
+\]
+再利用 $x=A^{-1}(b-By)$，得到
+\begin{equation}
+ x=\bigl(A^{-1}-A^{-1}B(I+CA^{-1}B)^{-1}CA^{-1}\bigr)b.\tag{C.9}
+\end{equation}
+由于 $b$ 任意，便有
+\[
+ (A+BC)^{-1}=A^{-1}-A^{-1}B(I+CA^{-1}B)^{-1}CA^{-1}.
+\]
+这称为\emph{矩阵求逆引理}，或 \emph{Sherman--Woodbury--Morrison 公式}。
+
+矩阵求逆引理有许多应用。例如，若 $p$ 较小，甚至只要不是很大，并且有高效求解 $Au=v$ 的方法，它就给出了求解 $(A+BC)x=b$ 的一种方法。
+
+% Source PDF page 693 (printed p. 679)
+\subsubsection*{对角或稀疏矩阵加低秩矩阵}
+设 $A$ 为对角元素均非零的对角矩阵，希望求解(C.7)形式的方程。直接的方法是先形成矩阵 $D=A+BC$，再求解 $Dx=b$。若乘积 $BC$ 稠密，则形成 $A+BC$ 需要 $2pn^2$ 次浮点运算，$D$ 的 LU 分解需要 $(2/3)n^3$ 次，因此总代价为
+\[
+ 2pn^2+(2/3)n^3.
+\]
+
+矩阵求逆引理给出更高效的方法。可以从右向左计算(C.9)，得到 $x$。先计算 $z=A^{-1}b$，由于 $A$ 为对角矩阵，需要 $n$ 次浮点运算；再形成矩阵 $E=I+CA^{-1}B$，需要 $2p^2n$ 次；然后求解 $Ew=Cz$，这是 $p$ 个变量的 $p$ 个线性方程，代价为 $(2/3)p^3$，另需 $2pn$ 次计算 $Cz$。最后计算 $x=z-A^{-1}Bw$，其中矩阵向量乘积 $Bw$ 需要 $2pn$ 次，另加较低阶的项。略去较低阶项，总代价为
+\[
+ 2p^2n+(2/3)p^3.
+\]
+与第一种方法比较可知，$p<n$ 时，第二种方法更高效。特别地，若 $p$ 较小且固定，复杂度随 $n$ 线性增长。
+
+矩阵求逆引理的另一个重要应用，是 $A$ 稀疏且非奇异，而 $B,C$ 稠密的情况。同样比较两种方法：第一种是形成稠密矩阵 $A+BC$，再用稠密 LU 分解求解(C.7)，代价为 $2pn^2+(2/3)n^3$ 次浮点运算；第二种基于(C.9)，使用 $A$ 的稀疏 LU 分解。具体地，设将 $A$ 分解为 $A=P_1LUP_2$ 的代价为 $f$，对已分解方程组 $P_1LUP_2x=d$ 进行求解的代价为 $s$。从右向左计算(C.9)：先分解 $A$，再求解 $p+1$ 个线性方程组
+\[
+ Az=b,\qquad AD=B,
+\]
+得到 $z\in\R^n$、$D\in\R^{n\times p}$，代价为 $f+(p+1)s$。接着形成矩阵 $E=I+CD$，并求解
+\[
+ Ew=Cz.
+\]
+这是关于 $p$ 个变量 $w$ 的 $p$ 个线性方程，代价为 $2p^2n+(2/3)p^3$，另加较低阶项。最后计算 $x=z-Dw$，需要 $2pn$ 次浮点运算。因此总代价为
+\[
+ f+ps+2p^2n+(2/3)p^3.
+\]
+若 $f\ll(2/3)n^3$、$s\ll2n^2$，它就远小于第一种方法的复杂度。
+
+\paragraph{注C.3\quad 增广方程组方法。}
+利用稀疏加低秩结构的另一种方法，是用稀疏 LU 求解器直接求解(C.8)。方程组(C.8)包含 $p+n$ 个变量、$p+n$ 个线性方程，有时称为(C.7)对应的
+% Source PDF page 694 (printed p. 680)
+\emph{增广方程组}。若 $A$ 非常稀疏，且 $p$ 较小，用稀疏求解器求解增广方程组，可能远快于用稠密求解器求解(C.7)。
+
+增广方程组方法与前面介绍的方法密切相关。设
+\[
+ A=P_1LUP_2
+\]
+为 $A$ 的稀疏 LU 分解，
+\[
+ I+CA^{-1}B=P_3\widetilde L\widetilde U
+\]
+为 $I+CA^{-1}B$ 的稠密 LU 分解，则
+\begin{equation}
+ \begin{aligned}
+ &\begin{bmatrix}A&B\\C&-I\end{bmatrix}\\
+ &\quad=\begin{bmatrix}P_1&0\\0&P_3\end{bmatrix}
+ \begin{bmatrix}L&0\\P_3^TCP_2^TU^{-1}&-\widetilde L\end{bmatrix}\\
+ &\qquad\cdot\begin{bmatrix}U&L^{-1}P_1^TB\\0&\widetilde U\end{bmatrix}
+ \begin{bmatrix}P_2&0\\0&I\end{bmatrix},
+ \end{aligned}\tag{C.10}
+\end{equation}
+可用这一分解求解增广方程组。可以验证，它与前面介绍的、基于矩阵求逆引理的方法等价。
+
+当然，如果用稀疏 LU 求解器求解增广方程组，我们无法控制它选择的置换。求解器可能选择一个不同于(C.10)、计算代价更大的分解。即便如此，增广方程组方法仍是有吸引力的选择：它比基于矩阵求逆引理的方法更容易实现，数值上也更稳定。
+
+\subsubsection*{低秩更新}
+设 $A\in\R^{n\times n}$ 非奇异，$u,v\in\R^n$，且 $1+v^TA^{-1}u\neq0$，希望求解两个线性方程组
+\[
+ Ax=b,\qquad(A+uv^T)\widetilde x=b.
+\]
+第二个方程组的解 $\widetilde x$ 称为 $x$ 的\emph{秩一更新}。矩阵求逆引理允许我们在算出 $x$ 以后，以很小的代价算出秩一更新 $\widetilde x$。有
+\begin{align*}
+ \widetilde x&=(A+uv^T)^{-1}b\\
+ &=\left(A^{-1}-\frac1{1+v^TA^{-1}u}A^{-1}uv^TA^{-1}\right)b\\
+ &=x-\frac{v^Tx}{1+v^TA^{-1}u}A^{-1}u.
+\end{align*}
+因此，可先分解 $A$，计算 $x=A^{-1}b$、$w=A^{-1}u$，再计算
+\[
+ \widetilde x=x-\frac{v^Tx}{1+v^Tw}w,
+\]
+即可解出两个方程组。总代价为 $f+2s$；如果从头求解 $\widetilde x$，代价则为 $2(f+s)$。
+
+% Source PDF page 695 (printed p. 681)
+\section{求解欠定线性方程组}
+本附录最后介绍欠定线性方程组
+\begin{equation}
+ Ax=b\tag{C.11}
+\end{equation}
+的几个重要事实，其中 $A\in\R^{p\times n}$、$p<n$。假设 $\rank A=p$，因此对所有 $b$ 都至少存在一个解。
+
+许多应用只需找到某个特解 $\hat x$。另一些情况下，可能需要把全部解完整地参数化为
+\begin{equation}
+ \{x\mid Ax=b\}=\{Fz+\hat x\mid z\in\R^{n-p}\},\tag{C.12}
+\end{equation}
+其中矩阵 $F$ 的各列构成 $A$ 的零空间的一组基。
+
+\subsubsection*{对$A$的非奇异子矩阵求逆}
+若已知 $A$ 的一个非奇异 $p\times p$ 子矩阵，欠定方程组就容易求解。先假设 $A$ 的前 $p$ 列线性无关。于是 $Ax=b$ 可以写成
+\[
+ Ax=\begin{bmatrix}A_1&A_2\end{bmatrix}
+ \begin{bmatrix}x_1\\x_2\end{bmatrix}=A_1x_1+A_2x_2=b,
+\]
+其中 $A_1\in\R^{p\times p}$ 非奇异。可将 $x_1$ 表示为
+\[
+ x_1=A_1^{-1}(b-A_2x_2)=A_1^{-1}b-A_1^{-1}A_2x_2.
+\]
+由此很容易算出一个解：只需取 $\hat x_2=0$、$\hat x_1=A_1^{-1}b$。代价等于求解一次含 $p$ 个变量的方形线性方程组 $A_1\hat x_1=b$ 的代价。
+
+也可以将 $x_2\in\R^{n-p}$ 作为自由参数，参数化 $Ax=b$ 的全部解。通解可表示为
+\[
+ x=\begin{bmatrix}x_1\\x_2\end{bmatrix}
+ =\begin{bmatrix}-A_1^{-1}A_2\\I\end{bmatrix}x_2
+ +\begin{bmatrix}A_1^{-1}b\\0\end{bmatrix}.
+\]
+这给出了(C.12)形式的参数化，其中
+\[
+ F=\begin{bmatrix}-A_1^{-1}A_2\\I\end{bmatrix},\qquad
+ \hat x=\begin{bmatrix}A_1^{-1}b\\0\end{bmatrix}.
+\]
+
+总结而言，设分解 $A_1$ 的代价为 $f$，求解一个 $A_1x=d$ 形式的方程组的代价为 $s$。则求(C.11)的一个解需要 $f+s$，参数化全部解，即计算 $F,\hat x$，需要 $f+s(n-p+1)$。
+
+现在考虑一般情况，即 $A$ 的前 $p$ 列未必线性无关。由于 $\rank A=p$，可以选出 $A$ 中线性无关的 $p$ 列，将它们置换到最前面，再使用上述方法。
+% Source PDF page 696 (printed p. 682)
+换句话说，找出一个置换矩阵 $P$，使 $\widetilde A=AP$ 的前 $p$ 列线性无关，即
+\[
+ \widetilde A=AP=\begin{bmatrix}A_1&A_2\end{bmatrix},
+\]
+其中 $A_1$ 可逆。$\widetilde A\widetilde x=b$ 的通解，其中 $\widetilde x=P^Tx$，为
+\[
+ \widetilde x=\begin{bmatrix}-A_1^{-1}A_2\\I\end{bmatrix}\widetilde x_2
+ +\begin{bmatrix}A_1^{-1}b\\0\end{bmatrix}.
+\]
+所以 $Ax=b$ 的通解为
+\[
+ x=P\widetilde x=P\begin{bmatrix}-A_1^{-1}A_2\\I\end{bmatrix}z
+ +P\begin{bmatrix}A_1^{-1}b\\0\end{bmatrix},
+\]
+其中 $z\in\R^{n-p}$ 为自由参数。当 $A$ 的某个非奇异或容易求逆的子矩阵容易识别时，这一思路很有用，例如具有非零对角元素的对角矩阵。
+
+\subsubsection*{QR分解}
+若 $C\in\R^{n\times p}$、$p\leq n$，且 $\rank C=p$，则可分解为
+\[
+ C=\begin{bmatrix}Q_1&Q_2\end{bmatrix}\begin{bmatrix}R\\0\end{bmatrix},
+\]
+其中 $Q_1\in\R^{n\times p}$、$Q_2\in\R^{n\times(n-p)}$ 满足
+\[
+ Q_1^TQ_1=I,\qquad Q_2^TQ_2=I,\qquad Q_1^TQ_2=0,
+\]
+$R\in\R^{p\times p}$ 为对角元素非零的上三角矩阵。这称为 $C$ 的 \emph{QR 分解}。计算 QR 分解需要 $2p^2(n-p/3)$ 次浮点运算。矩阵 $Q$ 以分解形式存储，从而能够高效计算矩阵向量乘积 $Qx$ 与 $Q^Tx$。
+
+QR 分解可以用于求解欠定线性方程组(C.11)。设
+\[
+ A^T=\begin{bmatrix}Q_1&Q_2\end{bmatrix}\begin{bmatrix}R\\0\end{bmatrix}
+\]
+为 $A^T$ 的 QR 分解。代入方程易知，$\hat x=Q_1R^{-T}b$ 满足方程组：
+\[
+ A\hat x=R^TQ_1^TQ_1R^{-T}b=b.
+\]
+此外，$Q_2$ 的各列构成 $A$ 的零空间的一组基，因此完整解集可参数化为
+\[
+ \{x=\hat x+Q_2z\mid z\in\R^{n-p}\}.
+\]
+QR 分解是求解欠定方程组最常用的方法。其一个不足是难以利用稀疏性：即使 $C$ 非常稀疏，因子 $Q$ 通常仍然稠密。
+
+% Source PDF page 697 (printed p. 683)
+\subsubsection*{矩形矩阵的LU分解}
+若 $C\in\R^{n\times p}$、$p\leq n$，且 $\rank C=p$，则可分解为
+\[
+ C=PLU,
+\]
+其中 $P\in\R^{n\times n}$ 是置换矩阵，$L\in\R^{n\times p}$ 为单位下三角矩阵，即 $i<j$ 时 $l_{ij}=0$、$l_{ii}=1$，$U\in\R^{p\times p}$ 为非奇异上三角矩阵。不利用 $C$ 的任何结构时，代价为 $(2/3)p^3+p^2(n-p)$ 次浮点运算。
+
+若 $C$ 稀疏，LU 分解通常包含行置换与列置换，即
+\[
+ C=P_1LUP_2,
+\]
+% Source prints P_1,P_2 in R^{p x p}; preserved as in the uploaded PDF.
+其中 $P_1,P_2\in\R^{p\times p}$ 为置换矩阵。稀疏矩形矩阵的 LU 分解可以非常高效地计算，其代价远低于稠密矩阵的情形。
+
+LU 分解也可用于求解欠定线性方程组。设 $A^T=PLU$ 为(C.11)中矩阵 $A^T$ 的 LU 分解，并将 $L$ 分块为
+\[
+ L=\begin{bmatrix}L_1\\L_2\end{bmatrix},
+\]
+其中 $L_1\in\R^{p\times p}$、$L_2\in\R^{(n-p)\times p}$。容易验证，解集可以按(C.12)参数化，其中
+\[
+ \hat x=P\begin{bmatrix}L_1^{-T}U^{-T}b\\0\end{bmatrix},\qquad
+ F=P\begin{bmatrix}-L_1^{-T}L_2^T\\I\end{bmatrix}.
+\]
+
+% Source PDF page 698 (printed p. 684)
+\section*{文献说明}
+\addcontentsline{toc}{section}{文献说明}
+关于稠密数值线性代数的标准参考书，有 Golub 和 Van Loan [GL89]、Demmel [Dem97]、Trefethen 和 Bau [TB97]，以及 Higham [Hig96]。George 和 Liu [GL81] 介绍了稀疏 Cholesky 分解。Duff、Erisman 和 Reid [DER86] 以及 Duff [Duf93] 讨论了稀疏 LU 与 $LDL^T$ 分解。Gill、Murray 和 Wright [GMW81，第2.2节]、Wright [Wri97，第11章]，以及 Nocedal 和 Wright [NW99，第A.2节] 的著作，也介绍了数值线性代数，重点放在数值优化中出现的问题。
+
+LAPACK 软件包 [ABB+99] 包含常用稠密线性代数算法的高质量实现。LAPACK 建立在基础线性代数子程序库 BLAS 之上，后者提供基本的向量与矩阵运算例程，容易针对具体计算机体系结构进行定制。求解稀疏线性方程组的软件也有很多，例如 SPOOLES [APWW99]、SuperLU [DGL03]、UMFPACK [Dav03] 和 WSMP [Gup00]，这里只列举其中几种。

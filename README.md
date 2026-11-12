@@ -1,29 +1,28 @@
-# 通信中的优化问题
+# 《凸优化》中文 LaTeX 译稿
 
-一本中文入门教材，按“通信模型 → 数学结构 → 求解方法 → 数值核验”组织。当前版本以 XeLaTeX 编译为 61 页，含 10 章正文、2 个附录、4 组可复现实验，以及 14 道自拟习题与参考解答。
+底本为用户上传的 Stephen Boyd、Lieven Vandenberghe 著 *Convex Optimization*（Cambridge University Press，714页 PDF）。译稿按原书顺序逐段翻译，保留章节、公式、例题、图、算法和习题编号。当前中文编译稿为677页，包含11章、3个附录和337道习题。
 
-## 下载与编译
+正文与公式采用可编辑 LaTeX；图形从原书 PDF 矢量提取，图注译为中文。参考文献保留原著录信息。源码中的 `Source PDF page` 注释标明对应底本页码。
 
-[下载 LaTeX 源码压缩包](output/latex.zip?raw=true)
+## 下载
 
-解压后选择 **XeLaTeX**，将 `main.tex` 设为主文件。也可以直接使用本仓库的 `latex/` 目录：
+[LaTeX 完整源码包](output/latex.zip?raw=true) · [中文 PDF](output/convex-optimization-zh.pdf?raw=true)
+
+## 编译
 
 ```sh
-cd latex
+cd bv-translation
 latexmk -xelatex main.tex
 ```
 
-完整 TeX Live 或 Overleaf 需提供 `ctex`、`xeCJK` 等中文支持。全部排版图已包含在包中，编译不需要运行 Python，也无需 BibTeX、Biber、MATLAB、网络或 shell-escape。
+使用完整 TeX Live 或 Overleaf，选择 **XeLaTeX**，以 `main.tex` 为主文件。所需图形已包含在 `figures/` 中；参考文献直接写在 LaTeX 中，无需 BibTeX、Biber 或额外脚本。
 
-## 内容与文件
+## 文件
 
-- `latex/chapters/`：问题分类、凸优化基础、资源分配、波束与估计、数值算法、非凸优化、离散决策、随机与在线优化、实验和习题解答。
-- `latex/code/`、`latex/data/`、`latex/figures/`：实验代码、原始数据和图形。
-- `latex/SOURCES.txt`：开源检索及复用说明。
-- `latex/VALIDATION.txt`：数学、数值和编译验证记录。
-- `latex/third_party/`：上游案例、固定版本、归属及完整许可。
-- `output/latex.zip`：可独立编译的完整交付包。
+- `bv-translation/chapters/`：逐章译稿、三个附录、参考文献与记号表。
+- `bv-translation/figures/`：原书图形的矢量裁剪。
+- `bv-translation/TRANSLATION.txt`：底本标识与翻译约定。
+- `bv-translation/SOURCE-ISSUES.txt`：对照原 PDF 核实的底本疑点。
+- `bv-translation/VALIDATION.txt`：覆盖、编号和编译检查记录。
 
-## 来源
-
-以 CVX 公有领域案例和 CVXPY Apache-2.0 案例为基础扩充；参考书和论文通过引用标明。数学书写遵循用户指定的 [writing_skills](https://github.com/hongjinrui/writing_skills/blob/main/SKILL.md)。上游文件适用各自许可，详见 `latex/third_party/NOTICE.txt`；本仓库未替用户决定新写正文的公开许可。
+原书作者、出版及版权信息保留于译稿书前页。此前的通信优化教材保留在 `latex/`；本次译稿以 `bv-translation/` 为准。

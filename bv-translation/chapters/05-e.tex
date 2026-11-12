@@ -1,0 +1,459 @@
+% Source PDF page 269 (printed p. 255)
+再次将问题改写为
+\[
+\begin{array}{ll}\text{最小化}&\norm y\\\text{约束为}&Ax-b=y.\end{array}
+\]
+由（5.61），拉格朗日对偶问题为
+\begin{equation}
+\begin{array}{ll}\text{最大化}&b^\T\nu\\
+\text{约束为}&\norm\nu_*\le1\\&A^\T\nu=0,\end{array}\tag{5.64}
+\end{equation}
+这里利用范数的共轭是对偶范数单位球的示性函数这一事实（第93页例3.26）。
+\end{origexample}
+
+引入新等式约束的思想也可用于约束函数。例如考虑问题
+\begin{equation}
+\begin{array}{ll}\text{最小化}&f_0(A_0x+b_0)\\
+\text{约束为}&f_i(A_ix+b_i)\le0,\quad i=1,\ldots,m,\end{array}\tag{5.65}
+\end{equation}
+其中 $A_i\in\R^{k_i\times n}$、$f_i:\R^{k_i}\to\R$ 凸。（为简便，这里不包含等式约束。）引入新变量 $y_i\in\R^{k_i}$，$i=0,\ldots,m$，将其改写为
+\begin{equation}
+\begin{array}{ll}\text{最小化}&f_0(y_0)\\
+\text{约束为}&f_i(y_i)\le0,\quad i=1,\ldots,m\\
+&A_ix+b_i=y_i,\quad i=0,\ldots,m.\end{array}\tag{5.66}
+\end{equation}
+该问题的拉格朗日函数为
+\[
+\begin{split}
+L(x,y_0,\ldots,y_m,\lambda,\nu_0,\ldots,\nu_m)
+={}&f_0(y_0)+\sum_{i=1}^m\lambda_i f_i(y_i)\\
+&+\sum_{i=0}^m\nu_i^\T(A_ix+b_i-y_i).
+\end{split}
+\]
+对 $x,y_i$ 最小化可求得对偶函数。除非
+\[
+\sum_{i=0}^m A_i^\T\nu_i=0,
+\]
+否则关于 $x$ 的最小值为 $-\infty$。该等式成立时，对于 $\lambda\succ0$，有
+\[
+\begin{aligned}
+g(\lambda,\nu_0,\ldots,\nu_m)
+&=\sum_{i=0}^m\nu_i^\T b_i+
+\inf_{y_0,\ldots,y_m}\left(f_0(y_0)+\sum_{i=1}^m\lambda_i f_i(y_i)
+-\sum_{i=0}^m\nu_i^\T y_i\right)\\
+&=\sum_{i=0}^m\nu_i^\T b_i+\inf_{y_0}(f_0(y_0)-\nu_0^\T y_0)\\
+&\quad+\sum_{i=1}^m\lambda_i\inf_{y_i}
+\bigl(f_i(y_i)-(\nu_i/\lambda_i)^\T y_i\bigr)\\
+&=\sum_{i=0}^m\nu_i^\T b_i-f_0^*(\nu_0)
+-\sum_{i=1}^m\lambda_i f_i^*(\nu_i/\lambda_i).
+\end{aligned}
+\]
+
+% Source PDF page 270 (printed p. 256)
+最后一个表达式涉及共轭函数的透视，因此关于对偶变量是凹的。最后讨论 $\lambda\succeq0$ 但某些 $\lambda_i$ 为零的情形。若 $\lambda_i=0$、$\nu_i\ne0$，对偶函数为 $-\infty$。若 $\lambda_i=0$ 且 $\nu_i=0$，涉及 $y_i,\nu_i,\lambda_i$ 的项全为零。因此，只要约定在 $\lambda_i=0,\nu_i=0$ 时 $\lambda_i f_i^*(\nu_i/\lambda_i)=0$，在 $\lambda_i=0,\nu_i\ne0$ 时 $\lambda_i f_i^*(\nu_i/\lambda_i)=\infty$，上述 $g$ 的表达式对所有 $\lambda\succeq0$ 都有效。
+
+因此，问题（5.66）的对偶可写为
+\begin{equation}
+\begin{array}{ll}
+\text{最大化}&\sum_{i=0}^m\nu_i^\T b_i-f_0^*(\nu_0)
+-\sum_{i=1}^m\lambda_i f_i^*(\nu_i/\lambda_i)\\
+\text{约束为}&\lambda\succeq0\\
+&\sum_{i=0}^m A_i^\T\nu_i=0.\end{array}\tag{5.67}
+\end{equation}
+
+\begin{origexample}{5.7}
+\emph{不等式约束几何规划。}不等式约束几何规划
+\[
+\begin{array}{ll}
+\text{最小化}&\log\left(\sum_{k=1}^{K_0}e^{a_{0k}^\T x+b_{0k}}\right)\\
+\text{约束为}&\log\left(\sum_{k=1}^{K_i}e^{a_{ik}^\T x+b_{ik}}\right)\le0,\quad i=1,\ldots,m
+\end{array}
+\]
+具有（5.65）的形式，其中 $f_i:\R^{K_i}\to\R$ 为
+$f_i(y)=\log(\sum_{k=1}^{K_i}e^{y_k})$。其共轭为
+\[
+f_i^*(\nu)=\begin{cases}
+\sum_{k=1}^{K_i}\nu_k\log\nu_k&\nu\succeq0,\quad\one^\T\nu=1,\\
+\infty&\text{其他情形}.
+\end{cases}
+\]
+由（5.67）可直接写出对偶
+\[
+\begin{array}{ll}
+\text{最大化}&
+b_0^\T\nu_0-\sum_{k=1}^{K_0}\nu_{0k}\log\nu_{0k}
++\sum_{i=1}^m\left(b_i^\T\nu_i-\sum_{k=1}^{K_i}
+\nu_{ik}\log(\nu_{ik}/\lambda_i)\right)\\
+\text{约束为}&\nu_0\succeq0,\quad\one^\T\nu_0=1\\
+&\nu_i\succeq0,\quad\one^\T\nu_i=\lambda_i,\quad i=1,\ldots,m\\
+&\lambda_i\ge0,\quad i=1,\ldots,m\\
+&\sum_{i=0}^m A_i^\T\nu_i=0.
+\end{array}
+\]
+进一步简化为
+\[
+\begin{array}{ll}
+\text{最大化}&
+b_0^\T\nu_0-\sum_{k=1}^{K_0}\nu_{0k}\log\nu_{0k}
++\sum_{i=1}^m\left(b_i^\T\nu_i-\sum_{k=1}^{K_i}
+\nu_{ik}\log(\nu_{ik}/\one^\T\nu_i)\right)\\
+\text{约束为}&\nu_i\succeq0,\quad i=0,\ldots,m\\
+&\one^\T\nu_0=1\\
+&\sum_{i=0}^m A_i^\T\nu_i=0.
+\end{array}
+\]
+\end{origexample}
+
+\subsection{变换目标函数}
+若用 $f_0$ 的递增函数代替目标 $f_0$，所得问题显然等价（见§4.1.3）。不过，等价问题的对偶可能与原问题的对偶非常不同。
+
+\begin{origexample}{5.8}
+再次考虑最小范数问题
+\[
+\text{最小化}\quad\norm{Ax-b},
+\]
+
+% Source PDF page 271 (printed p. 257)
+其中 $\norm{\cdot}$ 为某个范数。将问题改写为
+\[
+\begin{array}{ll}\text{最小化}&(1/2)\norm y^2\\
+\text{约束为}&Ax-b=y.\end{array}
+\]
+这里引入新变量，并将目标替换成其平方的一半。它显然与原问题等价。
+
+改写后问题的对偶为
+\[
+\begin{array}{ll}\text{最大化}&-(1/2)\norm\nu_*^2+b^\T\nu\\
+\text{约束为}&A^\T\nu=0,\end{array}
+\]
+这里利用 $(1/2)\norm{\cdot}^2$ 的共轭为 $(1/2)\norm{\cdot}_*^2$ 这一事实（见第93页例3.27）。
+
+注意，这一对偶问题与先前推导的对偶问题（5.64）不同。
+\end{origexample}
+
+\subsection{隐式约束}
+接下来研究的简单改写，是把某些约束包含到目标函数中：修改目标函数，使其在违反约束时为无穷大。
+
+\begin{origexample}{5.9}
+\emph{带盒约束的线性规划。}考虑线性规划
+\begin{equation}
+\begin{array}{ll}\text{最小化}&c^\T x\\
+\text{约束为}&Ax=b\\&l\preceq x\preceq u,\end{array}\tag{5.68}
+\end{equation}
+其中 $A\in\R^{p\times n}$、$l\prec u$。约束 $l\preceq x\preceq u$ 有时称为\emph{盒约束}或\emph{变量界}。
+
+当然，可以推导这个线性规划的对偶。对偶中会有对应等式约束的拉格朗日乘子 $\nu$，对应不等式 $x\preceq u$ 的 $\lambda_1$，以及对应 $l\preceq x$ 的 $\lambda_2$。对偶为
+\begin{equation}
+\begin{array}{ll}\text{最大化}&-b^\T\nu-\lambda_1^\T u+\lambda_2^\T l\\
+\text{约束为}&A^\T\nu+\lambda_1-\lambda_2+c=0\\
+&\lambda_1\succeq0,\quad\lambda_2\succeq0.
+\end{array}\tag{5.69}
+\end{equation}
+现在换一种做法，先把（5.68）改写为
+\begin{equation}
+\begin{array}{ll}\text{最小化}&f_0(x)\\
+\text{约束为}&Ax=b,\end{array}\tag{5.70}
+\end{equation}
+其中定义
+\[
+f_0(x)=\begin{cases}c^\T x&l\preceq x\preceq u,\\
+\infty&\text{其他情形}.\end{cases}
+\]
+问题（5.70）显然与（5.68）等价；只是把显式盒约束变成隐式约束。
+
+% Source PDF page 272 (printed p. 258)
+问题（5.70）的对偶函数为
+\[
+\begin{aligned}
+g(\nu)&=\inf_{l\preceq x\preceq u}\bigl(c^\T x+\nu^\T(Ax-b)\bigr)\\
+&=-b^\T\nu-u^\T(A^\T\nu+c)_-+l^\T(A^\T\nu+c)_+,
+\end{aligned}
+\]
+其中 $y_i^+=\max\{y_i,0\}$、$y_i^-=\max\{-y_i,0\}$。这里可以得到 $g$ 的解析公式，它是凹的分段线性函数。
+
+对偶问题为无约束问题
+\begin{equation}
+\text{最大化}\quad
+-b^\T\nu-u^\T(A^\T\nu+c)_-+l^\T(A^\T\nu+c)_+,\tag{5.71}
+\end{equation}
+它与原问题对偶的形式很不相同。
+
+（事实上，（5.69）与（5.71）密切相关，二者等价；见习题5.8。）
+\end{origexample}
+
+\section{择一定理}
+\subsection{通过对偶函数得到弱择一关系}
+本节将拉格朗日对偶理论用于判断不等式和等式系统
+\begin{equation}
+f_i(x)\le0,\quad i=1,\ldots,m,\qquad
+h_i(x)=0,\quad i=1,\ldots,p\tag{5.72}
+\end{equation}
+的可行性。假设系统（5.72）的定义域
+$D=\bigcap_{i=1}^m\dom f_i\cap\bigcap_{i=1}^p\dom h_i$ 非空。可把（5.72）看作目标 $f_0=0$ 的标准问题（5.1），即
+\begin{equation}
+\begin{array}{ll}\text{最小化}&0\\
+\text{约束为}&f_i(x)\le0,\quad i=1,\ldots,m\\
+&h_i(x)=0,\quad i=1,\ldots,p.
+\end{array}\tag{5.73}
+\end{equation}
+该问题最优值为
+\begin{equation}
+p^\star=\begin{cases}
+0&\text{（5.72）可行},\\
+\infty&\text{（5.72）不可行},
+\end{cases}\tag{5.74}
+\end{equation}
+所以求解优化问题（5.73）等同于求解不等式系统（5.72）。
+
+\subsubsection*{对偶函数}
+为系统（5.72）引入对偶函数
+\[
+g(\lambda,\nu)=\inf_{x\in D}\left(\sum_{i=1}^m\lambda_i f_i(x)+\sum_{i=1}^p\nu_i h_i(x)\right).
+\]
+
+% Source PDF page 273 (printed p. 259)
+它也就是优化问题（5.73）的对偶函数。由于 $f_0=0$，对偶函数关于 $(\lambda,\nu)$ 正齐次：对 $\alpha>0$，$g(\alpha\lambda,\alpha\nu)=\alpha g(\lambda,\nu)$。（5.73）的对偶问题是在 $\lambda\succeq0$ 下最大化 $g(\lambda,\nu)$。由于 $g$ 齐次，其对偶最优值为
+\begin{equation}
+d^\star=\begin{cases}
+\infty&\lambda\succeq0,\quad g(\lambda,\nu)>0\text{ 可行},\\
+0&\lambda\succeq0,\quad g(\lambda,\nu)>0\text{ 不可行}.
+\end{cases}\tag{5.75}
+\end{equation}
+弱对偶说明 $d^\star\le p^\star$。结合（5.74）和（5.75），得到：若系统
+\begin{equation}
+\lambda\succeq0,\qquad g(\lambda,\nu)>0\tag{5.76}
+\end{equation}
+可行（即 $d^\star=\infty$），则不等式系统（5.72）不可行（因为此时 $p^\star=\infty$）。事实上，可将（5.76）的任意解 $(\lambda,\nu)$ 看作系统（5.72）不可行的一个证明或\emph{不可行性证书}。
+
+也可从原系统可行性的角度表述这一蕴含：若原不等式系统（5.72）可行，则系统（5.76）必不可行。满足（5.72）的 $x$ 可看作证明（5.76）不可行的证书。
+
+若两个不等式（和等式）系统至多有一个可行，就称二者具有\emph{弱择一关系}。因此，（5.72）与（5.76）具有弱择一关系，无论（5.72）是否凸（即 $f_i$ 凸、$h_i$ 仿射），这一点都成立；而且对应的另一系统（5.76）总是凸的（即 $g$ 凹，约束 $\lambda_i\ge0$ 凸）。
+
+\subsubsection*{严格不等式}
+还可研究严格不等式系统
+\begin{equation}
+f_i(x)<0,\quad i=1,\ldots,m,\qquad
+h_i(x)=0,\quad i=1,\ldots,p\tag{5.77}
+\end{equation}
+的可行性。令 $g$ 与非严格系统中的定义相同，对应的另一不等式系统是
+\begin{equation}
+\lambda\succeq0,\qquad\lambda\ne0,\qquad g(\lambda,\nu)\ge0.\tag{5.78}
+\end{equation}
+可以直接证明（5.77）与（5.78）具有弱择一关系。设存在 $\widetilde x$，使 $f_i(\widetilde x)<0$、$h_i(\widetilde x)=0$。那么，对任意 $\lambda\succeq0$、$\lambda\ne0$ 和任意 $\nu$，
+\[
+\lambda_1 f_1(\widetilde x)+\cdots+\lambda_m f_m(\widetilde x)
++\nu_1h_1(\widetilde x)+\cdots+\nu_p h_p(\widetilde x)<0.
+\]
+从而
+\[
+\begin{aligned}
+g(\lambda,\nu)&=\inf_{x\in D}\left(\sum_{i=1}^m\lambda_i f_i(x)+\sum_{i=1}^p\nu_i h_i(x)\right)\\
+&\le\sum_{i=1}^m\lambda_i f_i(\widetilde x)+\sum_{i=1}^p\nu_i h_i(\widetilde x)<0.
+\end{aligned}
+\]
+
+% Source PDF page 274 (printed p. 260)
+因此，（5.77）可行意味着不存在满足（5.78）的 $(\lambda,\nu)$。所以，给出系统（5.78）的一个解，就可证明（5.77）不可行；给出系统（5.77）的一个解，就可证明（5.78）不可行。
+
+\subsection{强择一关系}
+若原不等式系统凸，即 $f_i$ 凸、$h_i$ 仿射，并且某种约束资格成立，那么上述弱择一系统对就具有\emph{强择一关系}，即二者恰有一个可行。换言之，每个系统可行，当且仅当另一个不可行。
+
+本节假设 $f_i$ 凸、$h_i$ 仿射，因此（5.72）可写为
+\[
+f_i(x)\le0,\quad i=1,\ldots,m,\qquad Ax=b,
+\]
+其中 $A\in\R^{p\times n}$。
+
+\subsubsection*{严格不等式}
+先研究严格不等式系统
+\begin{equation}
+f_i(x)<0,\quad i=1,\ldots,m,\qquad Ax=b,\tag{5.79}
+\end{equation}
+及其另一系统
+\begin{equation}
+\lambda\succeq0,\qquad\lambda\ne0,\qquad g(\lambda,\nu)\ge0.\tag{5.80}
+\end{equation}
+需要一个技术条件：存在 $x\in\relint D$，使 $Ax=b$。换言之，不仅要求线性等式约束相容，还要求它们在 $\relint D$ 中有解。（很多情况下 $D=\R^n$，只要等式约束相容，条件就满足。）在此条件下，（5.79）和（5.80）恰有一个可行；也就是说，它们具有强择一关系。
+
+通过考虑相关优化问题来证明：
+\begin{equation}
+\begin{array}{ll}\text{最小化}&s\\
+\text{约束为}&f_i(x)-s\le0,\quad i=1,\ldots,m\\
+&Ax=b,\end{array}\tag{5.81}
+\end{equation}
+变量为 $x,s$，定义域为 $D\times\R$。它的最优值 $p^\star$ 为负，当且仅当严格不等式系统（5.79）有解。问题（5.81）的拉格朗日对偶函数为
+\[
+\inf_{x\in D,s}\left(s+\sum_{i=1}^m\lambda_i(f_i(x)-s)+\nu^\T(Ax-b)\right)
+=\begin{cases}g(\lambda,\nu)&\one^\T\lambda=1,\\
+-\infty&\text{其他情形}.\end{cases}
+\]
+
+% Source PDF page 275 (printed p. 261)
+因此（5.81）的对偶可写为
+\[
+\begin{array}{ll}\text{最大化}&g(\lambda,\nu)\\
+\text{约束为}&\lambda\succeq0,\quad\one^\T\lambda=1.\end{array}
+\]
+注意，问题（5.81）满足Slater条件。由假设，存在 $\widetilde x\in\relint D$，使 $A\widetilde x=b$。任取 $\widetilde s>\max_i f_i(\widetilde x)$，则 $(\widetilde x,\widetilde s)$ 对（5.81）严格可行。因此有 $d^\star=p^\star$，且对偶最优值 $d^\star$ 能达到。换言之，存在 $(\lambda^\star,\nu^\star)$，使
+\begin{equation}
+g(\lambda^\star,\nu^\star)=p^\star,\qquad
+\lambda^\star\succeq0,\qquad\one^\T\lambda^\star=1.\tag{5.82}
+\end{equation}
+设严格不等式系统（5.79）不可行，即 $p^\star\ge0$。那么（5.82）中的 $(\lambda^\star,\nu^\star)$ 满足另一系统（5.80）。同样，若另一系统（5.80）可行，则 $d^\star=p^\star\ge0$，说明（5.79）不可行。因此二者具有强择一关系：每个系统可行，当且仅当另一个不可行。
+
+\subsubsection*{非严格不等式}
+再考虑非严格不等式系统
+\begin{equation}
+f_i(x)\le0,\quad i=1,\ldots,m,\qquad Ax=b,\tag{5.83}
+\end{equation}
+及其另一系统
+\begin{equation}
+\lambda\succeq0,\qquad g(\lambda,\nu)>0.\tag{5.84}
+\end{equation}
+下面说明，在以下条件下二者具有强择一关系：存在 $x\in\relint D$，使 $Ax=b$，并且（5.81）的最优值 $p^\star$ 能达到。例如，若 $D=\R^n$ 且 $x\to\infty$ 时 $\max_i f_i(x)\to\infty$，就满足这一条件。在这些假设下，与严格情形一样，有 $p^\star=d^\star$，且原始、对偶最优值都能达到。设非严格系统（5.83）不可行，即 $p^\star>0$。（这里利用了原始最优值能够达到的假设。）那么（5.82）中的 $(\lambda^\star,\nu^\star)$ 满足另一系统（5.84）。因此，（5.83）和（5.84）具有强择一关系：每个可行，当且仅当另一个不可行。
+
+\subsection{例子}
+\subsubsection*{线性不等式}
+考虑线性不等式系统 $Ax\preceq b$。对偶函数为
+\[
+g(\lambda)=\inf_x\lambda^\T(Ax-b)
+=\begin{cases}-b^\T\lambda&A^\T\lambda=0,\\
+-\infty&\text{其他情形}.\end{cases}
+\]
+因此另一不等式系统为
+\[
+\lambda\succeq0,\qquad A^\T\lambda=0,\qquad b^\T\lambda<0.
+\]
+
+% Source PDF page 276 (printed p. 262)
+事实上，二者具有强择一关系，因为相关问题（5.81）只要不是无下界，最优值就能达到。
+
+再考虑严格线性不等式 $Ax\prec b$，它具有强择一关系的另一系统为
+\[
+\lambda\succeq0,\qquad\lambda\ne0,\qquad A^\T\lambda=0,\qquad b^\T\lambda\le0.
+\]
+事实上，§2.5.1已遇到并证明过这个结果；见第50页（2.17）与（2.18）。
+
+\subsubsection*{椭球的交}
+考虑 $m$ 个椭球，描述为
+\[
+\mathcal E_i=\{x\mid f_i(x)\le0\},
+\]
+其中 $f_i(x)=x^\T A_ix+2b_i^\T x+c_i$，$i=1,\ldots,m$，$A_i\in\mathbf S_{++}^n$。问这些椭球的交什么时候具有非空内部。这等价于以下严格二次不等式组的可行性：
+\begin{equation}
+f_i(x)=x^\T A_ix+2b_i^\T x+c_i<0,\quad i=1,\ldots,m.\tag{5.85}
+\end{equation}
+对偶函数为
+\[
+\begin{aligned}
+g(\lambda)&=\inf_x\bigl(x^\T A(\lambda)x+2b(\lambda)^\T x+c(\lambda)\bigr)\\
+&=\begin{cases}
+-b(\lambda)^\T A(\lambda)^\dagger b(\lambda)+c(\lambda)
+&A(\lambda)\succeq0,\quad b(\lambda)\in\mathcal R(A(\lambda)),\\
+-\infty&\text{其他情形},
+\end{cases}
+\end{aligned}
+\]
+其中
+\[
+A(\lambda)=\sum_{i=1}^m\lambda_i A_i,\qquad
+b(\lambda)=\sum_{i=1}^m\lambda_i b_i,\qquad
+c(\lambda)=\sum_{i=1}^m\lambda_i c_i.
+\]
+注意，对 $\lambda\succeq0$、$\lambda\ne0$，有 $A(\lambda)\succ0$，可将对偶函数简化为
+\[
+g(\lambda)=-b(\lambda)^\T A(\lambda)^{-1}b(\lambda)+c(\lambda).
+\]
+因此，与系统（5.85）具有强择一关系的系统为
+\begin{equation}
+\lambda\succeq0,\quad\lambda\ne0,\quad
+-b(\lambda)^\T A(\lambda)^{-1}b(\lambda)+c(\lambda)\ge0.\tag{5.86}
+\end{equation}
+这对强择一系统有简单的几何解释。对任意非零 $\lambda\succeq0$，可能为空的椭球
+\[
+\mathcal E_\lambda=\{x\mid x^\T A(\lambda)x+2b(\lambda)^\T x+c(\lambda)\le0\}
+\]
+包含 $\mathcal E_1\cap\cdots\cap\mathcal E_m$，因为 $f_i(x)\le0$ 蕴含 $\sum_{i=1}^m\lambda_i f_i(x)\le0$。$\mathcal E_\lambda$ 的内部为空，当且仅当
+\[
+\inf_x\bigl(x^\T A(\lambda)x+2b(\lambda)^\T x+c(\lambda)\bigr)
+=-b(\lambda)^\T A(\lambda)^{-1}b(\lambda)+c(\lambda)\ge0.
+\]
+所以系统（5.86）表示 $\mathcal E_\lambda$ 的内部为空。
+
+弱对偶显而易见：若（5.86）成立，$\mathcal E_\lambda$ 包含交集 $\mathcal E_1\cap\cdots\cap\mathcal E_m$，且内部为空，故交集自然也内部为空。强择一关系则表达了不那么明显的事实：若交集 $\mathcal E_1\cap\cdots\cap\mathcal E_m$ 内部为空，就能构造一个包含该交集、且内部为空的椭球 $\mathcal E_\lambda$。
+
+% Source PDF page 277 (printed p. 263)
+\subsubsection*{Farkas引理}
+本节给出严格与非严格线性不等式混合系统的一对强择一关系，称为\emph{Farkas引理}：不等式系统
+\begin{equation}
+Ax\preceq0,\qquad c^\T x<0,\tag{5.87}
+\end{equation}
+其中 $A\in\R^{m\times n}$、$c\in\R^n$，与等式不等式系统
+\begin{equation}
+A^\T y+c=0,\qquad y\succeq0,\tag{5.88}
+\end{equation}
+具有强择一关系。
+
+可直接利用线性规划对偶证明Farkas引理。考虑线性规划
+\begin{equation}
+\begin{array}{ll}\text{最小化}&c^\T x\\
+\text{约束为}&Ax\preceq0,\end{array}\tag{5.89}
+\end{equation}
+及其对偶
+\begin{equation}
+\begin{array}{ll}\text{最大化}&0\\
+\text{约束为}&A^\T y+c=0\\&y\succeq0.\end{array}\tag{5.90}
+\end{equation}
+原始线性规划（5.89）是齐次的：若（5.87）不可行，最优值为0；若（5.87）可行，最优值为 $-\infty$。对偶线性规划（5.90）在（5.88）可行时最优值为0，不可行时为 $-\infty$。由于 $x=0$ 是（5.89）的可行点，可排除线性规划强对偶失败的唯一情形，因此必有 $p^\star=d^\star$。结合以上讨论，说明（5.87）和（5.88）具有强择一关系。
+
+\begin{origexample}{5.10}
+\emph{价格的无套利界。}考虑 $n$ 种资产，投资期初价格分别为 $p_1,\ldots,p_n$，期末价值为 $v_1,\ldots,v_n$。若 $x_1,\ldots,x_n$ 表示各资产的初始投资量（$x_j<0$ 表示做空资产 $j$），则初始投资成本为 $p^\T x$，期末价值为 $v^\T x$。
+
+资产期末价值 $v$ 不确定。假设只有 $m$ 种可能情景或结果。若发生结果 $i$，资产期末价值为 $v^{(i)}$，因此投资总价值为 $(v^{(i)})^\T x$。
+
+若存在投资向量 $x$，满足 $p^\T x<0$，且在所有可能情景下期末价值非负，即 $(v^{(i)})^\T x\ge0$，$i=1,\ldots,m$，则称存在\emph{套利}。$p^\T x<0$ 表示接受这一投资组合时会得到一笔钱；$(v^{(i)})^\T x\ge0$ 对 $i=1,\ldots,m$ 成立，则表示无论出现何种结果，期末价值都非负。因此，套利对应保证获利的投资策略。通常假设价格与价值之间不存在套利，即系统
+\[
+Vx\succeq0,\qquad p^\T x<0
+\]
+不可行，其中 $V_{ij}=v_j^{(i)}$。
+
+利用Farkas引理，无套利当且仅当存在 $y$，使
+\[
+-V^\T y+p=0,\qquad y\succeq0.
+\]
+
+% Source PDF page 278 (printed p. 264)
+可以用这一无套利价格与价值的刻画，求解几个有趣的问题。
+
+例如，设已知价值 $V$，除最后一个价格 $p_n$ 外的所有价格也已知。与无套利假设相容的 $p_n$ 构成一个区间，可通过求解一对线性规划得到。线性规划
+\[
+\begin{array}{ll}\text{最小化}&p_n\\
+\text{约束为}&V^\T y=p,\quad y\succeq0,\end{array}
+\]
+变量为 $p_n,y$，其最优值给出资产 $n$ 的最小可能无套利价格。将同一问题的最小化改为最大化，得到资产 $n$ 的最大可能价格。若二者相等，即无套利假设确定了资产 $n$ 的唯一价格，就称市场是\emph{完备的}。一个例子见习题5.38。
+
+这种方法可为基于其他标的资产期末价值的衍生品或期权价格求界，即资产 $n$ 的价值或支付是其他资产价值的函数。
+\end{origexample}
+
+\section{广义不等式}
+本节讨论拉格朗日对偶如何推广到含广义不等式约束的问题
+\begin{equation}
+\begin{array}{ll}\text{最小化}&f_0(x)\\
+\text{约束为}&f_i(x)\preceq_{K_i}0,\quad i=1,\ldots,m\\
+&h_i(x)=0,\quad i=1,\ldots,p,\end{array}\tag{5.91}
+\end{equation}
+其中 $K_i\subseteq\R^{k_i}$ 是正常锥。目前不假设（5.91）凸。假设其定义域
+$D=\bigcap_{i=0}^m\dom f_i\cap\bigcap_{i=1}^p\dom h_i$ 非空。
+
+\subsection{拉格朗日对偶}
+对（5.91）的每个广义不等式 $f_i(x)\preceq_{K_i}0$，引入拉格朗日乘子向量 $\lambda_i\in\R^{k_i}$，并定义相应拉格朗日函数
+\[
+L(x,\lambda,\nu)=f_0(x)+\lambda_1^\T f_1(x)+\cdots+\lambda_m^\T f_m(x)
++\nu_1h_1(x)+\cdots+\nu_ph_p(x),
+\]
+其中 $\lambda=(\lambda_1,\ldots,\lambda_m)$、$\nu=(\nu_1,\ldots,\nu_p)$。对偶函数的定义与标量不等式问题完全相同：
+\[
+g(\lambda,\nu)=\inf_{x\in D}L(x,\lambda,\nu)
+=\inf_{x\in D}\left(f_0(x)+\sum_{i=1}^m\lambda_i^\T f_i(x)+\sum_{i=1}^p\nu_i h_i(x)\right).
+\]
+由于拉格朗日函数关于对偶变量 $(\lambda,\nu)$ 仿射，而对偶函数是其逐点下确界，因此对偶函数是凹的。

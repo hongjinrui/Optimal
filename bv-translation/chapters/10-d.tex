@@ -1,0 +1,262 @@
+% Source PDF page 565 (printed p. 551)
+$x_j<0$ 表示沿弧的反方向流动。此外，给定外部源或汇流量 $s_i$：$s_i>0$ 时进入结点 $i$，$s_i<0$ 时离开结点 $i$。流量必须满足守恒方程，即每个结点的总净流入（包括外部源和汇）为零。守恒方程可写为 $\widetilde Ax=s$，其中 $\widetilde A\in\R^{(p+1)\times n}$ 是图的结点关联矩阵：
+\[\widetilde A_{ij}=\begin{cases}1,&\text{弧 }j\text{ 离开结点 }i,\\-1,&\text{弧 }j\text{ 进入结点 }i,\\0,&\text{其他情形}.\end{cases}\]
+流量守恒方程 $\widetilde Ax=s$ 只有在 $\one^\T s=0$ 时才可能相容，这里假定此条件成立。换言之，源流量总和必须等于汇流量总和。由于 $\one^\T\widetilde A=0$，方程 $\widetilde Ax=s$ 也存在冗余。为了得到独立方程组，可以删去其中任意一个方程，得到 $Ax=b$；其中 $A\in\R^{p\times n}$ 是图的约化结点关联矩阵，即删去一行的结点关联矩阵，$b\in\R^p$ 是约化源向量，即删去对应元素的 $s$。
+
+总之，流量守恒由 $Ax=b$ 给出，其中 $A$ 是图的约化结点关联矩阵，$b$ 是约化源向量。矩阵 $A$ 非常稀疏，每列至多有两个非零元素，且只能为 $+1$ 或 $-1$。
+
+以流量 $x$ 为变量，源流量已知。引入目标函数
+\[f(x)=\sum_{i=1}^n\phi_i(x_i),\]
+其中 $\phi_i:\R\to\R$ 是弧 $i$ 的流量代价函数。假设流量代价函数严格凸且二阶可微。
+
+满足流量守恒要求的最佳流量选择问题为
+\begin{equation}\begin{array}{ll}\text{最小化}&\displaystyle\sum_{i=1}^n\phi_i(x_i)\\\text{约束条件}&Ax=b.\end{array}\tag{10.36}\end{equation}
+由于目标函数可分离，Hessian $H$ 为对角矩阵。
+
+计算最优网络流问题 (10.36) 的牛顿步有几种选择。最直接的是用稀疏 $LDL^\T$ 分解求解完整 KKT 系统。
+
+对这个问题，用分块消元计算牛顿步可能更好。Schur 补 $S=-AH^{-1}A^\T$ 的稀疏模式可以用图描述：$S_{ij}\ne0$ 当且仅当结点 $i$ 与 $j$ 由一条弧连接。因此，如果网络稀疏，即每个结点只通过弧与少数其他结点连接，那么 Schur 补 $S$ 也稀疏。此时，在形成 $S$、以及对应的分解与求解步骤中，都可利用稀疏性。可以预期牛顿步的计算复杂度约随弧数，也就是变量数，线性增长。
+
+% Source PDF page 566 (printed p. 552)
+\subsubsection*{最优控制}
+考虑问题
+\[\begin{array}{ll}\text{最小化}&\displaystyle\sum_{t=1}^N\phi_t(z(t))+\sum_{t=0}^{N-1}\psi_t(u(t))\\\text{约束条件}&z(t+1)=A_tz(t)+B_tu(t),\quad t=0,\ldots,N-1.\end{array}\]
+其中
+\begin{itemize}
+\item $z(t)\in\R^k$ 是时刻 $t$ 的系统状态；
+\item $u(t)\in\R^l$ 是时刻 $t$ 的输入或控制作用；
+\item $\phi_t:\R^k\to\R$ 是状态代价函数；
+\item $\psi_t:\R^l\to\R$ 是输入代价函数；
+\item $N$ 称为问题的时间范围。
+\end{itemize}
+假设输入代价与状态代价函数严格凸且二阶可微。问题变量为 $u(0),\ldots,u(N-1)$ 和 $z(1),\ldots,z(N)$。初始状态 $z(0)$ 已知。线性等式约束称为状态方程或动态演化方程。定义整体优化变量
+\[x=(u(0),z(1),u(1),\ldots,u(N-1),z(N))\in\R^{N(k+l)}.\]
+由于目标函数分块可分离，即为 $z(t)$ 和 $u(t)$ 的函数之和，Hessian 为分块对角矩阵：
+\[H=\diag(R_0,Q_1,\ldots,R_{N-1},Q_N),\]
+其中
+\[\begin{aligned}
+R_t&=\nabla^2\psi_t(u(t)),&&t=0,\ldots,N-1,\\
+Q_t&=\nabla^2\phi_t(z(t)),&&t=1,\ldots,N.
+\end{aligned}\]
+将所有等式约束，即状态方程，合并为 $Ax=b$，其中
+\begingroup\small
+\[
+A=\begin{bmatrix}
+-B_0&I&0&0&0&\cdots&0&0&0\\
+0&-A_1&-B_1&I&0&\cdots&0&0&0\\
+0&0&0&-A_2&-B_2&\cdots&0&0&0\\
+\vdots&\vdots&\vdots&\vdots&\vdots&&\vdots&\vdots&\vdots\\
+0&0&0&0&0&\cdots&I&0&0\\
+0&0&0&0&0&\cdots&-A_{N-1}&-B_{N-1}&I
+\end{bmatrix},\qquad
+b=\begin{bmatrix}A_0z(0)\\0\\0\\\vdots\\0\\0\end{bmatrix}.
+\]
+\endgroup
+
+% Source PDF page 567 (printed p. 553)
+$A$ 的行数，即等式约束数，为 $Nk$。
+
+若用稠密 $LDL^\T$ 分解直接求解牛顿步的 KKT 系统，代价为
+\[(1/3)(2Nk+Nl)^3=(1/3)N^3(2k+l)^3\]
+次浮点运算。使用稀疏 $LDL^\T$ 分解会有很大改进，因为它能利用 $A$ 和 $H$ 中的大量零元素。
+
+事实上，通过分块消元计算牛顿步，并利用 $H$ 和 $A$ 的特殊分块结构，可以做得更好。Schur 补 $S=-AH^{-1}A^\T$ 是以 $k\times k$ 矩阵为分块的分块三对角矩阵：
+\begingroup\small
+\[
+\begin{aligned}
+S&=-AH^{-1}A^\T\\
+&=\begin{bmatrix}
+S_{11}&Q_1^{-1}A_1^\T&0&\cdots&0&0\\
+A_1Q_1^{-1}&S_{22}&Q_2^{-1}A_2^\T&\cdots&0&0\\
+0&A_2Q_2^{-1}&S_{33}&\cdots&0&0\\
+\vdots&\vdots&\vdots&\ddots&\vdots&\vdots\\
+0&0&0&\cdots&S_{N-1,N-1}&Q_{N-1}^{-1}A_{N-1}^\T\\
+0&0&0&\cdots&A_{N-1}Q_{N-1}^{-1}&S_{NN}
+\end{bmatrix},
+\end{aligned}\]
+\endgroup
+其中
+\[\begin{aligned}
+S_{11}&=-B_0R_0^{-1}B_0^\T-Q_1^{-1},\\
+S_{ii}&=-A_{i-1}Q_{i-1}^{-1}A_{i-1}^\T-B_{i-1}R_{i-1}^{-1}B_{i-1}^\T-Q_i^{-1},&&i=2,\ldots,N.
+\end{aligned}\]
+特别地，$S$ 为带宽 $2k-1$ 的带状矩阵，因此可用 $k^3N$ 量级的浮点运算分解它。假设 $k\ll N$，便能以 $k^3N$ 量级的浮点运算计算牛顿步。注意，这随时间范围 $N$ 线性增长，而通用方法的浮点运算次数随 $N^3$ 增长。
+
+对这个问题还可以进一步利用 $S$ 的分块三对角结构。应用标准分块三对角分解方法，会得到求解二次最优控制问题的经典 Riccati 递推。不过，即使只利用 $S$ 的带状性质，也能得到同阶算法。
+
+\subsubsection*{线性矩阵不等式的解析中心}
+考虑问题
+\begin{equation}\begin{array}{ll}\text{最小化}&f(X)=-\log\det X\\\text{约束条件}&\tr(A_iX)=b_i,\quad i=1,\ldots,p,\end{array}\tag{10.37}\end{equation}
+其中 $X\in\mathbf S^n$ 为变量，$A_i\in\mathbf S^n$、$b_i\in\R$，$\dom f=\mathbf S_{++}^n$。该问题的 KKT 条件为
+\begin{equation}-X^{\star-1}+\sum_{i=1}^m\nu_i^\star A_i=0,\qquad\tr(A_iX^\star)=b_i,\quad i=1,\ldots,p.\tag{10.38}\end{equation}
+变量 $X$ 的维数为 $n(n+1)/2$。可以简单地忽略 $X$ 的特殊矩阵结构，将其看成向量变量 $x\in\R^{n(n+1)/2}$，并对一个具有 $n(n+1)/2$ 个变量和 $p$ 个等式约束的问题使用通用方法求解 (10.37)。
+
+% Source PDF page 568 (printed p. 554)
+此时计算牛顿步的代价至少为
+\[(1/3)(n(n+1)/2+p)^3\]
+次浮点运算，关于 $n$ 为 $n^6$ 量级。下面将看到几种好得多的替代方案。
+
+第一种选择是求解对偶问题。$f$ 的共轭为
+\[f^*(Y)=\log\det(-Y)^{-1}-n,\]
+定义域为 $\dom f^*=-\mathbf S_{++}^n$，见第92页例3.23，因此对偶问题为
+\begin{equation}\text{最大化}\quad-b^\T\nu+\log\det\left(\sum_{i=1}^p\nu_iA_i\right)+n,\tag{10.39}\end{equation}
+定义域为 $\{\nu\mid\sum_{i=1}^p\nu_iA_i\succ0\}$。这是变量为 $\nu\in\R^p$ 的无约束问题。由最优 $\nu^\star$，可通过求解 (10.38) 中第一个对偶可行性方程恢复最优 $X^\star$，即 $X^\star=(\sum_{i=1}^p\nu_i^\star A_i)^{-1}$。
+
+计算对偶问题 (10.39) 的牛顿步，需要形成 $g$ 的梯度和 Hessian，再求出牛顿步。梯度与 Hessian 为
+\[\begin{aligned}
+\nabla^2g(\nu)_{ij}&=-\tr(A^{-1}A_iA^{-1}A_j),&&i,j=1,\ldots,p,\\
+\nabla g(\nu)_i&=\tr(A^{-1}A_i)-b_i,&&i=1,\ldots,p,
+\end{aligned}\]
+其中 $A=\sum_{i=1}^p\nu_iA_i$。为形成 $\nabla^2g(\nu)$ 与 $\nabla g(\nu)$，先形成 $A$，代价为 $pn^2$ 次浮点运算，再对各个 $j$ 形成 $A^{-1}A_j$，代价为 $2pn^3$。然后形成矩阵 $\nabla^2g(\nu)$。其 $p(p+1)/2$ 个元素中的每一个，都是两个 $\mathbf S^n$ 矩阵的内积，每次需要 $n(n+1)$ 次浮点运算，因此总计为 $(1/2)p^2n^2$，这里忽略低阶项。由于已经得到矩阵 $A^{-1}A_i$，形成 $\nabla g(\nu)$ 代价很小。最后，求解牛顿步 $-\nabla^2g(\nu)^{-1}\nabla g(\nu)$，代价为 $(1/3)p^3$。合起来只保留主项，牛顿步的总计算代价为 $2pn^3+(1/2)p^2n^2+(1/3)p^3$。注意，这关于 $n$ 为 $n^3$ 量级，远优于上面 $n^6$ 量级的简单原始方法。
+
+也可以利用原始问题的特殊矩阵结构，更高效地求解它。为推导可行 $X$ 处牛顿步 $\Delta X_{\rm nt}$ 的 KKT 系统，在 KKT 条件中用 $X+\Delta X_{\rm nt}$ 代替 $X^\star$，用 $w$ 代替 $\nu^\star$，并用一阶近似
+\[(X+\Delta X_{\rm nt})^{-1}\approx X^{-1}-X^{-1}\Delta X_{\rm nt}X^{-1}\]
+线性化第一个方程，得到 KKT 系统
+\begin{equation}\begin{gathered}
+-X^{-1}+X^{-1}\Delta X_{\rm nt}X^{-1}+\sum_{i=1}^p w_iA_i=0,\\
+\tr(A_i\Delta X_{\rm nt})=0,\quad i=1,\ldots,p.
+\end{gathered}\tag{10.40}\end{equation}
+这是一组关于变量 $\Delta X_{\rm nt}\in\mathbf S^n$ 与 $w\in\R^p$ 的 $n(n+1)/2+p$ 个线性方程。若用通用方法求解，代价为 $n^6$ 量级。
+
+% Source PDF page 569 (printed p. 555)
+可以用分块消元更高效地求解 KKT 系统 (10.40)。由第一个方程解出 $\Delta X_{\rm nt}$，消去这个变量：
+\begin{equation}\Delta X_{\rm nt}=X-X\left(\sum_{i=1}^p w_iA_i\right)X=X-\sum_{i=1}^p w_iXA_iX.\tag{10.41}\end{equation}
+将该表达式代入另一个方程，得到
+\[\tr(A_j\Delta X_{\rm nt})=\tr(A_jX)-\sum_{i=1}^p w_i\tr(A_jXA_iX)=0,\qquad j=1,\ldots,p.\]
+这是关于 $w$ 的 $p$ 个线性方程：
+\[Cw=d,\]
+其中 $C_{ij}=\tr(A_iXA_jX)$、$d_i=\tr(A_iX)$。系数矩阵 $C$ 对称正定，因此可以用 Cholesky 分解求 $w$。得到 $w$ 后，就能由 (10.41) 计算 $\Delta X_{\rm nt}$。
+
+该方法的代价如下。先形成乘积 $A_iX$，需要 $2pn^3$ 次浮点运算，再形成矩阵 $C$。$C$ 的 $p(p+1)/2$ 个元素中的每一个，都是两个 $\R^{n\times n}$ 矩阵的内积，因此形成 $C$ 需要 $p^2n^2$ 次浮点运算。然后求 $w=C^{-1}d$，需要 $(1/3)p^3$。最后计算 $\Delta X_{\rm nt}$。若使用 (10.41) 中第一个表达式，即先求和，再在左右分别乘以 $X$，代价约为 $pn^2+3n^3$。总之，采用分块消元形成原始问题牛顿步的总浮点运算次数为 $2pn^3+p^2n^2+(1/3)p^3$，远优于 $n^6$ 量级的简单方法。注意，这也与计算对偶问题牛顿步的代价相同。
+
+% Source PDF page 570 (printed p. 556)
+\section*{文献说明}
+\addcontentsline{toc}{section}{文献说明}
+分析不可行初始点牛顿法时所用的两个关键假设，即导数 $Dr$ 的逆有界以及满足 Lipschitz 条件，也是大多数牛顿法收敛证明的核心；见 Ortega 与 Rheinboldt [OR00]、Dennis 与 Schnabel [DS96]。
+
+在用于线性规划与二次规划的内点法中，对直接分解完整 KKT 系统和通过消元求解 KKT 系统的相对优劣，已有广泛研究；例如见 Wright [Wri97, 第11章]、Nocedal 与 Wright [NW99, 第16.1--2节]。最优控制中的 Riccati 递推，可以解释为利用第552页例子中 Schur 补 $S$ 的分块三对角结构的方法。Rao、Wright 与 Rawlings [RWR98, 第3.3节] 作出了这一观察。
+
+% Source PDF page 571 (printed p. 557)
+\section*{习题}
+\addcontentsline{toc}{section}{习题}
+\subsection*{等式约束最小化}
+\paragraph{10.1} \emph{KKT 矩阵的非奇异性。}考虑 KKT 矩阵
+\[\begin{bmatrix}P&A^\T\\A&0\end{bmatrix},\]
+其中 $P\in\mathbf S_+^n$、$A\in\R^{p\times n}$，$\rank A=p<n$。
+\begin{enumerate}[label=(\alph*)]
+\item 证明以下每一个陈述都与 KKT 矩阵非奇异等价：
+\begin{itemize}
+\item $\mathcal N(P)\cap\mathcal N(A)=\{0\}$。
+\item $Ax=0$、$x\ne0\Longrightarrow x^\T Px>0$。
+\item $F^\T PF\succ0$，其中 $F\in\R^{n\times(n-p)}$ 满足 $\mathcal R(F)=\mathcal N(A)$。
+\item 对某个 $Q\succeq0$，有 $P+A^\T QA\succ0$。
+\end{itemize}
+\item 证明，若 KKT 矩阵非奇异，则它恰有 $n$ 个正特征值和 $p$ 个负特征值。
+\end{enumerate}
+
+\paragraph{10.2} \emph{投影梯度法。}本题探索梯度法在等式约束最小化中的扩展。假设 $f$ 凸且可微，$x\in\dom f$ 满足 $Ax=b$，其中 $A\in\R^{p\times n}$，$\rank A=p<n$。负梯度 $-\nabla f(x)$ 在 $\mathcal N(A)$ 上的欧几里得投影为
+\[\Delta x_{\rm pg}=\argmin_{Au=0}\norm{-\nabla f(x)-u}_2.\]
+\begin{enumerate}[label=(\alph*)]
+\item 设 $(v,w)$ 是
+\[\begin{bmatrix}I&A^\T\\A&0\end{bmatrix}\begin{bmatrix}v\\w\end{bmatrix}=\begin{bmatrix}-\nabla f(x)\\0\end{bmatrix}\]
+的唯一解。证明 $v=\Delta x_{\rm pg}$，且 $w=\argmin_y\norm{\nabla f(x)+A^\T y}_2$。
+\item 假设 $F^\T F=I$，投影负梯度 $\Delta x_{\rm pg}$ 与约化问题 (10.5) 的负梯度有什么关系？
+\item 求解等式约束最小化问题的投影梯度法，使用步 $\Delta x_{\rm pg}$，并对 $f$ 作回溯线搜索。利用 (b) 的结果，给出从满足 $Ax^{(0)}=b$ 的 $x^{(0)}\in\dom f$ 出发时，投影梯度法收敛到最优解的一些条件。
+\end{enumerate}
+
+\subsection*{带等式约束的牛顿法}
+\paragraph{10.3} \emph{对偶牛顿法。}本题研究用牛顿法求解等式约束最小化问题 (10.1) 的对偶。假设 $f$ 二阶可微，所有 $x\in\dom f$ 都满足 $\nabla^2f(x)\succ0$，而且对每个 $\nu\in\R^p$，拉格朗日函数 $L(x,\nu)=f(x)+\nu^\T(Ax-b)$ 都有唯一最小化点，记为 $x(\nu)$。
+\begin{enumerate}[label=(\alph*)]
+\item 证明对偶函数 $g$ 二阶可微。用 $f$、$\nabla f$、$\nabla^2f$ 在 $x=x(\nu)$ 处的值，写出对偶函数 $g$ 在 $\nu$ 处的牛顿步。可以使用习题3.40的结果。
+\end{enumerate}
+
+% Source PDF page 572 (printed p. 558)
+\begin{enumerate}[label=(\alph*),start=2]
+\item 假设存在 $K$，使对所有 $x\in\dom f$ 都有
+\[\left\|\begin{bmatrix}\nabla^2f(x)&A^\T\\A&0\end{bmatrix}^{-1}\right\|_2\le K.\]
+证明 $g$ 强凹，且 $\nabla^2g(\nu)\preceq-(1/K)I$。
+\end{enumerate}
+
+\paragraph{10.4} \emph{约化问题的强凸性与 Lipschitz 常数。}假设 $f$ 满足第529页的假设。证明约化目标函数 $\widetilde f(z)=f(Fz+\widehat x)$ 强凸，且其 Hessian 在相应下水平集 $\widetilde S$ 上 Lipschitz 连续。用 $K,M,L$ 以及 $F$ 的最大、最小奇异值，表达 $\widetilde f$ 的强凸性常数与 Lipschitz 常数。
+
+\paragraph{10.5} \emph{给目标增加二次项。}假设 $Q\succeq0$。问题
+\[\begin{array}{ll}\text{最小化}&f(x)+(Ax-b)^\T Q(Ax-b)\\\text{约束条件}&Ax=b\end{array}\]
+等价于原等式约束优化问题 (10.1)。该问题的牛顿步与原问题的牛顿步是否相同？
+
+\paragraph{10.6} \emph{牛顿减量。}证明 (10.13) 成立，即
+\[f(x)-\inf\{\widehat f(x+v)\mid A(x+v)=b\}=\lambda(x)^2/2.\]
+
+\subsection*{不可行初始点牛顿法}
+\paragraph{10.7} \emph{不可行初始点牛顿法的假设。}考虑第536页的假设。
+\begin{enumerate}[label=(\alph*)]
+\item 假设函数 $f$ 是闭函数。证明这蕴含残差范数 $\norm{r(x,\nu)}_2$ 是闭函数。
+\item 证明 $Dr$ 满足 Lipschitz 条件，当且仅当 $\nabla^2f$ 满足 Lipschitz 条件。
+\end{enumerate}
+
+\paragraph{10.8} \emph{不可行初始点牛顿法与初始已满足的等式约束。}假设用不可行初始点牛顿法，在 $a_i^\T x=b_i$（$i=1,\ldots,p$）下最小化 $f(x)$。
+\begin{enumerate}[label=(\alph*)]
+\item 假设初始点 $x^{(0)}$ 满足线性等式 $a_i^\T x=b_i$。证明此后所有迭代点都满足该等式，即对所有 $k$ 有 $a_i^\T x^{(k)}=b_i$。
+\item 假设某个等式约束在第 $k$ 次迭代首次满足，即 $a_i^\T x^{(k-1)}\ne b_i$、$a_i^\T x^{(k)}=b_i$。证明在第 $k$ 次迭代，全部等式约束都满足。
+\end{enumerate}
+
+\paragraph{10.9} \emph{等式约束熵最大化。}考虑等式约束熵最大化问题
+\begin{equation}\begin{array}{ll}\text{最小化}&f(x)=\displaystyle\sum_{i=1}^n x_i\log x_i\\\text{约束条件}&Ax=b,\end{array}\tag{10.42}\end{equation}
+其中 $\dom f=\R_{++}^n$，$A\in\R^{p\times n}$。假设问题可行，$\rank A=p<n$。
+\begin{enumerate}[label=(\alph*)]
+\item 证明问题具有唯一最优解 $x^\star$。
+\item 寻找 $A,b$ 与可行 $x^{(0)}$，使下水平集
+\[\{x\in\R_{++}^n\mid Ax=b,\ f(x)\le f(x^{(0)})\}\]
+不闭。因此，对于某些可行初始点，第10.2.4节（第529页）的假设不成立。
+\end{enumerate}
+
+% Source PDF page 573 (printed p. 559)
+\begin{enumerate}[label=(\alph*),start=3]
+\item 证明，对任何可行初始点，问题 (10.42) 都满足第10.3.3节（第536页）列出的不可行初始点牛顿法假设。
+\item 推导 (10.42) 的拉格朗日对偶，并说明如何由对偶问题最优解求 (10.42) 的最优解。证明对任何初始点，对偶问题都满足第10.2.4节（第529页）列出的假设。
+\end{enumerate}
+(b)、(c)、(d) 的结果并不意味着标准牛顿法会失败，也不意味着不可行初始点牛顿法或对偶方法在实际中表现更好。它们只表明，这里的标准牛顿法收敛分析不适用，而不可行初始点与对偶方法的收敛分析适用。（见习题10.15。）
+
+\paragraph{10.10} \emph{强凸凹博弈的导数逆有界条件。}考虑收益函数为 $f$ 的凸凹博弈，见第541页。假设对所有 $(u,v)\in\dom f$，有 $\nabla_{uu}^2f(u,v)\succeq mI$ 和 $\nabla_{vv}^2f(u,v)\preceq-mI$。证明
+\[\norm{Dr(u,v)^{-1}}_2=\norm{\nabla^2f(u,v)^{-1}}_2\le1/m.\]
+
+\subsection*{实现}
+\paragraph{10.11} 考虑例10.1的资源分配问题。可假设 $f_i$ 强凸，即所有 $z$ 都有 $f_i''(z)\ge m>0$。
+\begin{enumerate}[label=(\alph*)]
+\item 求计算约化问题牛顿步所需的计算量，务必利用牛顿方程的特殊结构。
+\item 说明如何通过对偶求解。可以假设共轭函数 $f_i^*$ 及其导数容易计算，而且给定 $\nu$ 时，方程 $f_i'(x)=\nu$ 容易对 $x$ 求解。求对偶问题牛顿步的计算复杂度是多少？
+\item 计算资源分配问题牛顿步的复杂度是多少？务必利用 KKT 方程的特殊结构。
+\end{enumerate}
+
+\paragraph{10.12} 描述一种高效计算以下问题牛顿步的方法：
+\[\begin{array}{ll}\text{最小化}&\tr(X^{-1})\\\text{约束条件}&\tr(A_iX)=b_i,\quad i=1,\ldots,p,\end{array}\]
+定义域为 $\mathbf S_{++}^n$，假设 $p$ 与 $n$ 同阶。并推导拉格朗日对偶问题，给出求对偶问题牛顿步的复杂度。
+
+\paragraph{10.13} \emph{用消元法计算凸凹博弈的牛顿步。}考虑收益函数 $f:\R^p\times\R^q\to\R$ 的凸凹博弈，见第541页。假设 $f$ 强凸凹，即对所有 $(u,v)\in\dom f$ 与某个 $m>0$，有 $\nabla_{uu}^2f(u,v)\succeq mI$ 和 $\nabla_{vv}^2f(u,v)\preceq-mI$。
+\begin{enumerate}[label=(\alph*)]
+\item 说明如何使用 $\nabla_{uu}^2f(u,v)$ 与 $-\nabla_{vv}^2f(u,v)$ 的 Cholesky 分解计算牛顿步。假设 $\nabla^2f(u,v)$ 稠密，比较这一方法与对 $\nabla f(u,v)$ 作 $LDL^\T$ 分解的代价。
+\item 说明如何利用 $\nabla_{uu}^2f(u,v)$ 和／或 $\nabla_{vv}^2f(u,v)$ 的对角或分块对角结构。假设 $\nabla_{uv}^2f(u,v)$ 稠密，可以节省多少计算？
+\end{enumerate}
+
+\subsection*{数值实验}
+\paragraph{10.14} \emph{对数最优投资。}考虑习题4.60所述的对数最优投资问题，去掉约束 $x\succeq0$。使用牛顿法求解，问题数据如下。
+
+% Source PDF page 574 (printed p. 560)
+有 $n=3$ 种资产、$m=4$ 种情景，收益为
+\[p_1=\begin{bmatrix}2\\1.3\\1\end{bmatrix},\qquad p_2=\begin{bmatrix}2\\0.5\\1\end{bmatrix},\qquad p_3=\begin{bmatrix}0.5\\1.3\\1\end{bmatrix},\qquad p_4=\begin{bmatrix}0.5\\0.5\\1\end{bmatrix}.\]
+四个情景的概率为 $\pi=(1/3,1/6,1/3,1/6)$。
+
+\paragraph{10.15} \emph{等式约束熵最大化。}考虑等式约束熵最大化问题
+\[\begin{array}{ll}\text{最小化}&f(x)=\displaystyle\sum_{i=1}^n x_i\log x_i\\\text{约束条件}&Ax=b,\end{array}\]
+其中 $\dom f=\R_{++}^n$，$A\in\R^{p\times n}$，$p<n$。（相关分析见习题10.9。）
+
+生成一个 $n=100$、$p=30$ 的实例：随机选择 $A$ 并检查其满秩，选随机正向量 $\widehat x$，例如各元素在 $[0,1]$ 上均匀分布，再令 $b=A\widehat x$，于是 $\widehat x$ 可行。
+
+采用以下方法计算问题的解。
+\begin{enumerate}[label=(\alph*)]
+\item 标准牛顿法。可取初始点 $x^{(0)}=\widehat x$。
+\item 不可行初始点牛顿法。可取 $x^{(0)}=\widehat x$ 以便与标准牛顿法比较，也可取 $x^{(0)}=\one$。
+\item 对偶牛顿法，即对对偶问题采用标准牛顿法。
+\end{enumerate}
+验证三个方法得到相同最优点及拉格朗日乘子。假设利用了相关结构，比较三种方法每步的计算量；不过，实现时并不要求利用结构计算牛顿步。
+
+\paragraph{10.16} \emph{凸凹博弈。}对随机生成的数据，使用不可行初始点牛顿法求解形如 (10.32) 的凸凹博弈。绘出残差范数及步长随迭代次数的变化。尝试不同的线搜索参数和初始点，但初始点必须满足 $\norm u_2<1$、$\norm v_2<1$。

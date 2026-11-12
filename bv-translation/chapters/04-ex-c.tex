@@ -1,0 +1,361 @@
+% Source PDF page 219 (printed p. 205)
+考虑问题
+\begin{equation}
+\text{最小化}\quad\lambda_{\max}(A(x),B(x)),\tag{4.73}
+\end{equation}
+其中 $A,B:\R^n\to\mathbf S^k$ 为仿射函数，定义为
+\[
+A(x)=A_0+x_1A_1+\cdots+x_nA_n,\qquad
+B(x)=B_0+x_1B_1+\cdots+x_nB_n,
+\]
+$A_i,B_i\in\mathbf S^k$。
+\begin{enumerate}[label=(\alph*)]
+\item 给出一族凸函数 $\phi_t:\mathbf S^k\times\mathbf S^k\to\R$，使对所有 $(A,B)\in\mathbf S^k\times\mathbf S_{++}^k$ 有
+\[
+\lambda_{\max}(A,B)\le t\quad\Longleftrightarrow\quad\phi_t(A,B)\le0.
+\]
+证明由此可以通过求解一系列凸可行性问题，解出（4.73）。
+\item 给出一族矩阵凸函数 $\Phi_t:\mathbf S^k\times\mathbf S^k\to\mathbf S^k$，使对所有 $(A,B)\in\mathbf S^k\times\mathbf S_{++}^k$ 有
+\[
+\lambda_{\max}(A,B)\le t\quad\Longleftrightarrow\quad\Phi_t(A,B)\preceq0.
+\]
+证明由此可以通过求解一系列具有LMI约束的凸可行性问题，解出（4.73）。
+\item 设 $B(x)=(a^\T x+b)I$，$a\ne0$。证明（4.73）等价于以下凸问题，变量为 $y\in\R^n,s\in\R$：
+\[
+\begin{array}{ll}\text{最小化}&\lambda_{\max}(sA_0+y_1A_1+\cdots+y_nA_n)\\\text{约束为}&a^\T y+bs=1,\\&s\ge0.\end{array}
+\]
+\end{enumerate}
+
+\paragraph{4.49}\textbf{广义分式规划。}设 $K\in\R^m$ 为正常锥。证明函数 $f_0:\R^n\to\R^m$，定义为
+\[
+f_0(x)=\inf\{t\mid Cx+d\preceq_K t(Fx+g)\},\qquad
+\dom f_0=\{x\mid Fx+g\succ_K0\},
+\]
+其中 $C,F\in\R^{m\times n},d,g\in\R^m$，是拟凸函数。
+
+具有这种目标函数的拟凸优化问题称为广义分式规划。将第152页的广义线性分式规划，以及广义特征值最小化问题（4.73），表示为广义分式规划。
+
+\subsection*{向量优化与多准则优化}
+\paragraph{4.50}\textbf{双准则优化。}图4.11展示了双准则优化问题
+\[
+\text{最小化（关于 }\R_+^2\text{）}\quad(\norm{Ax-b}_2^2,\norm{x}_2^2)
+\]
+的最优权衡曲线与可达值集，其中 $A\in\R^{100\times10},b\in\R^{100}$。利用图中的信息回答下列问题。以 $x^{\mathrm{ls}}$ 表示最小二乘问题
+\[
+\text{最小化}\quad\norm{Ax-b}_2^2
+\]
+的解。
+\begin{enumerate}[label=(\alph*)]
+\item $\norm{x^{\mathrm{ls}}}_2$ 是多少？
+\item $\norm{Ax^{\mathrm{ls}}-b}_2$ 是多少？
+\item $\norm{b}_2$ 是多少？
+% Source PDF page 220 (printed p. 206)
+\item 给出以下问题的最优值：
+\[
+\begin{array}{ll}\text{最小化}&\norm{Ax-b}_2^2\\\text{约束为}&\norm{x}_2^2=1.\end{array}
+\]
+\item 给出以下问题的最优值：
+\[
+\begin{array}{ll}\text{最小化}&\norm{Ax-b}_2^2\\\text{约束为}&\norm{x}_2^2\le1.\end{array}
+\]
+\item 给出以下问题的最优值：
+\[
+\text{最小化}\quad\norm{Ax-b}_2^2+\norm{x}_2^2.
+\]
+\item $A$ 的秩是多少？
+\end{enumerate}
+
+\paragraph{4.51}\textbf{向量优化中目标的单调变换。}考虑向量优化问题（4.56）。用 $\phi\circ f_0$ 替换目标 $f_0$，形成新向量优化问题，其中 $\phi:\R^q\to\R^q$ 满足
+\[
+u\preceq_K v,\quad u\ne v\quad\Longrightarrow\quad
+\phi(u)\preceq_K\phi(v),\quad\phi(u)\ne\phi(v).
+\]
+证明一个点对其中一个问题Pareto最优或最优，当且仅当它对另一个问题也Pareto最优或最优，所以两问题等价。特别地，将多准则问题中每个目标与递增函数复合，不影响Pareto最优点。
+
+\paragraph{4.52}\textbf{Pareto最优点与可达值集的边界。}考虑锥为 $K$ 的向量优化问题。以 $\mathcal P$ 表示Pareto最优值集，$\mathcal O$ 表示可达目标值集。证明 $\mathcal P\subseteq\mathcal O\cap\operatorname{bd}\mathcal O$，即每个Pareto最优值都是位于可达目标值集边界上的可达目标值。
+
+\paragraph{4.53}假设向量优化问题（4.56）凸。证明集合
+\[
+\mathcal A=\mathcal O+K=\{t\in\R^q\mid\text{存在可行 }x\text{，使 }f_0(x)\preceq_K t\}
+\]
+凸，并证明 $\mathcal A$ 的极小元与 $\mathcal O$ 的极小元相同。
+
+\paragraph{4.54}\textbf{标量化与最优点。}设一个未必凸的向量优化问题有最优点 $x^\star$。证明对任意 $\lambda\succ_{K^*}0$，$x^\star$ 都是相应标量化问题的解。再证明逆命题：若对每个 $\lambda\succ_{K^*}0$，点 $x$ 都是标量化问题的解，则它是原向量优化问题的最优点，该向量问题未必凸。
+
+\paragraph{4.55}\textbf{加权和标量化的推广。}§4.7.4通过将向量目标 $f_0:\R^n\to\R^q$ 替换为标量目标 $\lambda^\T f_0$（$\lambda\succ_{K^*}0$），得到向量问题的Pareto最优解。设 $\psi:\R^q\to\R$ 为 $K$-递增函数，即满足
+\[
+u\preceq_K v,\quad u\ne v\quad\Longrightarrow\quad\psi(u)<\psi(v).
+\]
+证明问题
+\[
+\begin{array}{ll}\text{最小化}&\psi(f_0(x))\\\text{约束为}&f_i(x)\le0,\quad i=1,\ldots,m,\\&h_i(x)=0,\quad i=1,\ldots,p\end{array}
+\]
+的任意解，
+
+% Source PDF page 221 (printed p. 207)
+都对向量优化问题
+\[
+\begin{array}{ll}\text{最小化（关于 }K\text{）}&f_0(x)\\\text{约束为}&f_i(x)\le0,\quad i=1,\ldots,m,\\&h_i(x)=0,\quad i=1,\ldots,p\end{array}
+\]
+Pareto最优。注意 $\psi(u)=\lambda^\T u$，$\lambda\succ_{K^*}0$，是其特例。
+
+作为相关例子，证明：在多准则优化问题中，即 $f_0=F:\R^n\to\R^q$、$K=\R_+^q$ 的向量优化中，若标量优化问题
+\[
+\begin{array}{ll}\text{最小化}&\max_{i=1,\ldots,q}F_i(x)\\\text{约束为}&f_i(x)\le0,\quad i=1,\ldots,m,\\&h_i(x)=0,\quad i=1,\ldots,p\end{array}
+\]
+有唯一解，则此解Pareto最优。
+
+\subsection*{其他问题}
+\paragraph{4.56}[P. Parrilo] 考虑在若干凸集之并的凸包 $\conv(\bigcup_{i=1}^q C_i)$ 上，最小化凸函数 $f_0:\R^n\to\R$ 的问题。各集合用凸不等式描述：
+\[
+C_i=\{x\mid f_{ij}(x)\le0,\ j=1,\ldots,k_i\},
+\]
+其中 $f_{ij}:\R^n\to\R$ 凸。目标是将此问题表述为凸优化问题。
+
+直接的思路是引入 $x_1,\ldots,x_q\in\R^n$，$x_i\in C_i$，引入满足 $\theta\succeq0$、$\one^\T\theta=1$ 的 $\theta\in\R^q$，再引入 $x\in\R^n$，使 $x=\theta_1x_1+\cdots+\theta_qx_q$。此等式约束关于变量并不仿射，所以这不产生凸问题。
+
+一种更巧妙的表述为
+\[
+\begin{array}{ll}
+\text{最小化}&f_0(x)\\
+\text{约束为}&s_if_{ij}(z_i/s_i)\le0,\quad i=1,\ldots,q,\quad j=1,\ldots,k_i,\\
+&\one^\T s=1,\quad s\succeq0,\\
+&x=z_1+\cdots+z_q,
+\end{array}
+\]
+变量为 $z_1,\ldots,z_q\in\R^n,x\in\R^n,s_1,\ldots,s_q\in\R$。（$s_i=0$ 时，$z_i=0$ 则取 $s_if_{ij}(z_i/s_i)=0$，$z_i\ne0$ 则取为 $\infty$。）解释为何此问题凸，且与原问题等价。
+
+\paragraph{4.57}\textbf{通信信道容量。}考虑通信信道，输入 $X(t)\in\{1,\ldots,n\}$，输出 $Y(t)\in\{1,\ldots,m\}$，$t=1,2,\ldots$，例如以秒计。输入与输出的关系由统计规律给出：
+\[
+p_{ij}=\Prob(Y(t)=i\mid X(t)=j),\quad i=1,\ldots,m,\quad j=1,\ldots,n.
+\]
+矩阵 $P\in\R^{m\times n}$ 称为信道转移矩阵，该信道称为离散无记忆信道。
+
+Shannon的著名结果指出，信息可以以任意小的错误概率通过信道发送，只要速率小于一个称为信道容量的数 $C$，单位为比特每秒。Shannon还指出，离散无记忆信道的容量可通过求解优化问题得到。假设 $X$ 的概率分布记为 $x\in\R^n$，即
+\[
+x_j=\Prob(X=j),\quad j=1,\ldots,n.
+\]
+
+% Source PDF page 222 (printed p. 208)
+$X$ 与 $Y$ 的互信息为
+\[
+I(X;Y)=\sum_{i=1}^m\sum_{j=1}^n x_jp_{ij}\log_2\frac{p_{ij}}{\sum_{k=1}^n x_kp_{ik}}.
+\]
+信道容量 $C$ 由
+\[
+C=\sup_x I(X;Y)
+\]
+给出，上确界遍历输入 $X$ 的全部可能分布，即 $x\succeq0$、$\one^\T x=1$。说明如何用凸优化计算信道容量。
+
+提示：引入变量 $y=Px$，它表示输出 $Y$ 的概率分布，并证明互信息可表示为
+\[
+I(X;Y)=c^\T x-\sum_{i=1}^m y_i\log_2y_i,
+\]
+其中 $c_j=\sum_{i=1}^m p_{ij}\log_2p_{ij}$（$j=1,\ldots,n$）。
+
+\paragraph{4.58}\textbf{最优消费。}本题考虑如何随时间最优地消费或花费初始资金或其他资产 $k_0$。变量为 $c_0,\ldots,c_T$，其中 $c_t\ge0$ 表示第 $t$ 期消费。消费水平 $c$ 带来的效用为 $u(c)$，其中 $u:\R\to\R$ 是递增凹函数。消费效用的现值为
+\[
+U=\sum_{t=0}^T\beta^t u(c_t),
+\]
+$0<\beta<1$ 为折现因子。
+
+以 $k_t$ 表示第 $t$ 期可投资资金。假设投资回报为 $f(k_t)$，其中 $f:\R\to\R$ 是递增凹投资回报函数，满足 $f(0)=0$。例如，每期以 $R\%$ 的利率获得单利时，$f(a)=(R/100)a$。消费额 $c_t$ 于期末取出，所以有递推
+\[
+k_{t+1}=k_t+f(k_t)-c_t,\quad t=0,\ldots,T.
+\]
+初始金额 $k_0>0$ 给定，要求 $k_t\ge0$（$t=1,\ldots,T+1$），也可以考虑允许负资金的更复杂模型。
+
+说明如何将最大化 $U$ 表述为凸优化问题。解释你的表述与原问题为何等价，并准确说明两者关系。
+
+提示：证明可以用不等式
+\[
+k_{t+1}\le k_t+f(k_t)-c_t,\quad t=0,\ldots,T
+\]
+替换上述递推。解释：这些不等式允许在每一期扔掉一些钱。这一技巧的一般形式见习题4.6。
+
+\paragraph{4.59}\textbf{鲁棒优化。}某些优化问题中，由于不可控或未知的参数、因素，目标函数和约束函数存在不确定性或变化。可将目标函数和约束函数 $f_0,\ldots,f_m$ 写成优化变量 $x\in\R^n$ 和未知或变化参数向量 $u\in\R^k$ 的函数，以描述这种情形。
+
+% Source PDF page 223 (printed p. 209)
+随机优化方法将 $u$ 建模为已知分布的随机变量，处理期望 $\E_u f_i(x,u)$。最坏情形分析则给定一个已知包含 $u$ 的集合 $\mathcal U$，处理最大或最坏情形值 $\sup_{u\in\mathcal U}f_i(x,u)$。为简化讨论，假设没有等式约束。
+\begin{enumerate}[label=(\alph*)]
+\item \textbf{随机优化。}考虑问题
+\[
+\begin{array}{ll}\text{最小化}&\E f_0(x,u)\\\text{约束为}&\E f_i(x,u)\le0,\quad i=1,\ldots,m,\end{array}
+\]
+其中期望关于 $u$。证明若对每个 $u$，$f_i$ 关于 $x$ 凸，则此随机优化问题凸。
+\item \textbf{最坏情形优化。}考虑问题
+\[
+\begin{array}{ll}\text{最小化}&\sup_{u\in\mathcal U}f_0(x,u)\\\text{约束为}&\sup_{u\in\mathcal U}f_i(x,u)\le0,\quad i=1,\ldots,m.\end{array}
+\]
+证明若对每个 $u$，$f_i$ 关于 $x$ 凸，则此最坏情形优化问题凸。
+\item \textbf{有限参数取值集。}当期望 $\E f_i(x,u)$ 或最坏情形值 $\sup_{u\in\mathcal U}f_i(x,u)$ 有解析或容易计算的表达式时，(a)、(b)的观察最有用。
+
+设给定参数可能取值的集合有限，即 $u\in\{u_1,\ldots,u_N\}$。随机情形还给定各取值的概率：$\Prob(u=u_i)=p_i$，其中 $p\in\R^N,p\succeq0,\one^\T p=1$。最坏情形表述中，则取 $\mathcal U\in\{u_1,\ldots,u_N\}$。
+
+说明如何显式构造最坏情形和随机优化问题，即给出 $\sup_{u\in\mathcal U}f_i$ 和 $\E_u f_i$ 的显式表达式。
+\end{enumerate}
+
+\paragraph{4.60}\textbf{对数最优投资策略。}考虑在 $N$ 个时期持有 $n$ 种资产的投资组合问题。每期开始时重新投资全部财富，按固定不变的配置策略 $x\in\R^n$ 分配到 $n$ 种资产，$x\succeq0,\one^\T x=1$。换言之，若 $W(t-1)$ 为第 $t$ 期初财富，则在该期对资产 $i$ 投资 $x_iW(t-1)$。以 $\lambda(t)$ 表示第 $t$ 期总回报倍数，即 $\lambda(t)=W(t)/W(t-1)$。$N$ 期结束后，财富乘以 $\prod_{t=1}^N\lambda(t)$。称
+\[
+\frac1N\sum_{t=1}^N\log\lambda(t)
+\]
+为这 $N$ 期投资的增长率。我们希望确定 $N$ 很大时使总财富增长最快的配置策略 $x$。
+
+用离散随机模型描述回报不确定性。假设每期有 $m$ 个可能情景，概率为 $\pi_j$（$j=1,\ldots,m$）。情景 $j$ 中，资产 $i$ 的单期回报为 $p_{ij}$。因此，第 $t$ 期投资组合回报 $\lambda(t)$ 是有 $m$ 个可能值 $p_1^\T x,\ldots,p_m^\T x$ 的随机变量，分布为
+\[
+\pi_j=\Prob(\lambda(t)=p_j^\T x),\quad j=1,\ldots,m.
+\]
+假设每期情景相同，各期分布相同且独立。由大数定律，
+\[
+\begin{aligned}
+\lim_{N\to\infty}\frac1N\log\frac{W(N)}{W(0)}
+&=\lim_{N\to\infty}\frac1N\sum_{t=1}^N\log\lambda(t)\\
+&=\E\log\lambda(t)=\sum_{j=1}^m\pi_j\log(p_j^\T x).
+\end{aligned}
+\]
+
+% Source PDF page 224 (printed p. 210)
+换言之，采用投资策略 $x$ 时，长期增长率为
+\[
+R_{\mathrm{lt}}=\sum_{j=1}^m\pi_j\log(p_j^\T x).
+\]
+使这个量最大的策略 $x$ 称为对数最优投资策略，可通过求解优化问题
+\[
+\begin{array}{ll}\text{最大化}&\displaystyle\sum_{j=1}^m\pi_j\log(p_j^\T x)\\\text{约束为}&x\succeq0,\quad\one^\T x=1\end{array}
+\]
+得到，变量为 $x\in\R^n$。证明这是凸优化问题。
+
+\paragraph{4.61}\textbf{逻辑斯蒂模型优化。}随机变量 $X\in\{0,1\}$ 满足
+\[
+\Prob(X=1)=p=\frac{\exp(a^\T x+b)}{1+\exp(a^\T x+b)},
+\]
+其中 $x\in\R^n$ 是影响概率的变量向量，$a,b$ 为已知参数。可将 $X=1$ 看作消费者购买产品的事件，$x$ 为影响购买概率的变量，如广告投入、零售价、折扣价、包装费用及其他因素。需要优化的变量 $x$ 满足一组线性约束 $Fx\preceq g$。
+
+将下列问题表述为凸优化问题。
+\begin{enumerate}[label=(\alph*)]
+\item \textbf{最大化购买概率。}选择 $x$ 使 $p$ 最大。
+\item \textbf{最大化期望利润。}设 $c^\T x+d$ 为售出产品所得利润，假设它对所有可行 $x$ 为正。目标是最大化期望利润 $p(c^\T x+d)$。
+\end{enumerate}
+
+\paragraph{4.62}\textbf{高斯广播信道的最优功率与带宽分配。}考虑中央结点向 $n$ 个接收机发送消息的通信系统。“高斯”指干扰传输的噪声类型。每个接收信道由发射功率 $P_i\ge0$ 和带宽 $W_i\ge0$ 描述。功率和带宽决定该信道比特率 $R_i$，即发送信息的速率：
+\[
+R_i=\alpha_iW_i\log(1+\beta_iP_i/W_i),
+\]
+其中 $\alpha_i,\beta_i$ 为已知正常数。$W_i=0$ 时，取 $R_i=0$，这也是 $W_i\to0$ 的极限。
+
+功率需满足总功率约束
+\[
+P_1+\cdots+P_n=P_{\mathrm{tot}},
+\]
+其中 $P_{\mathrm{tot}}>0$ 为可分配到各信道的给定总功率。类似地，带宽需满足
+\[
+W_1+\cdots+W_n=W_{\mathrm{tot}},
+\]
+其中 $W_{\mathrm{tot}}>0$ 为给定总可用带宽。优化变量为功率和带宽，即 $P_1,\ldots,P_n,W_1,\ldots,W_n$。
+
+目标是最大化总效用
+\[
+\sum_{i=1}^n u_i(R_i),
+\]
+
+% Source PDF page 225 (printed p. 211)
+其中 $u_i:\R\to\R$ 为第 $i$ 个接收机的效用函数。可将 $u_i(R_i)$ 看作为接收机 $i$ 提供比特率 $R_i$ 获得的收益，因此目标是最大化总收益。可假设 $u_i$ 非减且凹。将问题表述为凸优化问题。
+
+\paragraph{4.63}\textbf{最优平衡制造成本与成品率。}向量 $x\in\R^n$ 为制造工艺的标称参数。工艺成品率，即制造产品中合格品的比例，为 $Y(x)$。假设 $Y$ 对数凹，这在实践中很常见，见例3.43。每单位产品的制造成本为 $c^\T x$，其中 $c\in\R^n$。每个合格品的成本为 $c^\T x/Y(x)$。希望在 $x$ 的某些凸约束，例如线性不等式 $Ax\preceq b$ 下，最小化 $c^\T x/Y(x)$。可假设可行集上 $c^\T x>0,Y(x)>0$。
+
+此问题既非凸优化也非拟凸优化，但可通过凸优化与一维搜索求解。基本思想如下，请补全细节和论证。
+\begin{enumerate}[label=(\alph*)]
+\item 证明函数 $f:\R\to\R$，定义为
+\[
+f(a)=\sup\{Y(x)\mid Ax\preceq b,\ c^\T x=a\},
+\]
+是对数凹函数，它给出最大成品率随成本的变化。因此，可通过求解关于 $x$ 的凸优化问题计算 $f$。
+\item 假设在足够多个 $a$ 值上计算 $f$，从而在关心的范围内得到良好近似。说明如何利用这些数据，近似求解使每个合格产品成本最小的问题。
+\end{enumerate}
+
+\paragraph{4.64}\textbf{带补救的优化。}在带补救的优化问题中，也称两阶段优化，成本函数和约束不仅依赖选择的变量，还依赖离散随机变量 $s\in\{1,\ldots,S\}$，它表示 $S$ 个情景中究竟发生哪一个。情景随机变量 $s$ 的分布 $\pi$ 已知，$\pi_i=\Prob(s=i)$（$i=1,\ldots,S$）。
+
+两阶段优化要选择两个变量 $x\in\R^n,z\in\R^q$ 的值。变量 $x$ 必须在得知具体情景 $s$ 前选择，$z$ 则在得知情景随机变量取值后选择。换言之，$z$ 是 $s$ 的函数。为描述 $z$ 的选择，列出不同情景中会选择的值，即向量
+\[
+z_1,\ldots,z_S\in\R^q.
+\]
+例如，$s=3$ 时选择 $z_3$。整组值
+\[
+x\in\R^n,\qquad z_1,\ldots,z_S\in\R^q
+\]
+称为策略，因为它告诉我们：无论发生何种情景如何选择 $x$，以及每个可能情景中如何选择 $z$。
+
+变量 $z$ 称为补救变量或第二阶段变量，因为它允许在知道所发生情景后采取行动或作出选择；相比之下，称为第一阶段变量的 $x$，必须在完全不知道情景时决定。
+
+为简单起见，考虑无约束情形。成本函数为
+\[
+f:\R^n\times\R^q\times\{1,\ldots,S\}\to\R,
+\]
+其中 $f(x,z,i)$ 为第一阶段选择 $x$、第二阶段选择 $z$、发生情景 $i$ 时的成本。在全部策略中最小化的总目标取为期望成本
+\[
+\E f(x,z_s,s)=\sum_{i=1}^S\pi_if(x,z_i,i).
+\]
+
+% Source PDF page 226 (printed p. 212)
+假设对每个情景 $i=1,\ldots,S$，$f$ 关于 $(x,z)$ 凸。说明如何使用凸优化寻找最优策略，即在全部可能策略中使期望成本最小的策略。
+
+\paragraph{4.65}\textbf{混合动力汽车的最优运行。}混合动力汽车有内燃机、与蓄电池连接的电动机／发电机，以及常规摩擦制动器。本题考虑一个高度简化的并联混合动力模型，其中电动机／发电机和内燃机均直接连接驱动轮。内燃机可向车轮提供功率，制动器可从车轮吸收功率并转化为热。电动机／发电机既可作为电动机，利用电池储能向车轮提供功率；也可作为发电机，从车轮或内燃机获取功率，为电池充电。发电机从车轮获取功率并为电池充电，称为再生制动。与普通摩擦制动不同，从车轮吸收的能量储存起来，以后可以使用。通过在已知固定测试路线上行驶，评价车辆的燃油效率。
+
+下图表示混合动力汽车中的功率流。箭头为功率流规定的正方向。例如，内燃机功率 $p_{\mathrm{eng}}$ 在输出功率时为正，制动器功率 $p_{\mathrm{br}}$ 在从车轮吸收功率时为正。$p_{\mathrm{req}}$ 为车轮所需功率。车轮需要功率时为正，例如加速、爬坡或平路巡航；车辆必须快速减速或下坡时，所需车轮功率为负。
+
+\begin{center}
+\setlength{\unitlength}{1pt}
+\begin{picture}(300,115)
+\put(25,78){\framebox(56,30){内燃机}}
+\put(180,78){\framebox(56,30){制动器}}
+\put(53,78){\vector(0,-1){20}}
+\put(58,63){$p_{\mathrm{eng}}$}
+\put(53,58){\vector(1,0){215}}
+\put(207,58){\vector(0,1){20}}
+\put(214,67){$p_{\mathrm{br}}$}
+\put(249,64){$p_{\mathrm{req}}$}
+\put(272,54){车轮}
+\put(108,8){\framebox(68,32){\shortstack{电动机／\\发电机}}}
+\put(142,40){\vector(0,1){18}}
+\put(147,44){$p_{\mathrm{mg}}$}
+\put(180,8){\framebox(56,32){蓄电池}}
+\put(176,24){\line(1,0){4}}
+\end{picture}
+\end{center}
+
+上述全部功率都是时间函数，按一秒间隔离散化为 $t=1,2,\ldots,T$。所需车轮功率 $p_{\mathrm{req}}(1),\ldots,p_{\mathrm{req}}(T)$ 已知。由于指定了车辆在路线上的速度，结合已知坡度、空气阻力及其他损耗，可计算所需车轮功率。
+
+功率守恒意味着
+\[
+p_{\mathrm{req}}(t)=p_{\mathrm{eng}}(t)+p_{\mathrm{mg}}(t)-p_{\mathrm{br}}(t),\quad t=1,\ldots,T.
+\]
+制动器只能消耗功率，因此对每个 $t$ 有 $p_{\mathrm{br}}(t)\ge0$。内燃机只能提供功率，且不超过给定上限 $P_{\mathrm{eng}}^{\max}$：
+\[
+0\le p_{\mathrm{eng}}(t)\le P_{\mathrm{eng}}^{\max},\quad t=1,\ldots,T.
+\]
+电动机／发电机功率也有限制：
+\[
+P_{\mathrm{mg}}^{\min}\le p_{\mathrm{mg}}(t)\le P_{\mathrm{mg}}^{\max},\quad t=1,\ldots,T.
+\]
+其中 $P_{\mathrm{mg}}^{\max}>0$ 为最大电动机功率，$-P_{\mathrm{mg}}^{\min}>0$ 为最大发电机功率。
+
+时间 $t$ 的电池电量或能量记为 $E(t)$（$t=1,\ldots,T+1$），满足
+\[
+E(t+1)=E(t)-p_{\mathrm{mg}}(t)-\eta|p_{\mathrm{mg}}(t)|,\quad t=1,\ldots,T,
+\]
+
+% Source PDF page 227 (printed p. 213)
+其中 $\eta>0$ 为已知参数。$-p_{\mathrm{mg}}(t)$ 表示忽略损耗时，由电动机／发电机从电池取出或加入电池的能量；$-\eta|p_{\mathrm{mg}}(t)|$ 表示电池或电动机／发电机效率损失的能量。
+
+电池电量始终必须在零（空）与上限 $E_{\mathrm{batt}}^{\max}$（满）之间。$E(t)=0$ 时，电池完全放电，不能继续提取能量；$E(t)=E_{\mathrm{batt}}^{\max}$ 时电池充满，不能再充电。为公平地与非混合动力汽车比较，令初始电量等于最终电量，所以全路线电量净变化为零：$E(1)=E(T+1)$。不指定初始及最终电量的具体值。
+
+最小化的目标是内燃机总耗油量
+\[
+F_{\mathrm{total}}=\sum_{t=1}^T F(p_{\mathrm{eng}}(t)),
+\]
+其中 $F:\R\to\R$ 为内燃机耗油特性，假设它为正、递增且凸。
+
+将此问题表述为凸优化问题，变量为 $p_{\mathrm{eng}}(t),p_{\mathrm{mg}}(t),p_{\mathrm{br}}(t)$（$t=1,\ldots,T$），以及 $E(t)$（$t=1,\ldots,T+1$）。解释你的表述为何与上述问题等价。
+
+% Source PDF page 228 (printed p. 214)
+% 原书此页为空白页。

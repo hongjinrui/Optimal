@@ -1,0 +1,37 @@
+《凸优化》中文 LaTeX 译稿
+
+底本
+Stephen Boyd and Lieven Vandenberghe, Convex Optimization.
+Cambridge University Press, 2004; seventh printing with corrections, 2009.
+用户上传文件：bv_cvxbook.pdf
+PDF页数：714；正文印刷页1对应PDF页15。
+SHA256：40d976c83c18cce1900eff8c41bd5ad408c102b813af39d05ff85678ccf8d76e
+PDF元数据：2024-02-28，GPL Ghostscript 10.00.0，PDF 1.7。
+
+翻译约定
+按上传底本逐段翻译，保留原书论证、假设、例题、算法、习题及其编号。
+句法按中文表达习惯调整；不新增例题、解释、证明、习题答案或章末总结。
+数学正文与公式写为可编辑LaTeX；插图由原书PDF矢量裁剪，图注译为中文。
+参考文献保留原文作者、题名、刊物、出版信息与引文键。
+原目录由中文章节与小节重新生成；页码随中文排版变化。
+源码注释 Source PDF page 对应上传文件的物理页码。
+原书有疑点的公式保持底本写法，核查位置独立记录于 SOURCE-ISSUES.txt。
+
+编译
+在完整TeX Live或Overleaf中选择XeLaTeX，以main.tex为主文件。
+推荐运行 latexmk -xelatex main.tex。
+图形PDF均已随包提供；无需Python、网络、BibTeX、Biber或shell-escape。
+latexmkrc将输出PDF设为1.7，以容纳源图PDF版本。
+
+主要术语
+convex 凸；concave 凹；affine 仿射；convex hull 凸包
+proper cone 正常锥；generalized inequality 广义不等式
+epigraph 上图；hypograph 下图；perspective 透视
+conjugate 共轭；quasiconvex 拟凸；strongly convex 强凸
+feasible 可行；optimal value 最优值；optimal point 最优点
+Lagrangian 拉格朗日函数；duality gap 对偶间隙
+complementary slackness 互补松弛；stationary point 驻点
+least squares 最小二乘；regularization 正则化
+self-concordant 自协调；Newton decrement 牛顿减量
+central path 中心路径；barrier 障碍；interior-point 内点
+Schur complement Schur补；factor-solve 分解—求解
